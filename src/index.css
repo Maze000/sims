@@ -440,6 +440,36 @@ All colors MUST be HSL.
 
 /* Mobile-specific media queries */
 @media (max-width: 768px) {
+  /* Remove any default margins that could cause white space */
+  html, body, #root, header, main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure header has no margins on mobile */
+  header {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove any white space above the gradient stripe */
+  .gradient-stripe {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure no white space between elements */
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Specific fix for the header container */
+  header .container {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   /* Ensure proper touch targets */
   button, a, input, select, [role="button"] {
     min-height: 44px;
