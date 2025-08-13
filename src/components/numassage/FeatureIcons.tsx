@@ -4,17 +4,17 @@ const features = [
   {
     icon: ShieldCheck,
     title: "Experienced Therapists",
-    desc: "Certified professionals with years of practice.",
+    desc: "Certified professionals with years of practice. Our therapists have undergone extensive training in various massage techniques and therapeutic approaches. They bring a wealth of knowledge from working with diverse clients and conditions. Each therapist is committed to ongoing education and maintaining the highest standards of care.",
   },
   {
     icon: Sparkles,
     title: "Personalized Treatments",
-    desc: "Tailored sessions to your goals and preferences.",
+    desc: "Tailored sessions to your goals and preferences. We begin each session with a thorough consultation to understand your specific needs and health objectives. Our treatments are customized based on your body type, stress levels, and any areas of tension or discomfort. We adapt our techniques throughout the session to ensure maximum effectiveness and comfort.",
   },
   {
     icon: Leaf,
-    title: "Serene Environment",
-    desc: "Calm, clean, and luxurious spa spaces.",
+    title: "Home Comfort",
+    desc: "Transform your space into a peaceful sanctuary. We bring the spa experience directly to your home with portable massage tables, soft lighting, soothing music, and aromatic essential oils. Our therapists create a tranquil atmosphere in your familiar surroundings, ensuring maximum comfort and relaxation without leaving your home.",
   },
 ];
 

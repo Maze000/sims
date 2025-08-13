@@ -8,8 +8,25 @@ const BookingCTA = () => {
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
           Schedule your massage and step into a calmer you.
         </p>
-        <Button variant="cta" size="xl" asChild>
-          <a href="#services" aria-label="Schedule your massage">Schedule Your Massage</a>
+        <Button 
+          variant="cta" 
+          size="xl" 
+          className="w-full sm:w-auto touch-target mobile-transition"
+          onClick={(e) => {
+            e.preventDefault();
+            const element = document.querySelector('#services') as HTMLElement;
+            if (element) {
+              const headerHeight = 80; // Height of fixed header
+              const elementPosition = element.offsetTop - headerHeight;
+              window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth',
+                left: 0 // Ensure no horizontal movement
+              });
+            }
+          }}
+        >
+          Schedule Your Massage
         </Button>
       </div>
     </section>

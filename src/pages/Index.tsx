@@ -1,4 +1,3 @@
-import TopBar from "@/components/numassage/TopBar";
 import HeaderNav from "@/components/numassage/HeaderNav";
 import Hero from "@/components/numassage/Hero";
 import FeatureIcons from "@/components/numassage/FeatureIcons";
@@ -13,7 +12,8 @@ import Footer from "@/components/numassage/Footer";
 const Index = () => {
   return (
     <div>
-      <TopBar />
+      {/* Barra decorativa de 10px con el background del TopBar */}
+      <div className="w-full h-2.5 bg-gradient-orange-pink"></div>
       <HeaderNav />
       <main>
         <Hero />
