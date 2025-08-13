@@ -12,8 +12,7 @@ import Footer from "@/components/numassage/Footer";
 const Index = () => {
   return (
     <div>
-      {/* Barra decorativa de 10px con el background del TopBar */}
-      <div className="w-full h-2.5 bg-gradient-orange-pink gradient-stripe"></div>
+
       <HeaderNav />
       <main>
         <Hero />
