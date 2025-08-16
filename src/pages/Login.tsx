@@ -122,8 +122,8 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-pink-600">
-      <div className="container mx-auto px-4 py-8">
+    <div className="fixed inset-0 bg-gradient-to-br from-purple-600 via-purple-700 to-pink-600 overflow-y-auto">
+      <div className="min-h-full px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -136,7 +136,7 @@ const Login = () => {
         </div>
 
         {/* Login/Register Form */}
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl p-8">
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl p-8 mb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div>
