@@ -73,7 +73,7 @@ const ServiceImage = ({ serviceType, serviceName }: { serviceType: string; servi
   const imageSrc = getServiceImage(serviceType, serviceName);
 
   return (
-    <div className="w-full h-40 sm:h-44 bg-gradient-to-br from-muted/20 to-muted/10 rounded-t-lg overflow-hidden">
+    <div className="w-full h-40 sm:h-44 bg-gradient-to-br from-muted/20 to-muted/10 rounded-t-lg">
       <img
         src={imageSrc}
         alt={`${serviceName} service`}
@@ -559,7 +559,7 @@ const ServicesGrid = () => {
           "mb-6 md:mb-8 grid gap-4 transition-all duration-300 ease-in-out",
           showFilters ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 md:grid-rows-[1fr] md:opacity-100"
         )}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end overflow-hidden">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
             <div>
               <label className="mb-2 block text-sm font-medium">Type</label>
               <Select value={category} onValueChange={setCategory}>
@@ -600,26 +600,26 @@ const ServicesGrid = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mobile-grid">
           {filtered.map((s) => (
-            <Card key={s.id} className="overflow-hidden hover:shadow-lg transition-shadow mobile-transition flex flex-col h-full">
+            <Card key={s.id} className="hover:shadow-lg transition-shadow mobile-transition flex flex-col h-full">
               <ServiceImage serviceType={s.category} serviceName={s.name} />
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg sm:text-xl leading-tight">{s.name}</CardTitle>
+                <CardTitle className="text-lg sm:text-xl leading-tight break-words">{s.name}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-3 pb-3 flex-1">
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed break-words">{s.description}</p>
                 <ul className="text-sm space-y-1">
                   {s.durations.map((d) => (
                     <li key={d.label} className="flex justify-between items-center">
-                      <span>{d.label}</span>
+                      <span className="break-words">{d.label}</span>
                       <span className="font-medium">NZD ${d.price}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
               <CardFooter className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-0 mt-auto">
-                <span className="text-sm opacity-80 bg-muted/50 px-2 py-1 rounded-md">{s.category}</span>
+                <span className="text-sm opacity-80 bg-muted/50 px-2 py-1 rounded-md break-words">{s.category}</span>
                 <BookingDialog service={s} />
               </CardFooter>
             </Card>

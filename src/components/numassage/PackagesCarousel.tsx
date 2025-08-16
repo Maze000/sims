@@ -25,10 +25,10 @@ const PackagesCarousel = () => {
                 <CarouselItem key={p.id} className="basis-full sm:basis-1/2 lg:basis-1/3">
                   <Card className="h-full mobile-transition">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-lg sm:text-xl leading-tight">{p.title}</CardTitle>
+                      <CardTitle className="text-lg sm:text-xl leading-tight break-words">{p.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
-                      <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed break-words">{p.desc}</p>
                       <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                         <span className="font-medium text-lg">NZD ${p.price}</span>
                         <Button 

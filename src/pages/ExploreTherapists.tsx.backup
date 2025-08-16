@@ -1,0 +1,1168 @@
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// Removed Sheet imports - using simple modal instead
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { 
+  Search, 
+  Filter, 
+  MapPin, 
+  Star, 
+  Clock, 
+  DollarSign, 
+  Users, 
+  ArrowLeft,
+  SlidersHorizontal,
+  Grid3X3,
+  Map,
+  Heart,
+  Award,
+  Calendar,
+  Phone,
+  MessageSquare,
+  ChevronDown,
+  X
+} from "lucide-react";
+import SearchStats from "@/components/SearchStats";
+import { useFilterPersistence } from "@/hooks/useFilterPersistence";
+
+interface TherapistProfile {
+  id: string;
+  name: string;
+  avatar: string;
+  rating: number;
+  reviewsCount: number;
+  location: string;
+  city: string;
+  region: string;
+  specialties: string[];
+  priceRange: { min: number; max: number };
+  yearsExperience: number;
+  isOnline: boolean;
+  isVerified: boolean;
+  responseTime: string;
+  languages: string[];
+  distance?: number;
+  nextAvailable: string;
+  bio: string;
+  totalSessions: number;
+}
+
+const mockTherapists: TherapistProfile[] = [
+  {
+    id: "1",
+    name: "Sarah Mitchell",
+    avatar: "/placeholder.svg",
+    rating: 4.9,
+    reviewsCount: 234,
+    location: "Auckland Central, Auckland",
+    city: "Auckland",
+    region: "Auckland",
+    specialties: ["Relaxation Massage", "Deep Tissue", "Aromatherapy"],
+    priceRange: { min: 100, max: 180 },
+    yearsExperience: 8,
+    isOnline: true,
+    isVerified: true,
+    responseTime: "Within 1 hour",
+    languages: ["English", "Māori"],
+    distance: 2.5,
+    nextAvailable: "Today at 3:00 PM",
+    bio: "Certified therapist with 8 years of experience in therapeutic and relaxation massage.",
+    totalSessions: 1250
+  },
+  {
+    id: "2",
+    name: "James Thompson",
+    avatar: "/placeholder.svg",
+    rating: 4.8,
+    reviewsCount: 189,
+    location: "Newmarket, Auckland",
+    city: "Auckland",
+    region: "Auckland",
+    specialties: ["Sports Massage", "Deep Tissue", "Trigger Point"],
+    priceRange: { min: 120, max: 200 },
+    yearsExperience: 12,
+    isOnline: false,
+    isVerified: true,
+    responseTime: "Within 2 hours",
+    languages: ["English"],
+    distance: 4.2,
+    nextAvailable: "Tomorrow at 10:00 AM",
+    bio: "Sports massage specialist working with professional athletes and fitness enthusiasts.",
+    totalSessions: 2100
+  },
+  {
+    id: "3",
+    name: "Maria Rodriguez",
+    avatar: "/placeholder.svg",
+    rating: 4.9,
+    reviewsCount: 156,
+    location: "Ponsonby, Auckland",
+    city: "Auckland",
+    region: "Auckland",
+    specialties: ["Pregnancy Massage", "Relaxation", "Lymphatic Drainage"],
+    priceRange: { min: 110, max: 170 },
+    yearsExperience: 6,
+    isOnline: true,
+    isVerified: true,
+    responseTime: "Within 30 minutes",
+    languages: ["English", "Spanish"],
+    distance: 3.1,
+    nextAvailable: "Today at 5:00 PM",
+    bio: "Specializing in pregnancy and prenatal massage with gentle, nurturing techniques.",
+    totalSessions: 890
+  },
+  {
+    id: "4",
+    name: "David Chen",
+    avatar: "/placeholder.svg",
+    rating: 4.7,
+    reviewsCount: 298,
+    location: "Wellington Central, Wellington",
+    city: "Wellington",
+    region: "Wellington",
+    specialties: ["Thai Massage", "Shiatsu", "Acupressure"],
+    priceRange: { min: 90, max: 160 },
+    yearsExperience: 15,
+    isOnline: true,
+    isVerified: true,
+    responseTime: "Within 1 hour",
+    languages: ["English", "Mandarin"],
+    distance: 8.7,
+    nextAvailable: "Tomorrow at 2:00 PM",
+    bio: "Traditional Thai massage practitioner with extensive training in Eastern healing techniques.",
+    totalSessions: 3200
+  },
+  {
+    id: "5",
+    name: "Emma Wilson",
+    avatar: "/placeholder.svg",
+    rating: 4.8,
+    reviewsCount: 167,
+    location: "Christchurch Central, Christchurch",
+    city: "Christchurch",
+    region: "Canterbury",
+    specialties: ["Hot Stone", "Aromatherapy", "Relaxation"],
+    priceRange: { min: 95, max: 175 },
+    yearsExperience: 9,
+    isOnline: false,
+    isVerified: true,
+    responseTime: "Within 3 hours",
+    languages: ["English"],
+    distance: 15.2,
+    nextAvailable: "Today at 7:00 PM",
+    bio: "Creating deeply relaxing experiences with hot stone and aromatherapy techniques.",
+    totalSessions: 1450
+  },
+  {
+    id: "6",
+    name: "Michael Brown",
+    avatar: "/placeholder.svg",
+    rating: 4.9,
+    reviewsCount: 203,
+    location: "Hamilton East, Hamilton",
+    city: "Hamilton",
+    region: "Waikato",
+    specialties: ["Remedial Therapy", "Sports Massage", "Myofascial Release"],
+    priceRange: { min: 105, max: 185 },
+    yearsExperience: 11,
+    isOnline: true,
+    isVerified: true,
+    responseTime: "Within 1 hour",
+    languages: ["English"],
+    distance: 6.8,
+    nextAvailable: "Tomorrow at 9:00 AM",
+    bio: "Remedial therapist specializing in injury recovery and performance enhancement.",
+    totalSessions: 1800
+  }
+];
+
+const specialtyOptions = [
+  "Relaxation Massage", "Deep Tissue", "Sports Massage", "Aromatherapy", 
+  "Hot Stone Massage", "Swedish Massage", "Thai Massage", "Shiatsu",
+  "Pregnancy Massage", "Lymphatic Drainage", "Reflexology", "Trigger Point Therapy",
+  "Remedial Therapy", "Acupressure", "Cupping Therapy", "Myofascial Release"
+];
+
+const ExploreTherapists = () => {
+  const navigate = useNavigate();
+  const [view, setView] = useState<"grid" | "map">("grid");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCity, setSelectedCity] = useState("all");
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState([50, 250]);
+  const [minRating, setMinRating] = useState(0);
+  const [availableToday, setAvailableToday] = useState(false);
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [sortBy, setSortBy] = useState("rating");
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Advanced filters
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [experienceRange, setExperienceRange] = useState([0, 20]);
+  const [availableWeekend, setAvailableWeekend] = useState(false);
+  const [homeVisits, setHomeVisits] = useState(false);
+  const [onlineConsultation, setOnlineConsultation] = useState(false);
+  const [maxDistance, setMaxDistance] = useState(50);
+  const [genderPreference, setGenderPreference] = useState("any");
+  const [ageRange, setAgeRange] = useState([20, 65]);
+  const [newTherapists, setNewTherapists] = useState(false);
+
+  // Persist filters in localStorage
+  const { clearSavedFilters } = useFilterPersistence(
+    {
+      searchQuery,
+      selectedCity,
+      selectedSpecialties,
+      priceRange,
+      minRating,
+      availableToday,
+      verifiedOnly,
+      sortBy,
+      selectedLanguages,
+      experienceRange,
+      availableWeekend,
+      homeVisits,
+      onlineConsultation,
+      maxDistance,
+      genderPreference,
+      ageRange,
+      newTherapists
+    },
+    {
+      setSearchQuery,
+      setSelectedCity,
+      setSelectedSpecialties,
+      setPriceRange,
+      setMinRating,
+      setAvailableToday,
+      setVerifiedOnly,
+      setSortBy,
+      setSelectedLanguages,
+      setExperienceRange,
+      setAvailableWeekend,
+      setHomeVisits,
+      setOnlineConsultation,
+      setMaxDistance,
+      setGenderPreference,
+      setAgeRange,
+      setNewTherapists
+    }
+  );
+
+  const filteredTherapists = useMemo(() => {
+    let filtered = mockTherapists.filter(therapist => {
+      // Search query filter
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesName = therapist.name.toLowerCase().includes(query);
+        const matchesLocation = therapist.location.toLowerCase().includes(query);
+        const matchesSpecialty = therapist.specialties.some(s => s.toLowerCase().includes(query));
+        if (!matchesName && !matchesLocation && !matchesSpecialty) return false;
+      }
+
+      // City filter
+      if (selectedCity && selectedCity !== "all" && therapist.city !== selectedCity) return false;
+
+      // Specialties filter
+      if (selectedSpecialties.length > 0) {
+        const hasSpecialty = selectedSpecialties.some(specialty => 
+          therapist.specialties.includes(specialty)
+        );
+        if (!hasSpecialty) return false;
+      }
+
+      // Price range filter
+      if (therapist.priceRange.min > priceRange[1] || therapist.priceRange.max < priceRange[0]) {
+        return false;
+      }
+
+      // Rating filter
+      if (therapist.rating < minRating) return false;
+
+      // Available today filter
+      if (availableToday && !therapist.nextAvailable.includes("Today")) return false;
+
+      // Verified only filter
+      if (verifiedOnly && !therapist.isVerified) return false;
+
+      // Languages filter
+      if (selectedLanguages.length > 0) {
+        const hasLanguage = selectedLanguages.some(language => 
+          therapist.languages.includes(language)
+        );
+        if (!hasLanguage) return false;
+      }
+
+      // Experience range filter
+      if (therapist.yearsExperience < experienceRange[0] || therapist.yearsExperience > experienceRange[1]) {
+        return false;
+      }
+
+      // Distance filter (if distance is available)
+      if (therapist.distance && therapist.distance > maxDistance) return false;
+
+      // New therapists filter (less than 2 years experience)
+      if (newTherapists && therapist.yearsExperience >= 2) return false;
+
+      // Online consultation filter
+      if (onlineConsultation && !therapist.isOnline) return false;
+
+      return true;
+    });
+
+    // Sort results
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "rating":
+          return b.rating - a.rating;
+        case "price-low":
+          return a.priceRange.min - b.priceRange.min;
+        case "price-high":
+          return b.priceRange.max - a.priceRange.max;
+        case "distance":
+          return (a.distance || 0) - (b.distance || 0);
+        case "experience":
+          return b.yearsExperience - a.yearsExperience;
+        case "reviews":
+          return b.reviewsCount - a.reviewsCount;
+        default:
+          return 0;
+      }
+    });
+
+    return filtered;
+  }, [searchQuery, selectedCity, selectedSpecialties, priceRange, minRating, availableToday, verifiedOnly, sortBy, selectedLanguages, experienceRange, maxDistance, newTherapists, onlineConsultation]);
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setSelectedCity("all");
+    setSelectedSpecialties([]);
+    setPriceRange([50, 250]);
+    setMinRating(0);
+    setAvailableToday(false);
+    setVerifiedOnly(false);
+    // Clear advanced filters
+    setSelectedLanguages([]);
+    setExperienceRange([0, 20]);
+    setAvailableWeekend(false);
+    setHomeVisits(false);
+    setOnlineConsultation(false);
+    setMaxDistance(50);
+    setGenderPreference("any");
+    setAgeRange([20, 65]);
+    setNewTherapists(false);
+    // Clear saved filters from localStorage
+    clearSavedFilters();
+  };
+
+  const activeFiltersCount = [
+    searchQuery,
+    selectedCity && selectedCity !== "all",
+    selectedSpecialties.length > 0,
+    priceRange[0] !== 50 || priceRange[1] !== 250,
+    minRating > 0,
+    availableToday,
+    verifiedOnly,
+    selectedLanguages.length > 0,
+    experienceRange[0] !== 0 || experienceRange[1] !== 20,
+    maxDistance !== 50,
+    newTherapists,
+    onlineConsultation,
+    availableWeekend,
+    homeVisits,
+    genderPreference !== "any"
+  ].filter(Boolean).length;
+
+  const searchStats = useMemo(() => {
+    const totalTherapists = filteredTherapists.length;
+    const averageRating = totalTherapists > 0 
+      ? Math.round((filteredTherapists.reduce((sum, t) => sum + t.rating, 0) / totalTherapists) * 10) / 10
+      : 0;
+    const averagePrice = totalTherapists > 0
+      ? Math.round(filteredTherapists.reduce((sum, t) => sum + (t.priceRange.min + t.priceRange.max) / 2, 0) / totalTherapists)
+      : 0;
+    
+    const specialtyCounts: { [key: string]: number } = {};
+    const locationCounts: { [key: string]: number } = {};
+    
+    filteredTherapists.forEach(therapist => {
+      therapist.specialties.forEach(specialty => {
+        specialtyCounts[specialty] = (specialtyCounts[specialty] || 0) + 1;
+      });
+      locationCounts[therapist.city] = (locationCounts[therapist.city] || 0) + 1;
+    });
+    
+    const topSpecialty = Object.entries(specialtyCounts).sort(([,a], [,b]) => b - a)[0]?.[0] || "Relaxation Massage";
+    const topLocation = Object.entries(locationCounts).sort(([,a], [,b]) => b - a)[0]?.[0] || "Auckland";
+    
+    return { totalTherapists, averageRating, averagePrice, topSpecialty, topLocation };
+  }, [filteredTherapists]);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" onClick={() => navigate("/dashboard")}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <h1 className="text-2xl font-bold text-purple-600">
+                <span className="logo-nu">NU</span>
+                <span className="logo-massage">massage</span>
+              </h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <Tabs value={view} onValueChange={(value) => setView(value as "grid" | "map")}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="grid" className="flex items-center gap-2">
+                    <Grid3X3 className="w-4 h-4" />
+                    Grid
+                  </TabsTrigger>
+                  <TabsTrigger value="map" className="flex items-center gap-2">
+                    <Map className="w-4 h-4" />
+                    Map
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-6">
+        {/* Search and Filters Bar */}
+        <div className="mb-6">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            {/* Search Input */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search by name, specialty, or location..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            {/* Quick Filters */}
+            <div className="flex gap-2">
+              <Select value={selectedCity} onValueChange={setSelectedCity}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="All Cities" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Cities</SelectItem>
+                  <SelectItem value="Auckland">Auckland</SelectItem>
+                  <SelectItem value="Wellington">Wellington</SelectItem>
+                  <SelectItem value="Christchurch">Christchurch</SelectItem>
+                  <SelectItem value="Hamilton">Hamilton</SelectItem>
+                  <SelectItem value="Tauranga">Tauranga</SelectItem>
+                  <SelectItem value="Dunedin">Dunedin</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-44">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="rating">Highest Rated</SelectItem>
+                  <SelectItem value="price-low">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="distance">Nearest First</SelectItem>
+                  <SelectItem value="experience">Most Experienced</SelectItem>
+                  <SelectItem value="reviews">Most Reviews</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* FILTERS BUTTON - TESTING */}
+              <Button 
+                variant="outline" 
+                className="relative bg-red-100 border-red-500"
+                onClick={() => {
+                  alert("¡BOTÓN FUNCIONA! Estado actual: " + showFilters);
+                  console.log("Button clicked! Current state:", showFilters);
+                  setShowFilters(!showFilters);
+                  console.log("New state should be:", !showFilters);
+                }}
+              >
+                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                FILTERS TEST {showFilters ? "(OPEN)" : "(CLOSED)"}
+                {activeFiltersCount > 0 && (
+                  <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                    {activeFiltersCount}
+                  </Badge>
+                )}
+              </Button>
+
+              {/* Simple test modal */}
+              {showFilters && (
+                <div 
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                  onClick={() => setShowFilters(false)}
+                >
+                  <div 
+                    className="bg-white p-6 rounded-lg max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <h2 className="text-xl font-bold mb-4">¡Filtros Funcionando!</h2>
+                    <p>El botón está conectado correctamente.</p>
+                    <p>Estado: {showFilters ? 'Abierto' : 'Cerrado'}</p>
+                    
+                    <div className="mt-4 space-y-2">
+                      <h3 className="font-semibold">Filtros Básicos:</h3>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="block text-sm">Búsqueda:</label>
+                          <input 
+                            type="text" 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full border rounded px-2 py-1"
+                            placeholder="Buscar..."
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm">Ciudad:</label>
+                          <select 
+                            value={selectedCity} 
+                            onChange={(e) => setSelectedCity(e.target.value)}
+                            className="w-full border rounded px-2 py-1"
+                          >
+                            <option value="all">Todas las ciudades</option>
+                            <option value="Auckland">Auckland</option>
+                            <option value="Wellington">Wellington</option>
+                            <option value="Christchurch">Christchurch</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 flex gap-2">
+                      <button 
+                        onClick={() => setShowFilters(false)}
+                        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+                      >
+                        Cerrar
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSelectedCity("all");
+                        }}
+                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                      >
+                        Limpiar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Original Dialog (hidden for now) */}
+              <Dialog open={false} onOpenChange={() => {}}>
+                <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Filter Therapists</DialogTitle>
+                    <DialogDescription>
+                      Refine your search to find the perfect therapist
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <div className="space-y-4 mt-4">
+                    {/* Test Content */}
+                    <div>
+                      <p>¡El panel de filtros está funcionando!</p>
+                      <p>Estado actual: {showFilters ? 'Abierto' : 'Cerrado'}</p>
+                      
+                      {/* Filter Presets */}
+                      <Label className="text-base font-semibold mb-3 block mt-4">Popular Filters</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => {
+                            setSelectedSpecialties(["Relaxation Massage"]);
+                            setAvailableToday(true);
+                            setPriceRange([80, 150]);
+                          }}
+                        >
+                          Relaxing Today
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedSpecialties(["Sports Massage", "Deep Tissue"]);
+                            setVerifiedOnly(true);
+                            setMinRating(4.5);
+                          }}
+                        >
+                          Sports Recovery
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setPriceRange([50, 120]);
+                            setNewTherapists(false);
+                            setExperienceRange([5, 20]);
+                          }}
+                        >
+                          Budget Friendly
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setVerifiedOnly(true);
+                            setMinRating(4.8);
+                            setExperienceRange([10, 20]);
+                          }}
+                        >
+                          Premium Only
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Specialties Filter */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">Specialties</Label>
+                      <div className="space-y-2 max-h-32 overflow-y-auto scrollable">
+                        {specialtyOptions.map((specialty) => (
+                          <div key={specialty} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={specialty}
+                              checked={selectedSpecialties.includes(specialty)}
+                              onCheckedChange={(checked) => {
+                                if (checked === true) {
+                                  setSelectedSpecialties(prev => [...prev, specialty]);
+                                } else {
+                                  setSelectedSpecialties(prev => prev.filter(s => s !== specialty));
+                                }
+                              }}
+                            />
+                            <Label htmlFor={specialty} className="text-sm">{specialty}</Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price Range Filter */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">
+                        Price Range: ${priceRange[0]} - ${priceRange[1]}
+                      </Label>
+                      <Slider
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                        max={300}
+                        min={50}
+                        step={10}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>$50</span>
+                        <span>$300</span>
+                      </div>
+                    </div>
+
+                    {/* Experience Range */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">
+                        Experience: {experienceRange[0]} - {experienceRange[1]} years
+                      </Label>
+                      <Slider
+                        value={experienceRange}
+                        onValueChange={setExperienceRange}
+                        max={25}
+                        min={0}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>0 years</span>
+                        <span>25+ years</span>
+                      </div>
+                    </div>
+
+                    {/* Distance Filter */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">
+                        Maximum Distance: {maxDistance}km
+                      </Label>
+                      <Slider
+                        value={[maxDistance]}
+                        onValueChange={(value) => setMaxDistance(value[0])}
+                        max={100}
+                        min={1}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>1km</span>
+                        <span>100km+</span>
+                      </div>
+                    </div>
+
+                    {/* Languages Filter */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">Languages</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {["English", "Māori", "Mandarin", "Spanish", "Hindi", "French", "Japanese", "Korean"].map((language) => (
+                          <div key={language} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`lang-${language}`}
+                              checked={selectedLanguages.includes(language)}
+                              onCheckedChange={(checked) => {
+                                if (checked === true) {
+                                  setSelectedLanguages(prev => [...prev, language]);
+                                } else {
+                                  setSelectedLanguages(prev => prev.filter(l => l !== language));
+                                }
+                              }}
+                            />
+                            <Label htmlFor={`lang-${language}`} className="text-sm">{language}</Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Rating Filter */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">Minimum Rating</Label>
+                      <div className="flex gap-2 flex-wrap">
+                        {[0, 3, 4, 4.5, 4.8].map((rating) => (
+                          <Button
+                            key={rating}
+                            variant={minRating === rating ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setMinRating(rating)}
+                            className="flex items-center gap-1"
+                          >
+                            {rating === 0 ? "Any" : (
+                              <>
+                                {rating}
+                                <Star className="w-3 h-3 fill-current" />
+                              </>
+                            )}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Gender Preference */}
+                    <div>
+                      <Label className="text-base font-semibold mb-3 block">Gender Preference</Label>
+                      <Select value={genderPreference} onValueChange={setGenderPreference}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="any">Any Gender</SelectItem>
+                          <SelectItem value="female">Female Therapists</SelectItem>
+                          <SelectItem value="male">Male Therapists</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Availability Filters */}
+                    <div className="space-y-3">
+                      <Label className="text-base font-semibold">Availability</Label>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="availableToday"
+                            checked={availableToday}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === 'boolean') {
+                                setAvailableToday(checked);
+                              }
+                            }}
+                          />
+                          <Label htmlFor="availableToday">Available Today</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="availableWeekend"
+                            checked={availableWeekend}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === 'boolean') {
+                                setAvailableWeekend(checked);
+                              }
+                            }}
+                          />
+                          <Label htmlFor="availableWeekend">Weekend Availability</Label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Service Options */}
+                    <div className="space-y-3">
+                      <Label className="text-base font-semibold">Service Options</Label>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="homeVisits"
+                            checked={homeVisits}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === 'boolean') {
+                                setHomeVisits(checked);
+                              }
+                            }}
+                          />
+                          <Label htmlFor="homeVisits">Home Visits Available</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="onlineConsultation"
+                            checked={onlineConsultation}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === 'boolean') {
+                                setOnlineConsultation(checked);
+                              }
+                            }}
+                          />
+                          <Label htmlFor="onlineConsultation">Online Consultation</Label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quality Filters */}
+                    <div className="space-y-3">
+                      <Label className="text-base font-semibold">Quality Filters</Label>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="verifiedOnly"
+                            checked={verifiedOnly}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === 'boolean') {
+                                setVerifiedOnly(checked);
+                              }
+                            }}
+                          />
+                          <Label htmlFor="verifiedOnly">Verified Therapists Only</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="newTherapists"
+                            checked={newTherapists}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === 'boolean') {
+                                setNewTherapists(checked);
+                              }
+                            }}
+                          />
+                          <Label htmlFor="newTherapists">New Therapists (Under 2 years)</Label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Active Filters Summary */}
+                    {activeFiltersCount > 0 && (
+                      <div className="bg-purple-50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-purple-800">
+                            {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
+                          </span>
+                          <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+                            <X className="w-3 h-3 mr-1" />
+                            Clear All
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Apply Filters Button */}
+                    <div className="sticky bottom-0 bg-white pt-4 border-t">
+                      <Button 
+                        className="w-full bg-purple-600 hover:bg-purple-700" 
+                        onClick={() => setShowFilters(false)}
+                      >
+                        Apply Filters ({filteredTherapists.length} results)
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+          {activeFiltersCount > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {searchQuery && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Search: "{searchQuery}"
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setSearchQuery("")} />
+                </Badge>
+              )}
+              {selectedCity && selectedCity !== "all" && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  City: {selectedCity}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setSelectedCity("all")} />
+                </Badge>
+              )}
+              {selectedSpecialties.map((specialty) => (
+                <Badge key={specialty} variant="secondary" className="flex items-center gap-1">
+                  {specialty}
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setSelectedSpecialties(prev => prev.filter(s => s !== specialty))} 
+                  />
+                </Badge>
+              ))}
+              {selectedLanguages.map((language) => (
+                <Badge key={`lang-${language}`} variant="secondary" className="flex items-center gap-1">
+                  Language: {language}
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setSelectedLanguages(prev => prev.filter(l => l !== language))} 
+                  />
+                </Badge>
+              ))}
+              {(experienceRange[0] !== 0 || experienceRange[1] !== 20) && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Experience: {experienceRange[0]}-{experienceRange[1]} years
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setExperienceRange([0, 20])} 
+                  />
+                </Badge>
+              )}
+              {maxDistance !== 50 && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Within {maxDistance}km
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setMaxDistance(50)} 
+                  />
+                </Badge>
+              )}
+              {genderPreference !== "any" && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  {genderPreference === "female" ? "Female" : "Male"} therapists
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setGenderPreference("any")} 
+                  />
+                </Badge>
+              )}
+              {newTherapists && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  New therapists
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setNewTherapists(false)} 
+                  />
+                </Badge>
+              )}
+              {onlineConsultation && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Online consultation
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setOnlineConsultation(false)} 
+                  />
+                </Badge>
+              )}
+              {availableWeekend && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Weekend availability
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setAvailableWeekend(false)} 
+                  />
+                </Badge>
+              )}
+              {homeVisits && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Home visits
+                  <X 
+                    className="w-3 h-3 cursor-pointer" 
+                    onClick={() => setHomeVisits(false)} 
+                  />
+                </Badge>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Search Statistics */}
+        {filteredTherapists.length > 0 && (
+          <SearchStats {...searchStats} />
+        )}
+
+        {/* Results */}
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-gray-600">
+            {filteredTherapists.length} therapist{filteredTherapists.length !== 1 ? 's' : ''} found
+          </p>
+        </div>
+
+        {/* Therapists Grid */}
+        {view === "grid" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTherapists.map((therapist) => (
+              <Card key={therapist.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="relative">
+                      <Avatar className="w-16 h-16">
+                        <AvatarImage src={therapist.avatar} />
+                        <AvatarFallback>{therapist.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      {therapist.isOnline && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold">{therapist.name}</h3>
+                        {therapist.isVerified && (
+                          <Award className="w-4 h-4 text-blue-500" />
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 mb-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium">{therapist.rating}</span>
+                        <span className="text-sm text-gray-600">({therapist.reviewsCount})</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600 mb-1">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {therapist.location}
+                        {therapist.distance && (
+                          <span className="ml-2">• {therapist.distance}km away</span>
+                        )}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Clock className="w-3 h-3 mr-1" />
+                        {therapist.nextAvailable}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap gap-1">
+                      {therapist.specialties.slice(0, 3).map((specialty) => (
+                        <Badge key={specialty} variant="outline" className="text-xs">
+                          {specialty}
+                        </Badge>
+                      ))}
+                      {therapist.specialties.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{therapist.specialties.length - 3} more
+                        </Badge>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm">
+                        <span className="font-medium text-green-600">
+                          ${therapist.priceRange.min} - ${therapist.priceRange.max}
+                        </span>
+                        <span className="text-gray-600 ml-1">per session</span>
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {therapist.yearsExperience} years exp.
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 pt-2">
+                      <Button 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => navigate(`/therapist/${therapist.id}`)}
+                      >
+                        View Profile
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <Heart className="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <MessageSquare className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Map View */}
+        {view === "map" && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-96">
+            <div className="lg:col-span-2">
+              <Card className="h-full">
+                <CardContent className="p-4 h-full flex items-center justify-center bg-gray-100">
+                  <div className="text-center">
+                    <Map className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-600 mb-2">Interactive Map</h3>
+                    <p className="text-gray-500">
+                      Map view would show therapist locations with interactive markers
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="space-y-4 max-h-96 overflow-y-auto scrollable">
+              {filteredTherapists.slice(0, 5).map((therapist) => (
+                <Card key={therapist.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage src={therapist.avatar} />
+                        <AvatarFallback>{therapist.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <h4 className="font-medium text-sm">{therapist.name}</h4>
+                        <div className="flex items-center gap-1 text-xs">
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <span>{therapist.rating}</span>
+                          <span className="text-gray-500">• ${therapist.priceRange.min}+</span>
+                        </div>
+                        <p className="text-xs text-gray-600">{therapist.location}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* No Results */}
+        {filteredTherapists.length === 0 && (
+          <div className="text-center py-12">
+            <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">No therapists found</h3>
+            <p className="text-gray-500 mb-4">
+              Try adjusting your filters or search criteria
+            </p>
+            <Button variant="outline" onClick={clearAllFilters}>
+              Clear All Filters
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ExploreTherapists;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 const Hero = () => {
   return (
     <section id="home" className="relative">
-      <div className="relative h-[78vh] md:h-[91vh] w-full overflow-hidden rounded-none">
+      <div className="relative h-[78vh] md:h-[91vh] w-full rounded-none">
         <img
           src={heroImage}
           alt="Serene spa atmosphere with massage table, candles, and plants"

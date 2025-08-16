@@ -5,7 +5,7 @@ const AboutSection = () => {
     <section id="about" className="py-8 md:py-14 bg-gradient-pink-light/5">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
-          <div className="overflow-hidden rounded-lg shadow-lg order-2 lg:order-1">
+          <div className="rounded-lg shadow-lg order-2 lg:order-1">
             <img
               src={aboutImage}
               alt="Elegant Numassage spa interior with massage table and plants"

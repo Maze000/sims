@@ -14,10 +14,10 @@ const GiftCardsSection = () => {
         </div>
         <Card className="max-w-3xl mx-auto">
           <CardHeader className="text-center">
-            <CardTitle className="text-xl sm:text-2xl">Numassage at Home Gift Card</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl break-words">Numassage at Home Gift Card</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col md:flex-row gap-6 items-center md:items-end justify-between">
-            <p className="text-muted-foreground flex-1 text-center md:text-left leading-relaxed">
+            <p className="text-muted-foreground flex-1 text-center md:text-left leading-relaxed break-words">
               Beautifully presented digital gift card usable for any service. Perfect for birthdays,
               celebrations, or a thoughtful "just because".
             </p>
