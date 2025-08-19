@@ -1,16 +1,46 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
+import { useMobile } from "@/hooks/use-mobile";
+import MobileNavigation from "@/components/MobileNavigation";
+import OptimizedImage from "@/components/OptimizedImage";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { 
+  Search, 
+  SlidersHorizontal, 
+  MapPin, 
+  Star, 
+  Heart, 
+  Share2,
+  ChevronLeft,
+  ChevronRight,
+  User, 
+  Wallet, 
+  Bookmark, 
+  Moon, 
+  Sun, 
+  LogOut, 
+  Edit3, 
+  Camera,
+  Settings,
+  CreditCard,
+  Home as HomeIcon,
+  Compass,
+  Send,
+  Bell,
+  ChevronDown,
+  Menu,
+  X
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Star, MapPin, Clock, Heart, Share2, SlidersHorizontal, X, ArrowLeft } from "lucide-react";
 
 interface TherapistProfile {
   id: string;
@@ -78,11 +108,174 @@ const mockTherapists: TherapistProfile[] = [
     isOnline: true,
     description: "Therapist trained in traditional Eastern massage techniques.",
     services: ["Thai massage", "Traditional Shiatsu", "Therapeutic acupressure"]
+  },
+  {
+    id: "5",
+    name: "Lisa Rodriguez",
+    avatar: "/placeholder.svg",
+    rating: 4.6,
+    reviews: 167,
+    location: "Tauranga, New Zealand",
+    specialties: ["Hot Stone Massage", "Reflexology", "Relaxation"],
+    price: 115,
+    isOnline: true,
+    description: "Specializing in hot stone therapy and reflexology for deep relaxation.",
+    services: ["Hot stone massage", "Foot reflexology", "Full body relaxation"]
+  },
+  {
+    id: "6",
+    name: "David Park",
+    avatar: "/placeholder.svg",
+    rating: 4.8,
+    reviews: 203,
+    location: "Dunedin, New Zealand",
+    specialties: ["Sports Massage", "Injury Recovery", "Deep Tissue"],
+    price: 140,
+    isOnline: false,
+    description: "Sports massage specialist with focus on athlete recovery and performance.",
+    services: ["Sports recovery", "Injury rehabilitation", "Performance massage"]
+  },
+  {
+    id: "7",
+    name: "Rachel Green",
+    avatar: "/placeholder.svg",
+    rating: 4.9,
+    reviews: 145,
+    location: "Rotorua, New Zealand",
+    specialties: ["Aromatherapy", "Swedish Massage", "Stress Relief"],
+    price: 105,
+    isOnline: true,
+    description: "Certified aromatherapist offering holistic wellness and stress relief treatments.",
+    services: ["Aromatherapy massage", "Essential oils therapy", "Stress management"]
+  },
+  {
+    id: "8",
+    name: "Tom Wilson",
+    avatar: "/placeholder.svg",
+    rating: 4.5,
+    reviews: 178,
+    location: "Palmerston North, New Zealand",
+    specialties: ["Remedial Therapy", "Trigger Point", "Myofascial Release"],
+    price: 130,
+    isOnline: true,
+    description: "Remedial therapist specializing in trigger point therapy and pain management.",
+    services: ["Remedial massage", "Pain relief therapy", "Muscle tension release"]
+  },
+  {
+    id: "9",
+    name: "Sophie Taylor",
+    avatar: "/placeholder.svg",
+    rating: 4.7,
+    reviews: 192,
+    location: "Nelson, New Zealand",
+    specialties: ["Prenatal Massage", "Postnatal Care", "Gentle Touch"],
+    price: 120,
+    isOnline: false,
+    description: "Prenatal and postnatal massage specialist providing gentle care for mothers.",
+    services: ["Pregnancy massage", "Postnatal recovery", "Maternal wellness"]
+  },
+  {
+    id: "10",
+    name: "Alex Johnson",
+    avatar: "/placeholder.svg",
+    rating: 4.8,
+    reviews: 221,
+    location: "Napier, New Zealand",
+    specialties: ["Cupping Therapy", "Traditional Chinese Medicine", "Acupressure"],
+    price: 135,
+    isOnline: true,
+    description: "Traditional Chinese medicine practitioner offering cupping and acupressure.",
+    services: ["Cupping therapy", "TCM treatments", "Energy balancing"]
+  },
+  {
+    id: "11",
+    name: "Maria Santos",
+    avatar: "/placeholder.svg",
+    rating: 4.6,
+    reviews: 134,
+    location: "New Plymouth, New Zealand",
+    specialties: ["Lymphatic Drainage", "Detox Massage", "Wellness"],
+    price: 110,
+    isOnline: true,
+    description: "Lymphatic drainage specialist focused on detoxification and wellness.",
+    services: ["Manual lymphatic drainage", "Detox treatments", "Wellness massage"]
+  },
+  {
+    id: "12",
+    name: "Chris Anderson",
+    avatar: "/placeholder.svg",
+    rating: 4.7,
+    reviews: 189,
+    location: "Invercargill, New Zealand",
+    specialties: ["Deep Tissue", "Trigger Point", "Pain Relief"],
+    price: 125,
+    isOnline: false,
+    description: "Deep tissue specialist with expertise in chronic pain management.",
+    services: ["Deep tissue massage", "Pain management", "Chronic condition care"]
+  },
+  {
+    id: "13",
+    name: "Jessica Lee",
+    avatar: "/placeholder.svg",
+    rating: 4.9,
+    reviews: 156,
+    location: "Whangarei, New Zealand",
+    specialties: ["Relaxation Massage", "Stress Relief", "Mindfulness"],
+    price: 100,
+    isOnline: true,
+    description: "Relaxation specialist combining massage with mindfulness techniques.",
+    services: ["Relaxation massage", "Stress management", "Mindful healing"]
+  },
+  {
+    id: "14",
+    name: "Ryan Murphy",
+    avatar: "/placeholder.svg",
+    rating: 4.5,
+    reviews: 167,
+    location: "Gisborne, New Zealand",
+    specialties: ["Sports Recovery", "Athletic Performance", "Injury Prevention"],
+    price: 145,
+    isOnline: true,
+    description: "Sports recovery specialist working with professional athletes.",
+    services: ["Athletic recovery", "Performance enhancement", "Injury prevention"]
+  },
+  {
+    id: "15",
+    name: "Anna Thompson",
+    avatar: "/placeholder.svg",
+    rating: 4.8,
+    reviews: 198,
+    location: "Timaru, New Zealand",
+    specialties: ["Therapeutic Massage", "Rehabilitation", "Mobility"],
+    price: 120,
+    isOnline: false,
+    description: "Therapeutic massage specialist focused on rehabilitation and mobility.",
+    services: ["Therapeutic massage", "Rehabilitation therapy", "Mobility improvement"]
+  },
+  {
+    id: "16",
+    name: "Ben Clarke",
+    avatar: "/placeholder.svg",
+    rating: 4.6,
+    reviews: 143,
+    location: "Wanganui, New Zealand",
+    specialties: ["Traditional Massage", "Holistic Healing", "Energy Work"],
+    price: 115,
+    isOnline: true,
+    description: "Holistic healer combining traditional massage with energy work.",
+    services: ["Traditional massage", "Energy healing", "Holistic wellness"]
   }
 ];
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { isMobile, isSmallMobile } = useMobile();
+  
+  console.log('Dashboard component rendered, showUserMenu:', showUserMenu);
   
   // Filter states
   const [showFilters, setShowFilters] = useState(false);
@@ -94,6 +287,39 @@ const Dashboard = () => {
   const [onlineOnly, setOnlineOnly] = useState(false);
   const [sortBy, setSortBy] = useState("rating");
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedFilter, setSelectedFilter] = useState("Featured Creators");
+  const itemsPerPage = 10;
+
+  const [user] = useState({
+    username: "maze",
+    avatar: "/placeholder.svg",
+    wallet: 0.00,
+    subscriptions: 0,
+    bookmarks: 0
+  });
+
+  const handleLogout = () => {
+    navigate("/");
+  };
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        console.log('Clicking outside dropdown, closing menu');
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const toggleFavorite = (id: string) => {
     setFavorites(prev => 
@@ -189,229 +415,644 @@ const Dashboard = () => {
     setOnlineOnly(false);
   };
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredTherapists.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedTherapists = filteredTherapists.slice(startIndex, startIndex + itemsPerPage);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900' 
+        : 'bg-gradient-to-br from-purple-50 via-white to-pink-50'
+    }`}>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-40">
-        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <div className="relative flex items-center">
-              {/* Mobile Home Button */}
+      <header className={`backdrop-blur-sm shadow-sm border-b transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800/95 border-purple-800' 
+          : 'bg-white/95 border-purple-100'
+      }`}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <div className="text-xl sm:text-2xl font-bold">
+                <span className="logo-nu text-purple-600">NU</span>
+                <span className={`logo-massage transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                }`}>massage</span>
+              </div>
+            </div>
+
+            {/* Search Bar - Hidden on mobile, shown on tablet+ */}
+            <div className="hidden md:flex flex-1 max-w-lg mx-8">
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="Find a Therapist"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`w-full pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent placeholder-gray-500 transition-colors duration-300 ${
+                    isDarkMode 
+                      ? 'border-purple-700 bg-purple-900/50 text-gray-200' 
+                      : 'border-purple-200 bg-purple-50/50 text-gray-900'
+                  }`}
+                />
+              </div>
+            </div>
+
+            {/* Desktop Navigation Icons */}
+            <div className="hidden sm:flex items-center space-x-2 lg:space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className={`p-2 transition-colors duration-300 ${
+                  isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
+                }`}
+                onClick={() => navigate("/home")}
+              >
+                <HomeIcon className="h-5 w-5 text-purple-600" />
+              </Button>
+              <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-300 ${
+                isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
+              }`}
+              onClick={() => navigate("/therapists/featured")}>
+                <Compass className="h-5 w-5 text-purple-600" />
+              </Button>
+              <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-300 ${
+                isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
+              }`}
+              onClick={() => navigate("/messages")}>
+                <Send className="h-5 w-5 text-purple-600" />
+              </Button>
+              <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-300 ${
+                isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
+              }`}
+              onClick={() => navigate("/notifications")}>
+                <Bell className="h-5 w-5 text-purple-600" />
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="flex items-center space-x-2">
               <Button
                 variant="ghost"
                 size="sm"
-                className="sm:hidden absolute -left-2 p-2 rounded-full hover:bg-purple-100"
-                onClick={() => navigate("/home")}
+                className={`sm:hidden p-2 transition-colors duration-300 ${
+                  isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
+                }`}
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
               >
-                <ArrowLeft className="h-4 w-4 text-purple-600" />
-              </Button>
-              <h1 className="text-xl sm:text-2xl font-bold text-purple-600 ml-8 sm:ml-0">
-                <span className="logo-nu">NU</span>
-                <span className="logo-massage">massage</span>
-              </h1>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Button 
-                variant="outline"
-                size="sm"
-                className="hidden sm:flex"
-                onClick={() => navigate("/create-profile")}
-              >
-                Create Profile
-              </Button>
-              <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
-                <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-6 sm:py-8">
-        <div className="container mx-auto px-3 sm:px-4 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">
-            Find your perfect massage therapist
-          </h2>
-          <p className="text-sm mb-4 max-w-xl mx-auto">
-            Connect with certified massage and therapy professionals.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Button 
-              size="sm" 
-              className="bg-white text-purple-600 hover:bg-gray-100"
-              onClick={() => navigate("/explore")}
-            >
-              Explore Therapists
-            </Button>
-            <Button 
-              size="sm" 
-              className="bg-purple-600 text-white hover:bg-purple-700 border-purple-600"
-              onClick={() => navigate("/create-profile")}
-            >
-              Are you a Therapist?
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Therapists Grid */}
-      <section className="py-4 sm:py-8">
-        <div className="container mx-auto px-3 sm:px-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-              All Therapists ({filteredTherapists.length})
-            </h3>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="relative"
-                onClick={() => setShowFilters(true)}
-              >
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
-                Filters
-                {activeFiltersCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                    {activeFiltersCount}
-                  </Badge>
+                {showMobileMenu ? (
+                  <X className="h-5 w-5 text-purple-600" />
+                ) : (
+                  <Menu className="h-5 w-5 text-purple-600" />
                 )}
               </Button>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-32">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rating">Rating</SelectItem>
-                  <SelectItem value="price-low">Price: Low</SelectItem>
-                  <SelectItem value="price-high">Price: High</SelectItem>
-                  <SelectItem value="reviews">Reviews</SelectItem>
-                  <SelectItem value="name">Name</SelectItem>
-                </SelectContent>
-              </Select>
+              
+              {/* User Avatar with Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-1 p-1"
+                  onClick={() => {
+                    console.log('Avatar clicked, toggling menu');
+                    setShowUserMenu(prev => !prev);
+                  }}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
+                    <AvatarImage src={user.avatar} alt={user.username} />
+                    <AvatarFallback className={`text-sm transition-colors duration-300 ${
+                      isDarkMode ? 'bg-gray-600 text-gray-200' : 'bg-gray-300 text-gray-700'
+                    }`}>
+                      {user.username.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <ChevronDown className={`h-4 w-4 text-purple-600 transition-transform duration-200 ${
+                    showUserMenu ? 'rotate-180' : ''
+                  }`} />
+                </Button>
+
+                {/* Dropdown Menu */}
+                {showUserMenu && createPortal(
+                  <div 
+                    style={{
+                      position: 'fixed',
+                      top: '70px',
+                      right: '20px',
+                      width: '280px',
+                      backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(8px)',
+                      border: isDarkMode ? '1px solid rgb(147, 51, 234)' : '1px solid rgb(233, 213, 255)',
+                      borderRadius: '12px',
+                      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                      zIndex: 9999,
+                      padding: '16px'
+                    }}
+                  >
+                    <div>
+                      {/* Wallet */}
+                      <div className={`flex items-center justify-between mb-4 p-3 rounded transition-colors duration-300 ${
+                        isDarkMode ? 'bg-purple-900/50' : 'bg-purple-50'
+                      }`}>
+                        <div className="flex items-center">
+                          <Wallet className="h-4 w-4 mr-2 text-purple-600" />
+                          <span className={`text-sm font-medium transition-colors duration-300 ${
+                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                          }`}>Wallet:</span>
+                        </div>
+                        <span className={`text-sm font-bold transition-colors duration-300 ${
+                          isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                        }`}>${user.wallet.toFixed(2)}</span>
+                      </div>
+
+                      {/* Menu Items */}
+                      <div className="space-y-1">
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            navigate("/profile");
+                          }}
+                        >
+                          <User className="h-4 w-4 mr-2" />
+                          My Profile
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            navigate("/edit-profile");
+                          }}
+                        >
+                          <Edit3 className="h-4 w-4 mr-2" />
+                          Edit Profile
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                        >
+                          <Heart className="h-4 w-4 mr-2" />
+                          Favourites ({user.bookmarks})
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                        >
+                          <Bookmark className="h-4 w-4 mr-2" />
+                          Subscriptions ({user.subscriptions})
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                        >
+                          <CreditCard className="h-4 w-4 mr-2" />
+                          Payment Methods
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                        >
+                          <Settings className="h-4 w-4 mr-2" />
+                          Settings
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                          }`}
+                          onClick={() => {
+                            toggleDarkMode();
+                            setShowUserMenu(false);
+                          }}
+                        >
+                          {isDarkMode ? (
+                            <Sun className="h-4 w-4 mr-2" />
+                          ) : (
+                            <Moon className="h-4 w-4 mr-2" />
+                          )}
+                          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+                        </Button>
+                        <div className="border-t border-purple-200 dark:border-purple-700 my-2"></div>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start text-red-500 hover:text-red-600 transition-colors duration-300 ${
+                            isDarkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'
+                          }`}
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            handleLogout();
+                          }}
+                        >
+                          <LogOut className="h-4 w-4 mr-2" />
+                          Logout
+                        </Button>
+                      </div>
+                    </div>
+                  </div>,
+                  document.body
+                )}
+              </div>
+
+              {/* Edit Profile Button - Hidden on mobile */}
+              <Button 
+                className="hidden sm:flex bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full"
+                onClick={() => navigate("/edit-profile")}
+              >
+                Edit Profile →
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {showMobileMenu && (
+          <div className={`sm:hidden border-t transition-colors duration-300 ${
+            isDarkMode ? 'border-purple-800 bg-gray-800/95' : 'border-purple-200 bg-white/95'
+          }`}>
+            <div className="px-3 py-3 space-y-2">
+              {/* Mobile Search */}
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="Find a Therapist"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`w-full pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent placeholder-gray-500 transition-colors duration-300 ${
+                    isDarkMode 
+                      ? 'border-purple-700 bg-purple-900/50 text-gray-200' 
+                      : 'border-purple-200 bg-purple-50/50 text-gray-900'
+                  }`}
+                />
+              </div>
+              
+              {/* Mobile Navigation */}
+              <Button 
+                variant="ghost" 
+                className={`w-full justify-start transition-colors duration-300 ${
+                  isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+                }`}
+                onClick={() => navigate("/home")}
+              >
+                <HomeIcon className="h-5 w-5 mr-2 text-purple-600" />
+                Home
+              </Button>
+              <Button variant="ghost" className={`w-full justify-start transition-colors duration-300 ${
+                isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+              }`}
+              onClick={() => navigate("/therapists/featured")}>
+                <Compass className="h-5 w-5 mr-2 text-purple-600" />
+                Explore
+              </Button>
+              <Button variant="ghost" className={`w-full justify-start transition-colors duration-300 ${
+                isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+              }`}>
+                <Send className="h-5 w-5 mr-2 text-purple-600" />
+                Messages
+              </Button>
+              <Button variant="ghost" className={`w-full justify-start transition-colors duration-300 ${
+                isDarkMode ? 'hover:bg-purple-800/50 text-gray-200' : 'hover:bg-purple-100 text-gray-700'
+              }`}>
+                <Bell className="h-5 w-5 mr-2 text-purple-600" />
+                Notifications
+              </Button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Main Content */}
+      <div className={`max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 ${
+        isMobile ? 'pb-24' : 'pb-8'
+      }`}>
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+          {/* Sidebar - Hidden on mobile, shown as modal */}
+          <div className={`${
+            isMobile ? 'hidden' : 'lg:w-64 flex-shrink-0'
+          }`}>
+            <div className={`backdrop-blur-sm rounded-lg shadow-lg border transition-colors duration-300 p-4 ${
+              isDarkMode 
+                ? 'bg-gray-800/80 border-purple-800' 
+                : 'bg-white/80 border-purple-100'
+            }`}>
+              <h3 className={`font-semibold mb-4 transition-colors duration-300 ${
+                isDarkMode ? 'text-gray-200' : 'text-gray-900'
+              }`}>Featured Therapists</h3>
+              <p className={`text-sm mb-6 transition-colors duration-300 ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>The best of content therapists are here</p>
+              
+              {/* Filter Options */}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-teal-500 bg-teal-500 flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                  <span className="text-sm text-teal-600 font-medium">Featured Therapists</span>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-gray-300"></div>
+                  <span className="text-sm text-gray-600">New Therapists</span>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded border-2 border-gray-300"></div>
+                  <span className="text-sm text-gray-600">Free Subscription</span>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded border-2 border-gray-300"></div>
+                  <span className="text-sm text-gray-600">Live</span>
+                </div>
+              </div>
+              
+              <hr className="my-6 border-gray-200" />
+              
+              <h4 className="font-semibold mb-3 text-gray-900">Categories</h4>
+              <div className="space-y-2">
+                <div className="text-sm text-gray-600 hover:text-purple-600 cursor-pointer">Relaxation Massage</div>
+                <div className="text-sm text-gray-600 hover:text-purple-600 cursor-pointer">Deep Tissue</div>
+                <div className="text-sm text-gray-600 hover:text-purple-600 cursor-pointer">Sports Massage</div>
+                <div className="text-sm text-gray-600 hover:text-purple-600 cursor-pointer">Thai Massage</div>
+                <div className="text-sm text-gray-600 hover:text-purple-600 cursor-pointer">Hot Stone</div>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-8">
-            {filteredTherapists.map((therapist) => (
-              <Card key={therapist.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <Avatar className="w-12 h-12">
-                          <AvatarImage src={therapist.avatar} />
-                          <AvatarFallback>{therapist.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                          therapist.isOnline ? 'bg-green-500' : 'bg-gray-400'
-                        }`} />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{therapist.name}</CardTitle>
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
-                          <MapPin className="w-3 h-3" />
-                          {therapist.location}
+          {/* Main Content Area */}
+          <div className="flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Featured Therapists</h2>
+                <p className="text-gray-600">The best of content therapists are here</p>
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="relative"
+                  onClick={() => setShowFilters(true)}
+                >
+                  <SlidersHorizontal className="w-4 h-4 mr-2" />
+                  Filters
+                  {activeFiltersCount > 0 && (
+                    <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                      {activeFiltersCount}
+                    </Badge>
+                  )}
+                </Button>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Rating</SelectItem>
+                    <SelectItem value="price-low">Price: Low</SelectItem>
+                    <SelectItem value="price-high">Price: High</SelectItem>
+                    <SelectItem value="reviews">Reviews</SelectItem>
+                    <SelectItem value="name">Name</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
+            {/* Therapists Grid */}
+            <div className={`grid gap-4 sm:gap-6 mb-8 ${
+              isMobile 
+                ? 'grid-cols-1' 
+                : isSmallMobile 
+                ? 'grid-cols-1' 
+                : 'grid-cols-1 md:grid-cols-2'
+            }`}>
+              {paginatedTherapists.map((therapist) => (
+                <Card key={therapist.id} className={`transition-all duration-200 ${
+                  isMobile 
+                    ? 'hover:shadow-md mobile-touch-friendly' 
+                    : 'hover:shadow-lg'
+                } w-full ${isMobile ? 'max-w-full' : 'max-w-md mx-auto'}`}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <Avatar className={`${isMobile ? 'w-14 h-14' : 'w-12 h-12'}`}>
+                            <OptimizedImage
+                              src={therapist.avatar}
+                              alt={`${therapist.name} avatar`}
+                              className="w-full h-full object-cover rounded-full"
+                              width={isMobile ? 56 : 48}
+                              height={isMobile ? 56 : 48}
+                              loading="lazy"
+                            />
+                            <AvatarFallback className={`${isMobile ? 'text-lg' : 'text-sm'}`}>
+                              {therapist.name.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className={`absolute -bottom-1 -right-1 ${
+                            isMobile ? 'w-5 h-5' : 'w-4 h-4'
+                          } rounded-full border-2 border-white ${
+                            therapist.isOnline ? 'bg-green-500' : 'bg-gray-400'
+                          }`} />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg">{therapist.name}</CardTitle>
+                          <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <MapPin className="w-3 h-3" />
+                            {therapist.location}
+                          </div>
                         </div>
                       </div>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleFavorite(therapist.id)}
+                          className={`${
+                            isMobile ? 'p-2 h-10 w-10 mobile-touch-friendly' : 'p-1 h-auto'
+                          }`}
+                        >
+                          <Heart 
+                            className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'} ${
+                              favorites.includes(therapist.id) 
+                                ? 'fill-red-500 text-red-500' 
+                                : 'text-gray-400'
+                            }`} 
+                          />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className={`${
+                            isMobile ? 'p-2 h-10 w-10 mobile-touch-friendly' : 'p-1 h-auto'
+                          }`}
+                        >
+                          <Share2 className={`${isMobile ? 'w-5 h-5' : 'w-4 h-4'} text-gray-400`} />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleFavorite(therapist.id)}
-                        className="p-1 h-auto"
-                      >
-                        <Heart 
-                          className={`w-4 h-4 ${
-                            favorites.includes(therapist.id) 
-                              ? 'fill-red-500 text-red-500' 
-                              : 'text-gray-400'
-                          }`} 
-                        />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="p-1 h-auto">
-                        <Share2 className="w-4 h-4 text-gray-400" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
+                  </CardHeader>
 
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">{therapist.rating}</span>
-                    </div>
-                                          <span className="text-sm text-gray-600">
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="font-medium">{therapist.rating}</span>
+                      </div>
+                      <span className="text-sm text-gray-600">
                         ({therapist.reviews} reviews)
                       </span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1">
-                    {therapist.specialties.slice(0, 2).map((specialty) => (
-                      <Badge key={specialty} variant="secondary" className="text-xs">
-                        {specialty}
-                      </Badge>
-                    ))}
-                    {therapist.specialties.length > 2 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{therapist.specialties.length - 2}
-                      </Badge>
-                    )}
-                  </div>
-
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    {therapist.description}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-2 border-t">
-                    <div className="text-lg font-bold text-purple-600">
-                      ${therapist.price.toLocaleString()}
                     </div>
-                    <Button 
-                      size="sm" 
-                      className="bg-purple-600 hover:bg-purple-700"
-                      onClick={() => navigate(`/therapist/${therapist.id}`)}
-                    >
-                      View Profile
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+
+                    <div className="flex flex-wrap gap-1">
+                      {therapist.specialties.slice(0, 2).map((specialty) => (
+                        <Badge key={specialty} variant="secondary" className="text-xs">
+                          {specialty}
+                        </Badge>
+                      ))}
+                      {therapist.specialties.length > 2 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{therapist.specialties.length - 2}
+                        </Badge>
+                      )}
+                    </div>
+
+                    <p className="text-sm text-gray-600 line-clamp-2">
+                      {therapist.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-2 border-t">
+                      <div className="text-lg font-bold text-purple-600">
+                        ${therapist.price.toLocaleString()}
+                      </div>
+                      <Button 
+                        size="sm" 
+                        className="bg-purple-600 hover:bg-purple-700"
+                        onClick={() => navigate(`/therapist/${therapist.id}`)}
+                      >
+                        View Profile
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-8">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="p-2"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={currentPage === page ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => goToPage(page)}
+                    className={`w-8 h-8 p-0 ${
+                      currentPage === page 
+                        ? 'bg-teal-500 hover:bg-teal-600 text-white' 
+                        : 'text-gray-600 hover:text-teal-600'
+                    }`}
+                  >
+                    {page}
+                  </Button>
+                ))}
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="p-2"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
-      </section>
+
+      </div>
 
       {/* Filters Modal */}
       <Dialog open={showFilters} onOpenChange={setShowFilters}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto scrollable">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
+        <DialogContent className={`${
+          isMobile 
+            ? 'max-w-full h-full max-h-full m-0 rounded-none' 
+            : 'max-w-2xl max-h-[90vh]'
+        } overflow-y-auto mobile-scroll-container`}>
+          <DialogHeader className={isMobile ? 'p-4 pb-2' : ''}>
+            <DialogTitle className={`flex items-center justify-between ${
+              isMobile ? 'text-lg' : ''
+            }`}>
               <span>Filter Therapists</span>
               {activeFiltersCount > 0 && (
-                <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                <Button 
+                  variant="outline" 
+                  size={isMobile ? "default" : "sm"} 
+                  onClick={clearAllFilters}
+                  className={isMobile ? 'mobile-touch-friendly' : ''}
+                >
                   Clear All ({activeFiltersCount})
                 </Button>
               )}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className={isMobile ? 'text-base' : ''}>
               Refine your search to find the perfect therapist
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6 py-4">
+          <div className={`space-y-6 ${isMobile ? 'p-4 pt-2' : 'py-4'}`}>
             {/* Search */}
             <div className="space-y-2">
-              <Label htmlFor="search" className="text-base font-semibold">Search</Label>
+              <Label 
+                htmlFor="search" 
+                className={`font-semibold ${isMobile ? 'text-lg' : 'text-base'}`}
+              >
+                Search
+              </Label>
               <Input
                 id="search"
                 type="text"
                 placeholder="Search by name or specialty..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                className={`${
+                  isMobile 
+                    ? 'h-12 text-base mobile-touch-friendly' 
+                    : ''
+                }`}
+                autoComplete="off"
+                inputMode="search"
               />
             </div>
 
@@ -587,21 +1228,197 @@ const Dashboard = () => {
             )}
           </div>
 
-          <div className="flex justify-between pt-4 border-t">
-            <div className="text-sm text-gray-500">
+          <div className={`flex ${
+            isMobile ? 'flex-col gap-4' : 'justify-between'
+          } pt-4 border-t ${isMobile ? 'p-4' : ''}`}>
+            <div className={`${isMobile ? 'text-base' : 'text-sm'} text-gray-500 ${
+              isMobile ? 'text-center' : ''
+            }`}>
               Showing {filteredTherapists.length} of {mockTherapists.length} therapists
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setShowFilters(false)}>
+            <div className={`flex gap-3 ${isMobile ? 'w-full' : ''}`}>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowFilters(false)}
+                className={`${
+                  isMobile 
+                    ? 'flex-1 h-12 mobile-touch-friendly' 
+                    : ''
+                }`}
+              >
                 Close
               </Button>
-              <Button onClick={() => setShowFilters(false)}>
+              <Button 
+                onClick={() => setShowFilters(false)}
+                className={`${
+                  isMobile 
+                    ? 'flex-1 h-12 mobile-touch-friendly' 
+                    : ''
+                }`}
+              >
                 Apply Filters
               </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Footer */}
+      <footer className={`mt-16 transition-colors duration-300 ${
+        isDarkMode ? 'bg-gray-900/50' : 'bg-gray-50'
+      }`}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Logo and Description */}
+            <div className="md:col-span-1">
+              <div className="text-xl sm:text-2xl font-bold mb-4">
+                <span className="logo-nu text-purple-600">NU</span>
+                <span className={`logo-massage transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                }`}>MASSAGE</span>
+              </div>
+              <p className={`text-sm mb-4 transition-colors duration-300 ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                Keep connect with us! Follow us on any of these platforms
+              </p>
+              {/* Social Icons */}
+              <div className="flex space-x-4">
+                <a href="#" className={`transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                }`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </a>
+                <a href="#" className={`transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                }`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd"/>
+                  </svg>
+                </a>
+                <a href="#" className={`transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                }`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.749.099.12.112.225.085.347-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.747 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001.017 0z" clipRule="evenodd"/>
+                  </svg>
+                </a>
+                <a href="#" className={`transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                }`}>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* About Section */}
+            <div>
+              <h3 className={`text-sm font-semibold mb-4 uppercase tracking-wider transition-colors duration-300 ${
+                isDarkMode ? 'text-purple-400' : 'text-purple-600'
+              }`}>
+                About
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    Contact us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    Blog
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Categories Section */}
+            <div>
+              <h3 className={`text-sm font-semibold mb-4 uppercase tracking-wider transition-colors duration-300 ${
+                isDarkMode ? 'text-purple-400' : 'text-purple-600'
+              }`}>
+                Categories
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 flex items-center ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    Explore
+                    <ChevronRight className="w-3 h-3 ml-1" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Links Section */}
+            <div>
+              <h3 className={`text-sm font-semibold mb-4 uppercase tracking-wider transition-colors duration-300 ${
+                isDarkMode ? 'text-purple-400' : 'text-purple-600'
+              }`}>
+                Links
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    My Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    Edit Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    My subscriptions
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className={`text-sm transition-colors duration-300 ${
+                    isDarkMode ? 'text-gray-400 hover:text-purple-400' : 'text-gray-600 hover:text-purple-600'
+                  }`}>
+                    Log out
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className={`mt-8 pt-8 border-t text-center transition-colors duration-300 ${
+            isDarkMode ? 'border-gray-800' : 'border-gray-200'
+          }`}>
+            <p className={`text-sm transition-colors duration-300 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              © 2025 <span className="text-purple-600">NU</span><span className={isDarkMode ? 'text-gray-200' : 'text-gray-900'}>MASSAGE</span>
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Mobile Navigation */}
+      {isMobile && (
+        <MobileNavigation 
+          isDarkMode={isDarkMode}
+          className="mobile-bottom-nav"
+        />
+      )}
     </div>
   );
 };

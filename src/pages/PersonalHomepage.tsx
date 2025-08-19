@@ -113,13 +113,14 @@ const PersonalHomepage = () => {
                 className={`p-2 transition-colors duration-300 ${
                   isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
                 }`}
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/home")}
               >
                 <Home className="h-5 w-5 text-purple-600" />
               </Button>
               <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-300 ${
                 isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
-              }`}>
+              }`}
+              onClick={() => navigate("/therapists/featured")}>
                 <Compass className="h-5 w-5 text-purple-600" />
               </Button>
               <Button variant="ghost" size="sm" className={`p-2 transition-colors duration-300 ${
@@ -294,7 +295,7 @@ const PersonalHomepage = () => {
               {/* Edit Profile Button - Hidden on mobile */}
               <Button 
                 className="hidden sm:flex bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full"
-                onClick={() => navigate("/create-profile")}
+                onClick={() => navigate("/edit-profile")}
               >
                 Edit profile
               </Button>
@@ -330,7 +331,7 @@ const PersonalHomepage = () => {
                       isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
                     }`}
                     onClick={() => {
-                      navigate("/dashboard");
+                      navigate("/home");
                       setShowMobileMenu(false);
                     }}
                   >
@@ -345,7 +346,10 @@ const PersonalHomepage = () => {
                     className={`flex flex-col items-center p-3 h-auto transition-colors duration-300 ${
                       isDarkMode ? 'hover:bg-purple-800/50' : 'hover:bg-purple-100'
                     }`}
-                    onClick={() => setShowMobileMenu(false)}
+                    onClick={() => {
+                      navigate("/therapists/featured");
+                      setShowMobileMenu(false);
+                    }}
                   >
                     <Compass className="h-5 w-5 text-purple-600 mb-1" />
                     <span className={`text-xs transition-colors duration-300 ${
@@ -432,7 +436,7 @@ const PersonalHomepage = () => {
               
               <Button 
                 className="bg-purple-600 hover:bg-purple-700 text-white rounded-full w-full sm:w-auto"
-                onClick={() => navigate("/create-profile")}
+                onClick={() => navigate("/edit-profile")}
               >
                 <Edit3 className="h-4 w-4 mr-2" />
                 Edit profile

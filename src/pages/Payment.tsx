@@ -51,7 +51,7 @@ const Payment = () => {
       
       // Redirigir después de 3 segundos
       setTimeout(() => {
-        navigate("/dashboard", { 
+        navigate("/therapists/featured", { 
           state: { message: "Booking confirmed! We'll send you the details by email." }
         });
       }, 3000);

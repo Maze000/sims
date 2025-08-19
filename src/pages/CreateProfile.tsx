@@ -154,7 +154,7 @@ const CreateProfile = () => {
       
       // Redirect after showing success message
       setTimeout(() => {
-        navigate("/dashboard", { 
+        navigate("/therapists/featured", { 
           state: { message: "Profile created successfully! We'll review it within 24-48 hours." }
         });
       }, 3000);
@@ -197,7 +197,7 @@ const CreateProfile = () => {
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Button variant="ghost" onClick={() => navigate("/dashboard")}>
+            <Button variant="ghost" onClick={() => navigate("/therapists/featured")}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>

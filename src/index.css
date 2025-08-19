@@ -771,6 +771,50 @@ All colors MUST be HSL.
   
   /* Mobile-optimized shadows */
   .mobile-shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+  
+  /* Safe area support for iPhone X and newer */
+  .safe-area-inset-top { padding-top: env(safe-area-inset-top); }
+  .safe-area-inset-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-area-inset-left { padding-left: env(safe-area-inset-left); }
+  .safe-area-inset-right { padding-right: env(safe-area-inset-right); }
+  
+  /* Mobile performance optimizations */
+  .mobile-smooth-scroll { -webkit-overflow-scrolling: touch; }
+  .mobile-no-select { -webkit-user-select: none; user-select: none; }
+  .mobile-no-callout { -webkit-touch-callout: none; }
+  .mobile-no-highlight { -webkit-tap-highlight-color: transparent; }
+  
+  /* Touch-friendly interactions */
+  .mobile-touch-friendly {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+  }
+  
+  /* Mobile scroll improvements */
+  .mobile-scroll-container {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .mobile-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Mobile gesture support */
+  .mobile-swipe-area {
+    touch-action: pan-x pan-y;
+    user-select: none;
+  }
+  
+  /* Mobile bottom navigation safe area */
+  .mobile-bottom-nav {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+  }
   .mobile-shadow { box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); }
   .mobile-shadow-md { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
   

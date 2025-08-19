@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useMobile } from "@/hooks/use-mobile";
 
 const countries = [
   "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", 
@@ -48,6 +49,7 @@ const countries = [
 
 const Login = () => {
   const navigate = useNavigate();
+  const { isMobile } = useMobile();
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
@@ -61,8 +63,11 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isRegister) {
-      // Simulate registration
-      setShowTwoFactor(true);
+      // Redirect directly to edit profile after signup
+      console.log("Registration successful, redirecting to edit profile");
+      setTimeout(() => {
+        navigate("/edit-profile");
+      }, 1000);
     } else {
       // Simulate login - redirect directly to personal homepage for demo
       console.log("Login attempt");
@@ -87,9 +92,9 @@ const Login = () => {
 
   if (showTwoFactor) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <h2 className="text-2xl font-bold text-center mb-6">Two-factor authentication</h2>
+      <div className={`min-h-screen bg-gray-50 flex items-center justify-center ${isMobile ? 'p-4' : ''}`}>
+        <div className={`bg-white rounded-lg shadow-lg w-full ${isMobile ? 'p-6 max-w-sm' : 'p-8 max-w-md'}`}>
+          <h2 className={`font-bold text-center mb-6 ${isMobile ? 'text-xl' : 'text-2xl'}`}>Two-factor authentication</h2>
           <p className="text-gray-600 text-center mb-6">
             We've sent a code to your email address
           </p>
@@ -100,7 +105,7 @@ const Login = () => {
                 placeholder="Enter the code"
                 value={twoFactorCode}
                 onChange={(e) => setTwoFactorCode(e.target.value)}
-                className="text-center text-lg tracking-widest"
+                className={`text-center text-lg tracking-widest ${isMobile ? 'mobile-touch-friendly' : ''}`}
                 maxLength={6}
               />
             </div>
@@ -108,11 +113,11 @@ const Login = () => {
               type="button"
               variant="link"
               onClick={resendCode}
-              className="w-full text-blue-600"
+              className={`w-full text-blue-600 ${isMobile ? 'mobile-touch-friendly' : ''}`}
             >
               Resend code
             </Button>
-            <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+            <Button type="submit" className={`w-full bg-purple-600 hover:bg-purple-700 ${isMobile ? 'mobile-touch-friendly' : ''}`}>
               Submit
             </Button>
           </form>
@@ -121,22 +126,22 @@ const Login = () => {
     );
   }
 
-  return (
-    <div className="fixed inset-0 bg-gradient-to-br from-purple-600 via-purple-700 to-pink-600 overflow-y-auto">
-      <div className="min-h-full px-4 py-8">
+     return (
+     <div className="fixed inset-0 bg-gradient-to-br from-purple-600 via-purple-700 to-pink-600">
+      <div className={`min-h-full ${isMobile ? 'px-4 py-6' : 'px-4 py-8'}`}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            <span className="logo-nu text-5xl">NU</span>
-            <span className="logo-massage">massage</span>
-          </h1>
-          <p className="text-white/90 text-lg max-w-2xl mx-auto">
+                 <div className="text-center mb-8">
+           <h1 className="text-4xl font-bold">
+             <span className="logo-nu text-purple-600">NU</span>
+             <span className="logo-massage text-white">MASSAGE</span>
+           </h1>
+          <p className={`text-white/90 max-w-2xl mx-auto ${isMobile ? 'text-base' : 'text-lg'}`}>
             Join New Zealand's premier platform for massage and therapy services!
           </p>
         </div>
 
         {/* Login/Register Form */}
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-xl p-8 mb-8">
+        <div className={`mx-auto bg-white rounded-lg shadow-xl mb-8 ${isMobile ? 'max-w-sm p-6' : 'max-w-md p-8'}`}>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div>
@@ -147,7 +152,7 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="mt-1"
+                  className={`mt-1 ${isMobile ? 'mobile-touch-friendly' : ''}`}
                 />
               </div>
 
@@ -159,7 +164,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="mt-1"
+                  className={`mt-1 ${isMobile ? 'mobile-touch-friendly' : ''}`}
                 />
               </div>
 
