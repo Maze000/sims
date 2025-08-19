@@ -445,7 +445,7 @@ All colors MUST be HSL.
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --input: 0 0% 100%; /* Blanco para inputs */
     --ring: 30 100% 56%; /* #e28000 */
 
     --radius: 0.75rem;
@@ -506,7 +506,7 @@ All colors MUST be HSL.
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --input: 0 0% 15%; /* Gris más claro para inputs en modo oscuro */
     --ring: 30 100% 56%;
 
     --sidebar-background: 0 0% 10%;
