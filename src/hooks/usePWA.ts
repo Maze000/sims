@@ -120,7 +120,7 @@ export const usePWA = () => {
     }
   };
 
-  const shareApp = async (title = 'Numassage', text = 'Descubre la mejor plataforma de masajes', url = window.location.href) => {
+      const shareApp = async (title = 'Numassage', text = 'Discover the best massage platform', url = window.location.href) => {
     if (navigator.share) {
       try {
         await navigator.share({ title, text, url });

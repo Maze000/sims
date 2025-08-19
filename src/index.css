@@ -1075,4 +1075,39 @@ All colors MUST be HSL.
     width: 12px !important;
     height: 12px !important;
   }
+
+  /* FORZAR INPUTS BLANCOS EN MÓVIL */
+  input, select, textarea {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Asegurar que los inputs tengan fondo blanco */
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="number"], 
+  input[type="tel"], 
+  input[type="url"], 
+  input[type="search"], 
+  input[type="date"], 
+  input[type="time"], 
+  input[type="datetime-local"], 
+  input[type="month"], 
+  input[type="week"], 
+  select, 
+  textarea {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #d1d5db !important;
+  }
+
+  /* Focus states para inputs */
+  input:focus, select:focus, textarea:focus {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #8b5cf6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+  }
 }

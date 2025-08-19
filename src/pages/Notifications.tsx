@@ -122,7 +122,7 @@ const Notifications = () => {
                   }`}
                 >
                   <Wallet className="w-4 h-4 mr-3" />
-                  Billetera
+                  Wallet
                 </button>
                 
                 <button 
@@ -131,7 +131,7 @@ const Notifications = () => {
                   }`}
                 >
                   <Settings className="w-4 h-4 mr-3" />
-                  ¡Sé un creador!
+                  Become a Creator!
                 </button>
 
                 <h3 className={`text-xs font-semibold uppercase tracking-wider mt-6 mb-4 transition-colors duration-300 ${
@@ -146,7 +146,7 @@ const Notifications = () => {
                   }`}
                 >
                   <Heart className="w-4 h-4 mr-3" />
-                  Mis suscripciones
+                  My Subscriptions
                 </button>
 
                 <h3 className={`text-xs font-semibold uppercase tracking-wider mt-6 mb-4 transition-colors duration-300 ${
@@ -161,7 +161,7 @@ const Notifications = () => {
                   }`}
                 >
                   <Shield className="w-4 h-4 mr-3" />
-                  Privacidad y seguridad
+                  Privacy & Security
                 </button>
                 
                 <button 
@@ -170,7 +170,7 @@ const Notifications = () => {
                   }`}
                 >
                   <Lock className="w-4 h-4 mr-3" />
-                  Contraseña
+                  Password
                 </button>
                 
                 <button 
@@ -179,7 +179,7 @@ const Notifications = () => {
                   }`}
                 >
                   <Users className="w-4 h-4 mr-3" />
-                  Usuarios restringidos
+                  Restricted Users
                 </button>
 
                 <button 
@@ -213,7 +213,7 @@ const Notifications = () => {
                 <h1 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
                   isDarkMode ? 'text-gray-200' : 'text-gray-900'
                 }`}>
-                  Notificaciones
+                  Notifications
                 </h1>
                 
                 <p className={`text-sm mb-8 transition-colors duration-300 ${
@@ -234,7 +234,7 @@ const Notifications = () => {
                 <p className={`text-lg font-medium mb-2 transition-colors duration-300 ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-700'
                 }`}>
-                  No tienes notificaciones
+                  You have no notifications
                 </p>
               </div>
             </div>

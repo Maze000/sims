@@ -86,55 +86,55 @@ const MobileOptimizer: React.FC<MobileOptimizerProps> = ({ children }) => {
     <>
       {children}
       
-      {/* Install Prompt */}
-      {showInstallPrompt && (
-        <div className="fixed bottom-20 left-4 right-4 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="font-semibold text-gray-900">Instalar App</h3>
-              <p className="text-sm text-gray-600">Accede más rápido desde tu pantalla de inicio</p>
-            </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => setShowInstallPrompt(false)}
-                className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700"
-              >
-                Ahora no
-              </button>
-              <button
-                onClick={() => {
-                  installApp();
-                  setShowInstallPrompt(false);
-                }}
-                className="px-4 py-1 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700"
-              >
-                Instalar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+             {/* Install Prompt */}
+       {showInstallPrompt && (
+         <div className="fixed bottom-4 left-4 right-4 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+           <div className="flex items-center justify-between">
+             <div className="flex-1">
+               <h3 className="font-semibold text-gray-900">Install App</h3>
+               <p className="text-sm text-gray-600">Access faster from your home screen</p>
+             </div>
+             <div className="flex space-x-2">
+               <button
+                 onClick={() => setShowInstallPrompt(false)}
+                 className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700"
+               >
+                 Not now
+               </button>
+               <button
+                 onClick={() => {
+                   installApp();
+                   setShowInstallPrompt(false);
+                 }}
+                 className="px-4 py-1 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700"
+               >
+                 Install
+               </button>
+             </div>
+           </div>
+         </div>
+       )}
 
-      {/* Update Prompt */}
-      {showUpdatePrompt && (
-        <div className="fixed top-4 left-4 right-4 z-50 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="font-semibold text-blue-900">Nueva versión disponible</h3>
-              <p className="text-sm text-blue-700">Actualiza para obtener las últimas mejoras</p>
-            </div>
-            <button
-              onClick={() => {
-                updateApp();
-                setShowUpdatePrompt(false);
-              }}
-              className="px-4 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
-            >
-              Actualizar
-            </button>
-          </div>
-        </div>
-      )}
+       {/* Update Prompt */}
+       {showUpdatePrompt && (
+         <div className="fixed top-4 left-4 right-4 z-50 bg-blue-50 border border-blue-200 rounded-lg p-4">
+           <div className="flex items-center justify-between">
+             <div className="flex-1">
+               <h3 className="font-semibold text-blue-900">New version available</h3>
+               <p className="text-sm text-blue-700">Update to get the latest improvements</p>
+             </div>
+             <button
+               onClick={() => {
+                 updateApp();
+                 setShowUpdatePrompt(false);
+               }}
+               className="px-4 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+             >
+               Update
+             </button>
+           </div>
+         </div>
+       )}
 
 
     </>

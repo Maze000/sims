@@ -1,7 +1,7 @@
 {
   "name": "Numassage - Plataforma de Masajes",
   "short_name": "Numassage",
-  "description": "Plataforma de servicios de masajes premium - encuentra y reserva tus terapeutas favoritos",
+      "description": "Premium massage services platform - find and book your favorite therapists",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -63,23 +63,23 @@
   ],
   "shortcuts": [
     {
-      "name": "Buscar Terapeutas",
-      "short_name": "Buscar",
-      "description": "Encuentra terapeutas disponibles",
+              "name": "Search Therapists",
+        "short_name": "Search",
+      "description": "Find available therapists",
       "url": "/therapists/featured",
       "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
     },
     {
-      "name": "Mis Mensajes",
-      "short_name": "Mensajes",
-      "description": "Ver conversaciones",
+              "name": "My Messages",
+        "short_name": "Messages",
+              "description": "View conversations",
       "url": "/messages",
       "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
     },
     {
-      "name": "Mi Perfil",
-      "short_name": "Perfil",
-      "description": "Gestionar perfil",
+              "name": "My Profile",
+        "short_name": "Profile",
+        "description": "Manage profile",
       "url": "/profile",
       "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
     }
