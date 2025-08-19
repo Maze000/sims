@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import HeaderMaind from "@/components/HeaderMaind";
 import { 
   Search, 
   MapPin, 
@@ -78,6 +79,7 @@ const mockTherapists = [
 
 const ExploreTherapists = () => {
   const navigate = useNavigate();
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("all");
@@ -186,24 +188,19 @@ const ExploreTherapists = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <Button variant="ghost" onClick={() => navigate("/therapists/featured")}>
-                ← Back to Dashboard
-              </Button>
-            </div>
-            <h1 className="text-xl font-bold text-gray-900">Explore Therapists</h1>
-            <div></div>
-          </div>
-        </div>
-      </div>
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900' 
+        : 'bg-gradient-to-br from-purple-50 via-white to-pink-50'
+    }`}>
+      <HeaderMaind isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} currentPage="dashboard" />
 
       {/* Search and Filters Section */}
-      <div className="bg-white shadow-sm">
+      <div className={`shadow-sm transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800/95 border-gray-700' 
+          : 'bg-white border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Search Bar */}
           <div className="relative mb-6">
@@ -213,7 +210,11 @@ const ExploreTherapists = () => {
               placeholder="Search therapists or specialties..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-3 w-full text-lg"
+              className={`pl-10 pr-4 py-3 w-full text-lg transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'border-purple-700 bg-purple-900/50 text-gray-200 placeholder-gray-400' 
+                  : 'border-purple-200 bg-purple-50/50 text-gray-900 placeholder-gray-500'
+              }`}
             />
           </div>
 
@@ -250,7 +251,11 @@ const ExploreTherapists = () => {
             {/* Filters Button */}
             <Button 
               variant="outline" 
-              className="relative"
+              className={`relative transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'border-purple-700 text-purple-400 hover:bg-purple-900/50' 
+                  : 'border-purple-200 text-purple-700 hover:bg-purple-50'
+              }`}
               onClick={() => setShowFilters(!showFilters)}
             >
               <SlidersHorizontal className="w-4 h-4 mr-2" />
@@ -263,7 +268,9 @@ const ExploreTherapists = () => {
             </Button>
 
             {/* View Toggle */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className={`flex rounded-lg p-1 transition-colors duration-300 ${
+              isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+            }`}>
               <Button
                 variant={viewMode === "grid" ? "default" : "ghost"}
                 size="sm"
@@ -651,8 +658,12 @@ const ExploreTherapists = () => {
             )}
           </div>
 
-          <div className="flex justify-between items-center pt-4 border-t">
-            <div className="text-sm text-gray-500">
+          <div className={`flex justify-between items-center pt-4 border-t transition-colors duration-300 ${
+            isDarkMode ? 'border-gray-700' : 'border-gray-200'
+          }`}>
+            <div className={`text-sm transition-colors duration-300 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               Showing {filteredTherapists.length} of {mockTherapists.length} therapists
             </div>
             <div className="flex gap-2">
@@ -670,10 +681,14 @@ const ExploreTherapists = () => {
       {/* Results Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+            isDarkMode ? 'text-gray-200' : 'text-gray-900'
+          }`}>
             {filteredTherapists.length} Therapists Found
           </h2>
-          <p className="text-gray-600">
+          <p className={`transition-colors duration-300 ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             Showing the best massage therapists in your area
           </p>
           
@@ -685,7 +700,11 @@ const ExploreTherapists = () => {
           {filteredTherapists.map((therapist) => (
             <Card 
               key={therapist.id} 
-              className="hover:shadow-lg transition-shadow cursor-pointer"
+              className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
+                isDarkMode 
+                  ? 'bg-gray-800/80 border-gray-700 hover:border-purple-600' 
+                  : 'bg-white border-gray-200 hover:border-purple-300'
+              }`}
               onClick={() => navigate(`/therapist/${therapist.id}`)}
             >
               <CardContent className="p-6">
@@ -697,17 +716,25 @@ const ExploreTherapists = () => {
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      <h3 className={`text-lg font-semibold truncate transition-colors duration-300 ${
+                        isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                      }`}>
                         {therapist.name}
                       </h3>
                       {therapist.isVerified && (
-                        <Badge className="bg-green-100 text-green-800">Verified</Badge>
+                        <Badge className={`transition-colors duration-300 ${
+                          isDarkMode ? 'bg-green-900/50 text-green-400' : 'bg-green-100 text-green-800'
+                        }`}>Verified</Badge>
                       )}
                     </div>
                     
-                    <p className="text-sm text-gray-600 mb-2">{therapist.specialty}</p>
+                    <p className={`text-sm mb-2 transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{therapist.specialty}</p>
                     
-                    <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                    <div className={`flex items-center space-x-4 text-sm mb-3 transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-500' : 'text-gray-500'
+                    }`}>
                       <div className="flex items-center">
                         <Star className="w-4 h-4 text-yellow-400 mr-1" />
                         {therapist.rating} ({therapist.reviewsCount})
@@ -736,7 +763,9 @@ const ExploreTherapists = () => {
 
         {filteredTherapists.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No therapists found matching your criteria.</p>
+            <p className={`text-lg transition-colors duration-300 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>No therapists found matching your criteria.</p>
             <Button onClick={clearAllFilters} className="mt-4">
               Clear All Filters
             </Button>

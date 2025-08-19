@@ -13,7 +13,7 @@ export const useSwipe = (options: SwipeOptions) => {
   const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
   const minSwipeDistance = options.minSwipeDistance || 50;
 
-  const onTouchStart = (e: TouchEvent) => {
+  const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart({
       x: e.targetTouches[0].clientX,
@@ -21,7 +21,7 @@ export const useSwipe = (options: SwipeOptions) => {
     });
   };
 
-  const onTouchMove = (e: TouchEvent) => {
+  const onTouchMove = (e: React.TouchEvent) => {
     setTouchEnd({
       x: e.targetTouches[0].clientX,
       y: e.targetTouches[0].clientY,

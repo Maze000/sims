@@ -69,10 +69,10 @@ const Login = () => {
         navigate("/edit-profile");
       }, 1000);
     } else {
-      // Simulate login - redirect directly to personal homepage for demo
+      // Simulate login - redirect directly to edit profile
       console.log("Login attempt");
       setTimeout(() => {
-        navigate("/home");
+        navigate("/edit-profile");
       }, 1000);
     }
   };
@@ -80,9 +80,9 @@ const Login = () => {
   const handleTwoFactorSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Two factor code submitted:", twoFactorCode);
-    // Simulate successful 2FA and redirect to personal homepage
+    // Simulate successful 2FA and redirect to edit profile
     setTimeout(() => {
-      navigate("/home");
+      navigate("/edit-profile");
     }, 1000);
   };
 

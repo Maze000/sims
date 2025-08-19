@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Header from "@/components/Header";
+import HeaderMaind from "@/components/HeaderMaind";
 import { useMobile } from "@/hooks/use-mobile";
 import { 
   MapPin, 
@@ -104,7 +105,7 @@ const Home = () => {
         ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900' 
         : 'bg-gradient-to-br from-purple-50 via-white to-pink-50'
     }`}>
-      <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} currentPage="home" />
+      <HeaderMaind isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} currentPage="home" />
 
       {/* Main Content */}
       <div className={`max-w-7xl mx-auto py-4 sm:py-8 ${isMobile ? 'px-4 pb-24' : 'px-3 sm:px-6 lg:px-8'}`}>

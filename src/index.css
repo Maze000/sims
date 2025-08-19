@@ -1051,4 +1051,28 @@ All colors MUST be HSL.
   .bg-gradient-orange-pink {
     background: linear-gradient(135deg, hsl(var(--orange-vibrant)), hsl(var(--pink-vibrant)));
   }
+
+  /* CHECKBOX FIXES PARA MÓVIL - FORZAR CUADRADO */
+  button[role="checkbox"],
+  [data-state="checked"],
+  [data-state="unchecked"],
+  #keepLoggedIn,
+  #acceptTerms {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    border-radius: 0px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* SVG dentro del checkbox también debe ser cuadrado */
+  button[role="checkbox"] svg,
+  [data-state="checked"] svg,
+  [data-state="unchecked"] svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
 }
