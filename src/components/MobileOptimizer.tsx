@@ -7,7 +7,7 @@ interface MobileOptimizerProps {
 }
 
 const MobileOptimizer: React.FC<MobileOptimizerProps> = ({ children }) => {
-  const { isMobile, isSmallMobile, isLandscape } = useMobile();
+  const { isMobile, isSmallMobile } = useMobile();
   const { isInstallable, installApp, updateAvailable, updateApp } = usePWA();
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [showUpdatePrompt, setShowUpdatePrompt] = useState(false);
@@ -65,14 +65,7 @@ const MobileOptimizer: React.FC<MobileOptimizerProps> = ({ children }) => {
     }
   }, [updateAvailable]);
 
-  // Landscape mode optimization
-  useEffect(() => {
-    if (isLandscape && isMobile) {
-      document.body.classList.add('landscape-mode');
-    } else {
-      document.body.classList.remove('landscape-mode');
-    }
-  }, [isLandscape, isMobile]);
+
 
   // Performance optimizations for small mobile devices
   useEffect(() => {
@@ -143,16 +136,7 @@ const MobileOptimizer: React.FC<MobileOptimizerProps> = ({ children }) => {
         </div>
       )}
 
-      {/* Mobile-specific overlay for landscape mode */}
-      {isLandscape && isMobile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 mx-4 text-center">
-            <div className="text-6xl mb-4">📱</div>
-            <h3 className="text-lg font-semibold mb-2">Gira tu dispositivo</h3>
-            <p className="text-gray-600">Para una mejor experiencia, usa el modo vertical</p>
-          </div>
-        </div>
-      )}
+
     </>
   );
 };
