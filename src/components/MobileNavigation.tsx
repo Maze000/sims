@@ -174,27 +174,27 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
             </Button>
 
             {/* Explore */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className={`flex flex-col items-center gap-1 h-12 w-12 touch-target ${
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`flex flex-col items-center gap-1 h-12 w-12 touch-target ${
                 isActive('/therapists/featured')
-                  ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/50'
+                    ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/50'
                   : effectiveDarkMode
-                  ? 'text-gray-400 hover:text-gray-200'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+                    ? 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
               onClick={() => navigate("/therapists/featured")}
-            >
+              >
               <Compass className="h-5 w-5" />
               <span className="text-xs">Explore</span>
-            </Button>
+              </Button>
 
             {/* Messages */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className={`flex flex-col items-center gap-1 h-12 w-12 touch-target ${
+          <Button
+            variant="ghost"
+            size="sm"
+            className={`flex flex-col items-center gap-1 h-12 w-12 touch-target ${
                 isActive('/messages')
                   ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/50'
                   : effectiveDarkMode
@@ -205,19 +205,19 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
             >
               <Send className="h-5 w-5" />
               <span className="text-xs">Messages</span>
-            </Button>
+          </Button>
 
             {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className={`flex flex-col items-center gap-1 h-12 w-12 touch-target ${
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`flex flex-col items-center gap-1 h-12 w-12 touch-target ${
                 isActive('/notifications')
-                  ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/50'
+                    ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/50'
                   : effectiveDarkMode
-                  ? 'text-gray-400 hover:text-gray-200'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+                    ? 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
               onClick={() => navigate("/notifications")}
             >
               <Bell className="h-5 w-5" />
@@ -241,7 +241,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
                 </AvatarFallback>
               </Avatar>
               <span className="text-xs">Profile</span>
-            </Button>
+              </Button>
 
             {/* Mobile Dropdown Menu */}
             {showUserMenu && createPortal(

@@ -1,316 +1,363 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Star, 
-  MapPin, 
-  Clock, 
-  Calendar, 
-  CreditCard, 
-  MessageSquare, 
-  Share2,
-  Heart,
-  Shield,
-  Award,
-  Users,
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  ArrowLeft,
+  Star,
+  MapPin,
+  Clock,
+  DollarSign,
+  MessageSquare,
+  Calendar,
   Phone,
-  Mail
-} from "lucide-react";
+  Mail,
+  Globe,
+  Facebook,
+  Instagram,
+  Linkedin,
+  CheckCircle,
+  XCircle
+} from 'lucide-react';
 
 const TherapistProfile = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [selectedService, setSelectedService] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('services');
 
+  // Mock data for therapist
   const therapist = {
-    id: "1",
-    name: "Sarah Mitchell",
-    avatar: "/placeholder.svg",
-    rating: 4.9,
-    reviewsCount: 234,
-    location: "Auckland, New Zealand",
-    verified: true,
-    yearsExperience: 8,
-    totalSessions: 1250,
-    specialties: ["Relaxation Massage", "Deep Tissue", "Aromatherapy", "Sports Massage"],
-    languages: ["English", "Māori"],
-    phone: "+64 9 123 4567",
-    email: "sarah.mitchell@numassage.com",
-    description: "Certified therapist with over 8 years of experience in therapeutic and relaxation massage. Specialising in deep relaxation techniques and muscle recovery. My approach focuses on creating a personalised experience for each client, adapting techniques to their specific needs.",
-    certifications: [
-      "Therapeutic Massage Certification - New Zealand Massage Institute",
-      "Deep Tissue Specialisation - International Massage Academy",
-      "Aromatherapy Certification - Natural Therapy Centre"
-    ],
+    id: '1',
+    name: 'María González',
+    specialization: 'Therapeutic Massage',
+    location: 'Auckland Central',
+    rating: 4.8,
+    reviewsCount: 127,
+    experience: '8 years',
+    languages: ['English', 'Spanish'],
+    bio: 'Professional massage therapist with over 8 years of experience specializing in therapeutic and deep tissue massage. I help clients relieve pain, reduce stress, and improve their overall well-being through personalized massage therapy sessions.',
+    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face',
+    available: true,
     services: [
       {
-        id: "1",
-        name: "Relaxation Massage",
-        duration: "60 min",
+        id: '1',
+        name: 'Relaxation Massage',
+        description: 'A gentle, flowing massage that promotes relaxation and reduces stress. Perfect for those looking to unwind and rejuvenate.',
+        price: 80,
+        duration: '60 min'
+      },
+      {
+        id: '2',
+        name: 'Therapeutic Massage',
+        description: 'Targeted massage therapy to address specific muscle tension, pain, and mobility issues. Ideal for chronic pain relief.',
+        price: 100,
+        duration: '60 min'
+      },
+      {
+        id: '3',
+        name: 'Deep Tissue Massage',
+        description: 'Intensive massage targeting deep muscle layers to release chronic tension and improve range of motion.',
         price: 120,
-        description: "Gentle and relaxing massage to release tension and reduce stress"
+        duration: '75 min'
       },
       {
-        id: "2",
-        name: "Deep Tissue Massage",
-        duration: "75 min",
-        price: 150,
-        description: "Deep massage to release muscle tension and knots"
-      },
-      {
-        id: "3",
-        name: "Aromatherapy Massage",
-        duration: "90 min",
-        price: 180,
-        description: "Relaxing massage combined with therapeutic essential oils"
-      },
-      {
-        id: "4",
-        name: "Sports Massage",
-        duration: "60 min",
-        price: 135,
-        description: "Specific massage for athletes, focused on muscle recovery"
+        id: '4',
+        name: 'Sports Massage',
+        description: 'Specialized massage for athletes and active individuals to improve performance, prevent injuries, and aid recovery.',
+        price: 110,
+        duration: '60 min'
       }
     ],
     availability: {
-      "2025-01-20": ["09:00", "11:00", "14:00", "16:00"],
-      "2025-01-21": ["10:00", "13:00", "15:00", "17:00"],
-      "2025-01-22": ["09:00", "12:00", "14:30", "16:30"]
+      monday: { available: true, startTime: '09:00', endTime: '17:00' },
+      tuesday: { available: true, startTime: '09:00', endTime: '17:00' },
+      wednesday: { available: true, startTime: '09:00', endTime: '17:00' },
+      thursday: { available: true, startTime: '09:00', endTime: '17:00' },
+      friday: { available: true, startTime: '09:00', endTime: '17:00' },
+      saturday: { available: true, startTime: '10:00', endTime: '16:00' },
+      sunday: { available: false, startTime: '', endTime: '' }
     },
     reviewsList: [
       {
-        id: "1",
-        author: "Anna M.",
+        id: '1',
+        clientName: 'Sarah Johnson',
         rating: 5,
-        date: "2025-01-15",
-        comment: "Excellent professional, very dedicated and the massage was incredible. Highly recommended."
+        comment: 'María is absolutely amazing! Her therapeutic massage helped me recover from a sports injury much faster than expected. Very professional and skilled.',
+        date: '2024-01-10'
       },
       {
-        id: "2",
-        author: "Chris R.",
+        id: '2',
+        clientName: 'Mike Chen',
         rating: 5,
-        date: "2025-01-10",
-        comment: "Sarah has magic hands. The deep tissue massage was exactly what I needed."
+        comment: 'Best massage therapist I\'ve ever been to. Her deep tissue massage is incredible and she really knows how to target problem areas.',
+        date: '2024-01-08'
       },
       {
-        id: "3",
-        author: "Lucy P.",
+        id: '3',
+        clientName: 'Emma Wilson',
         rating: 4,
-        date: "2025-01-05",
-        comment: "Very good experience, relaxing atmosphere and professional technique."
+        comment: 'Great experience! María is very professional and the relaxation massage was exactly what I needed. Will definitely book again.',
+        date: '2024-01-05'
       }
-    ]
+    ],
+    contact: {
+      phone: '+64 21 123 4567',
+      email: 'maria.gonzalez@example.com',
+      website: 'www.mariamassage.co.nz'
+    },
+    socialMedia: {
+      facebook: 'mariamassageauckland',
+      instagram: 'mariamassage_nz',
+      linkedin: 'maria-gonzalez-massage'
+    }
   };
 
-  const handleBooking = () => {
-    const selectedServiceData = therapist.services.find(s => s.id === selectedService);
-    
-    const bookingData = {
-      therapistName: therapist.name,
-      serviceName: selectedServiceData?.name,
-      date: selectedDate,
-      time: selectedTime,
-      duration: selectedServiceData?.duration,
-      price: selectedServiceData?.price,
-      location: therapist.location
-    };
+  const availableDays = Object.entries(therapist.availability)
+    .filter(([_, schedule]) => schedule.available)
+    .map(([day, _]) => day.charAt(0).toUpperCase() + day.slice(1));
 
-    navigate("/payment", { state: bookingData });
-    setShowBookingModal(false);
+  const handleSendMessage = () => {
+    navigate('/messages');
+  };
+
+  const handleBookSession = () => {
+    // This would typically open a booking modal or redirect to booking page
+    console.log('Booking session with:', therapist.name);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Button variant="ghost" onClick={() => window.history.back()}>
-              ← Back
-            </Button>
-            <h1 className="text-2xl font-bold text-purple-600">
-              <span className="logo-nu">NU</span>
-              <span className="logo-massage">massage</span>
-            </h1>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">
-                <Share2 className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Heart className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        {/* Back Button */}
+        <div className="mb-4 sm:mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="text-sm sm:text-base touch-target"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
         </div>
-      </header>
 
-      <div className="container mx-auto px-4 py-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Profile Info */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Main Profile Card */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-start gap-4">
-                  <div className="relative">
-                    <Avatar className="w-20 h-20">
-                      <AvatarImage src={therapist.avatar} />
-                      <AvatarFallback className="text-2xl">{therapist.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    {therapist.verified && (
-                      <div className="absolute -bottom-1 -right-1 bg-green-500 text-white rounded-full p-1">
-                        <Shield className="w-3 h-3" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h1 className="text-2xl font-bold">{therapist.name}</h1>
-                      {therapist.verified && (
-                        <Badge className="bg-green-100 text-green-800">Verified</Badge>
-                      )}
+        {/* Therapist Header */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8">
+            {/* Profile Image */}
+            <div className="flex-shrink-0">
+              <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
+                <AvatarImage src={therapist.image} alt={therapist.name} />
+                <AvatarFallback className="text-2xl sm:text-3xl md:text-4xl bg-purple-600 text-white">
+                  {therapist.name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+
+            {/* Profile Info */}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                    {therapist.name}
+                  </h1>
+                  <p className="text-lg sm:text-xl text-purple-600 font-medium mb-2">
+                    {therapist.specialization}
+                  </p>
+                  <div className="flex items-center space-x-2 sm:space-x-4 text-sm sm:text-base text-gray-600 mb-3">
+                    <div className="flex items-center space-x-1">
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{therapist.location}</span>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {therapist.location}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Award className="w-4 h-4" />
-                        {therapist.yearsExperience} years exp.
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {therapist.totalSessions} sessions
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">{therapist.rating}</span>
-                      </div>
-                      <span className="text-gray-600">({therapist.reviewsCount} reviews)</span>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {therapist.specialties.map((specialty) => (
-                        <Badge key={specialty} variant="secondary" className="text-xs">
-                          {specialty}
-                        </Badge>
-                      ))}
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{therapist.experience} experience</span>
                     </div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 leading-relaxed">{therapist.description}</p>
-              </CardContent>
-            </Card>
 
-            {/* Tabs */}
-            <Tabs defaultValue="services" className="w-full">
+                {/* Rating and Status */}
+                <div className="flex flex-col items-end space-y-2 sm:space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                            i < Math.floor(therapist.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm sm:text-base font-medium text-gray-900">
+                      {therapist.rating}
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-gray-600">
+                    {therapist.reviewsCount} reviews
+                  </p>
+                  <Badge
+                    variant={therapist.available ? "default" : "secondary"}
+                    className="text-xs sm:text-sm"
+                  >
+                    {therapist.available ? 'Available' : 'Not Available'}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Bio */}
+              <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6">
+                {therapist.bio}
+              </p>
+
+              {/* Languages */}
+              <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
+                {therapist.languages.map((language) => (
+                  <Badge key={language} variant="outline" className="text-xs sm:text-sm">
+                    {language}
+                  </Badge>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                <Button
+                  onClick={handleSendMessage}
+                  className="text-sm sm:text-base touch-target"
+                  size="lg"
+                >
+                  <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  Send Message
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleBookSession}
+                  className="text-sm sm:text-base touch-target"
+                  size="lg"
+                >
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  Book Session
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="services">Services</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                <TabsTrigger value="about">About</TabsTrigger>
+                <TabsTrigger value="services" className="text-xs sm:text-sm">Services</TabsTrigger>
+                <TabsTrigger value="reviews" className="text-xs sm:text-sm">Reviews</TabsTrigger>
+                <TabsTrigger value="about" className="text-xs sm:text-sm">About</TabsTrigger>
               </TabsList>
-              
-              <TabsContent value="services" className="space-y-4 max-h-96 overflow-y-auto scrollable">
-                {therapist.services.map((service) => (
-                  <Card key={service.id} className="card-hover">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-2">{service.name}</h3>
-                          <p className="text-gray-600 mb-3">{service.description}</p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {service.duration}
+
+              {/* Services Tab */}
+              <TabsContent value="services" className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                  {therapist.services.map((service) => (
+                    <Card key={service.id}>
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                          <div className="flex-1 mb-3 sm:mb-0">
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+                              {service.name}
+                            </h3>
+                            <p className="text-sm sm:text-base text-gray-600 mb-3">
+                              {service.description}
+                            </p>
+                            <div className="flex items-center space-x-4 text-sm sm:text-base text-gray-500">
+                              <span className="flex items-center space-x-1">
+                                <Clock className="w-4 h-4" />
+                                <span>{service.duration}</span>
+                              </span>
+                              <span className="flex items-center space-x-1">
+                                <DollarSign className="w-4 h-4 text-green-600" />
+                                <span className="font-semibold">${service.price}</span>
+                              </span>
                             </div>
                           </div>
+                          <Button
+                            onClick={handleSendMessage}
+                            className="text-sm sm:text-base touch-target"
+                            size="sm"
+                          >
+                            <MessageSquare className="w-4 h-4 mr-2" />
+                            Send Message
+                          </Button>
                         </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-purple-600 mb-2">
-                            ${service.price.toLocaleString()}
-                          </div>
-                          <Dialog open={showBookingModal} onOpenChange={setShowBookingModal}>
-                            <DialogTrigger asChild>
-                                                          <Button 
-                              className="bg-purple-600 hover:bg-purple-700"
-                              onClick={() => setSelectedService(service.id)}
-                            >
-                              Book Now
-                            </Button>
-                            </DialogTrigger>
-                          </Dialog>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </TabsContent>
 
-              <TabsContent value="reviews" className="space-y-4 max-h-96 overflow-y-auto scrollable">
-                {therapist.reviewsList.map((review) => (
-                  <Card key={review.id}>
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h4 className="font-medium">{review.author}</h4>
-                          <div className="flex items-center gap-1 mt-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`w-4 h-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                              />
-                            ))}
+              {/* Reviews Tab */}
+              <TabsContent value="reviews" className="space-y-4 sm:space-y-6">
+                <div className="space-y-4 sm:space-y-6">
+                  {therapist.reviewsList.map((review) => (
+                    <Card key={review.id}>
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="flex items-start justify-between mb-3 sm:mb-4">
+                          <div className="flex items-center space-x-3 sm:space-x-4">
+                            <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
+                              <AvatarFallback className="bg-purple-100 text-purple-600 text-sm sm:text-base">
+                                {review.clientName.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium text-sm sm:text-base">{review.clientName}</p>
+                              <div className="flex items-center space-x-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`w-3 h-3 sm:w-4 sm:h-4 ${
+                                      i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
                           </div>
+                          <span className="text-xs sm:text-sm text-gray-500">
+                            {new Date(review.date).toLocaleDateString()}
+                          </span>
                         </div>
-                        <span className="text-sm text-gray-500">{review.date}</span>
-                      </div>
-                      <p className="text-gray-700">{review.comment}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <p className="text-sm sm:text-base text-gray-700">{review.comment}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </TabsContent>
 
-              <TabsContent value="about" className="space-y-4">
+              {/* About Tab */}
+              <TabsContent value="about" className="space-y-4 sm:space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Certifications</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Professional Background</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {therapist.certifications.map((cert, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <Award className="w-4 h-4 text-purple-600 mt-1 flex-shrink-0" />
-                          <span className="text-gray-700">{cert}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Languages</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {therapist.languages.map((language) => (
-                        <Badge key={language} variant="outline">{language}</Badge>
-                      ))}
+                  <CardContent className="space-y-4 sm:space-y-6">
+                    <div>
+                      <h4 className="font-medium text-sm sm:text-base text-gray-900 mb-2">Experience</h4>
+                      <p className="text-sm sm:text-base text-gray-600">{therapist.experience}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-sm sm:text-base text-gray-900 mb-2">Specialization</h4>
+                      <p className="text-sm sm:text-base text-gray-600">{therapist.specialization}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-sm sm:text-base text-gray-900 mb-2">Languages</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {therapist.languages.map((language) => (
+                          <Badge key={language} variant="secondary" className="text-xs sm:text-sm">
+                            {language}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -318,158 +365,111 @@ const TherapistProfile = () => {
             </Tabs>
           </div>
 
-          {/* Booking Sidebar */}
-          <div className="space-y-6">
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="w-5 h-5" />
-                  Book Session
-                </CardTitle>
+          {/* Right Column - Sidebar */}
+          <div className="space-y-4 sm:space-y-6 md:space-y-8">
+            {/* General Info */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-lg sm:text-xl">General Info</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label>Service</Label>
-                  <Select value={selectedService} onValueChange={setSelectedService}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {therapist.services.map((service) => (
-                        <SelectItem key={service.id} value={service.id}>
-                          {service.name} - ${service.price.toLocaleString()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>Date</Label>
-                  <Select value={selectedDate} onValueChange={setSelectedDate}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a date" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.keys(therapist.availability).map((date) => (
-                        <SelectItem key={date} value={date}>
-                          {new Date(date).toLocaleDateString('en-NZ')}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {selectedDate && (
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <Label>Time</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {therapist.availability[selectedDate as keyof typeof therapist.availability]?.map((time) => (
-                        <Button
-                          key={time}
-                          variant={selectedTime === time ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSelectedTime(time)}
-                          className={selectedTime === time ? "bg-purple-600 hover:bg-purple-700" : ""}
-                        >
-                          {time}
-                        </Button>
+                    <h4 className="font-medium text-sm sm:text-base text-gray-900 mb-2">Available Days</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {availableDays.map((day) => (
+                        <Badge key={day} variant="outline" className="text-xs sm:text-sm">
+                          {day}
+                        </Badge>
                       ))}
                     </div>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-2">
+                      Contact for specific hours
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact Information */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-4">
+                <CardTitle className="text-lg sm:text-xl">Contact Information</CardTitle>
+              </CardHeader>
+              <CardContent className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
+                <div className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-700">{therapist.location}</span>
+                </div>
+                <div className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-700">{therapist.contact.phone}</span>
+                </div>
+                <div className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                  <span className="text-gray-700">{therapist.contact.email}</span>
+                </div>
+                {therapist.contact.website && (
+                  <div className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
+                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                    <a
+                      href={`https://${therapist.contact.website}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple-600 hover:text-purple-700 hover:underline"
+                    >
+                      {therapist.contact.website}
+                    </a>
                   </div>
                 )}
-
-                <Button 
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                  disabled={!selectedService || !selectedDate || !selectedTime}
-                  onClick={() => setShowBookingModal(true)}
-                >
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  Reservar y Pagar
-                </Button>
               </CardContent>
             </Card>
 
-            {/* Contact Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm">{therapist.phone}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm">{therapist.email}</span>
-                </div>
-                <Button variant="outline" className="w-full">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Send Message
-                </Button>
-              </CardContent>
-            </Card>
+            {/* Social Media */}
+            {(therapist.socialMedia.facebook || therapist.socialMedia.instagram || therapist.socialMedia.linkedin) && (
+              <Card>
+                <CardHeader className="pb-3 sm:pb-4">
+                  <CardTitle className="text-lg sm:text-xl">Social Media</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 sm:p-4 md:p-6">
+                  <div className="flex space-x-3 sm:space-x-4">
+                    {therapist.socialMedia.facebook && (
+                      <a
+                        href={`https://facebook.com/${therapist.socialMedia.facebook}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        <Facebook className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </a>
+                    )}
+                    {therapist.socialMedia.instagram && (
+                      <a
+                        href={`https://instagram.com/${therapist.socialMedia.instagram}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-pink-600 hover:text-pink-700"
+                      >
+                        <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </a>
+                    )}
+                    {therapist.socialMedia.linkedin && (
+                      <a
+                        href={`https://linkedin.com/in/${therapist.socialMedia.linkedin}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-700 hover:text-blue-800"
+                      >
+                        <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
+                      </a>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Booking Modal */}
-      <Dialog open={showBookingModal} onOpenChange={setShowBookingModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Confirm Booking</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-              <div className="flex justify-between">
-                <span>Therapist:</span>
-                <span className="font-medium">{therapist.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Service:</span>
-                <span className="font-medium">
-                  {therapist.services.find(s => s.id === selectedService)?.name}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span>Date:</span>
-                <span className="font-medium">
-                  {selectedDate && new Date(selectedDate).toLocaleDateString('en-NZ')}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span>Time:</span>
-                <span className="font-medium">{selectedTime}</span>
-              </div>
-              <div className="flex justify-between border-t pt-2">
-                <span className="font-semibold">Total:</span>
-                <span className="font-bold text-purple-600">
-                  ${therapist.services.find(s => s.id === selectedService)?.price.toLocaleString()}
-                </span>
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="notes">Additional notes (optional)</Label>
-              <Textarea 
-                id="notes"
-                placeholder="Mention any preferences or special conditions..."
-                rows={3}
-              />
-            </div>
-
-            <div className="flex gap-2">
-              <Button variant="outline" className="flex-1" onClick={() => setShowBookingModal(false)}>
-                Cancel
-              </Button>
-              <Button className="flex-1 bg-purple-600 hover:bg-purple-700" onClick={handleBooking}>
-                Confirm & Pay
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

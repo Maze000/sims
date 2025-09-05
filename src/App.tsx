@@ -1,58 +1,206 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MobileOptimizer from "./components/MobileOptimizer";
-import MobilePerformance from "./components/MobilePerformance";
-import MobileAccessibility from "./components/MobileAccessibility";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
-import PersonalHomepage from "./pages/PersonalHomepage";
-import TherapistProfile from "./pages/TherapistProfile";
-import Payment from "./pages/Payment";
-import CreateProfile from "./pages/CreateProfile";
-import EditProfile from "./pages/EditProfile";
-import TherapistDashboard from "./pages/TherapistDashboard";
-import ExploreTherapists from "./pages/ExploreTherapists";
-import Messages from "./pages/Messages";
-import Notifications from "./pages/Notifications";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
+import Navigation from './components/Navigation';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import TherapistDashboard from './pages/TherapistDashboard';
+import Membership from './pages/Membership';
+import Home from './pages/Home';
+import ExploreTherapists from './pages/ExploreTherapists';
+import Messages from './pages/Messages';
+import Profile from './pages/Profile';
+import TherapistProfile from './pages/TherapistProfileNew';
+import CreateProfile from './pages/CreateProfile';
+import Services from './pages/Services';
+import Availability from './pages/Availability';
+import Settings from './pages/Settings';
 
-const queryClient = new QueryClient();
+// Unified Layout Component - Always renders Navigation
+const AppLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <Navigation />
+      <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 transition-all duration-300 lg:ml-64">
+        {/* Mobile header spacer - Only visible on mobile */}
+        <div className="lg:hidden h-14 sm:h-16" />
+        {children}
+      </main>
+    </div>
+  );
+};
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <MobileOptimizer>
-        <MobilePerformance>
-          <MobileAccessibility>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/profile" element={<PersonalHomepage />} />
-                <Route path="/therapists/featured" element={<Dashboard />} />
-                <Route path="/therapist/:id" element={<TherapistProfile />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="/create-profile" element={<CreateProfile />} />
-                <Route path="/edit-profile" element={<EditProfile />} />
-                <Route path="/therapist-dashboard" element={<TherapistDashboard />} />
-                <Route path="/explore" element={<ExploreTherapists />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/notifications" element={<Notifications />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </MobileAccessibility>
-        </MobilePerformance>
-      </MobileOptimizer>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+// Public Layout Component - For pages that don't need authentication
+const PublicLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {children}
+    </div>
+  );
+};
+
+// Protected Route Component with role-based access
+const ProtectedRoute = ({ 
+  children, 
+  allowedUserTypes, 
+  redirectTo = '/dashboard' 
+}: { 
+  children: React.ReactNode, 
+  allowedUserTypes?: string[], 
+  redirectTo?: string 
+}) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="animate-spin w-8 h-8 sm:w-12 sm:h-12 border-4 border-purple-600 border-t-transparent rounded-full mx-auto mb-3 sm:mb-4"></div>
+            <p className="text-gray-600 text-sm sm:text-base">Loading...</p>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedUserTypes && !allowedUserTypes.includes(user.userType)) {
+    return <Navigate to={redirectTo} replace />;
+  }
+
+  return <>{children}</>;
+};
+
+// Main App Component
+const AppContent = () => {
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes - No authentication required */}
+        <Route path="/" element={
+          <PublicLayout>
+            <Home />
+          </PublicLayout>
+        } />
+        
+        <Route path="/home" element={
+          <PublicLayout>
+            <Home />
+          </PublicLayout>
+        } />
+        
+        <Route path="/login" element={
+          <PublicLayout>
+            <Login />
+          </PublicLayout>
+        } />
+
+        {/* Protected Routes - Require authentication and use AppLayout */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Dashboard />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/therapist-dashboard" element={
+          <ProtectedRoute allowedUserTypes={['therapist']} redirectTo="/dashboard">
+            <AppLayout>
+              <TherapistDashboard />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/explore" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <ExploreTherapists />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/therapist/:id" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <TherapistProfile />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/messages" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Messages />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Profile />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/create-profile" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <CreateProfile />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/services" element={
+          <ProtectedRoute allowedUserTypes={['therapist']} redirectTo="/dashboard">
+            <AppLayout>
+              <Services />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/availability" element={
+          <ProtectedRoute allowedUserTypes={['therapist']} redirectTo="/dashboard">
+            <AppLayout>
+              <Availability />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Settings />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/membership" element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Membership />
+            </AppLayout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Catch all route - Redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+};
+
+// Root App Component
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
 
 export default App;
