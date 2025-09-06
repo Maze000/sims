@@ -60,7 +60,7 @@ const Payment = () => {
 
   if (paymentSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <Card className="w-full max-w-md text-center">
           <CardContent className="p-8">
             <div className="mb-6">
@@ -98,7 +98,7 @@ const Payment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">

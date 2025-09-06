@@ -4,21 +4,20 @@ import Navigation from './components/Navigation';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import TherapistDashboard from './pages/TherapistDashboard';
-import Membership from './pages/Membership';
 import Home from './pages/Home';
 import ExploreTherapists from './pages/ExploreTherapists';
-import Messages from './pages/Messages';
 import Profile from './pages/Profile';
 import TherapistProfile from './pages/TherapistProfileNew';
 import CreateProfile from './pages/CreateProfile';
 import Services from './pages/Services';
 import Availability from './pages/Availability';
 import Settings from './pages/Settings';
+import ProfileStats from './pages/ProfileStats';
 
 // Unified Layout Component - Always renders Navigation
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-transparent">
       <Navigation />
       <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 transition-all duration-300 lg:ml-64">
         {/* Mobile header spacer - Only visible on mobile */}
@@ -108,7 +107,7 @@ const AppContent = () => {
         } />
         
         <Route path="/therapist-dashboard" element={
-          <ProtectedRoute allowedUserTypes={['therapist']} redirectTo="/dashboard">
+          <ProtectedRoute allowedUserTypes={['service_provider']} redirectTo="/dashboard">
             <AppLayout>
               <TherapistDashboard />
             </AppLayout>
@@ -131,13 +130,14 @@ const AppContent = () => {
           </ProtectedRoute>
         } />
         
-        <Route path="/messages" element={
+        <Route path="/provider/:id" element={
           <ProtectedRoute>
             <AppLayout>
-              <Messages />
+              <TherapistProfile />
             </AppLayout>
           </ProtectedRoute>
         } />
+        
         
         <Route path="/profile" element={
           <ProtectedRoute>
@@ -156,7 +156,7 @@ const AppContent = () => {
         } />
         
         <Route path="/services" element={
-          <ProtectedRoute allowedUserTypes={['therapist']} redirectTo="/dashboard">
+          <ProtectedRoute allowedUserTypes={['service_provider']} redirectTo="/dashboard">
             <AppLayout>
               <Services />
             </AppLayout>
@@ -164,7 +164,7 @@ const AppContent = () => {
         } />
         
         <Route path="/availability" element={
-          <ProtectedRoute allowedUserTypes={['therapist']} redirectTo="/dashboard">
+          <ProtectedRoute allowedUserTypes={['service_provider']} redirectTo="/dashboard">
             <AppLayout>
               <Availability />
             </AppLayout>
@@ -179,13 +179,14 @@ const AppContent = () => {
           </ProtectedRoute>
         } />
         
-        <Route path="/membership" element={
-          <ProtectedRoute>
+        <Route path="/profile-stats" element={
+          <ProtectedRoute allowedUserTypes={['service_provider']} redirectTo="/dashboard">
             <AppLayout>
-              <Membership />
+              <ProfileStats />
             </AppLayout>
           </ProtectedRoute>
         } />
+        
         
         {/* Catch all route - Redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

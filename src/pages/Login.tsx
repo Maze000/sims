@@ -77,8 +77,16 @@ const Login = () => {
         {/* Logo */}
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-            <span className="text-purple-600">NU</span>
-            <span className="text-gray-900">MASSAGE</span>
+            <span style={{
+              color: '#FF6B35',
+              fontFamily: 'Orbitron, Rajdhani, monospace',
+              fontWeight: '900',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+              textRendering: 'optimizeLegibility',
+              WebkitFontSmoothing: 'antialiased'
+            }}>SIMS</span>
           </h1>
           <p className="text-sm sm:text-base text-gray-600 mt-2">
             {isLogin ? 'Welcome back!' : 'Join our community'}
@@ -103,21 +111,45 @@ const Login = () => {
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
                 onClick={() => setIsLogin(true)}
-                className={`flex-1 py-2 px-3 text-xs sm:text-sm font-medium rounded-md transition-colors ${
-                  isLogin 
-                    ? 'bg-white text-purple-600 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
+                className={`flex-1 py-2 px-3 text-xs sm:text-sm font-medium rounded-md transition-colors`}
+                style={{
+                  backgroundColor: isLogin ? 'white' : 'transparent',
+                  color: isLogin ? '#FF6B35' : '#6B7280',
+                  boxShadow: isLogin ? '0 1px 3px rgba(0, 0, 0, 0.1)' : 'none',
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLogin) {
+                    e.target.style.color = '#374151';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLogin) {
+                    e.target.style.color = '#6B7280';
+                  }
+                }}
               >
                 Sign In
               </button>
               <button
                 onClick={() => setIsLogin(false)}
-                className={`flex-1 py-2 px-3 text-xs sm:text-sm font-medium rounded-md transition-colors ${
-                  !isLogin 
-                    ? 'bg-white text-purple-600 shadow-sm' 
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
+                className={`flex-1 py-2 px-3 text-xs sm:text-sm font-medium rounded-md transition-colors`}
+                style={{
+                  backgroundColor: !isLogin ? 'white' : 'transparent',
+                  color: !isLogin ? '#FF6B35' : '#6B7280',
+                  boxShadow: !isLogin ? '0 1px 3px rgba(0, 0, 0, 0.1)' : 'none',
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
+                onMouseEnter={(e) => {
+                  if (isLogin) {
+                    e.target.style.color = '#374151';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (isLogin) {
+                    e.target.style.color = '#6B7280';
+                  }
+                }}
               >
                 Sign Up
               </button>

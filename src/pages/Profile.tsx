@@ -265,7 +265,7 @@ const Profile = () => {
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">Account Information</CardTitle>
               <CardDescription className="text-xs sm:text-sm">
-                Your account details and membership status
+                Your account details and profile information
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 sm:space-y-6">

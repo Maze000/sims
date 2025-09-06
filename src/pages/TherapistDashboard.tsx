@@ -24,6 +24,7 @@ import {
 const TherapistDashboard = () => {
   const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState('week');
+  const [showAllRequests, setShowAllRequests] = useState(false);
 
   // Mock data
   const stats = {
@@ -33,33 +34,54 @@ const TherapistDashboard = () => {
     totalClients: 23
   };
 
-  const recentBookings = [
+  const allContactRequests = [
     {
       id: '1',
       clientName: 'Sarah Johnson',
-      service: 'Therapeutic Massage',
-      date: '2024-01-15',
-      time: '14:00',
-      status: 'confirmed',
-      amount: 120
+      service: 'Personal Training Service',
+      timeAgo: '2 hours ago'
     },
     {
       id: '2',
       clientName: 'Mike Chen',
-      service: 'Deep Tissue Massage',
-      date: '2024-01-16',
-      time: '10:00',
-      status: 'pending',
-      amount: 140
+      service: 'Guitar Lessons',
+      timeAgo: '1 day ago'
     },
     {
       id: '3',
       clientName: 'Emma Wilson',
-      service: 'Relaxation Massage',
-      date: '2024-01-17',
-      time: '16:00',
-      status: 'confirmed',
-      amount: 100
+      service: 'Photography Session',
+      timeAgo: '3 days ago'
+    },
+    {
+      id: '4',
+      clientName: 'David Brown',
+      service: 'Home Cleaning',
+      timeAgo: '5 days ago'
+    },
+    {
+      id: '5',
+      clientName: 'Lisa Davis',
+      service: 'Dog Walking',
+      timeAgo: '1 week ago'
+    },
+    {
+      id: '6',
+      clientName: 'Alex Thompson',
+      service: 'Tutoring - Mathematics',
+      timeAgo: '1 week ago'
+    },
+    {
+      id: '7',
+      clientName: 'Maria Garcia',
+      service: 'Graphic Design',
+      timeAgo: '2 weeks ago'
+    },
+    {
+      id: '8',
+      clientName: 'John Smith',
+      service: 'IT Support',
+      timeAgo: '2 weeks ago'
     }
   ];
 
@@ -117,15 +139,15 @@ const TherapistDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Therapist Dashboard</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Service Provider Dashboard</h1>
               <p className="text-sm sm:text-base text-gray-600">
-                Manage your practice and track your performance
+                Manage your profile and track your visibility
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-0">
@@ -138,26 +160,26 @@ const TherapistDashboard = () => {
                 Edit Profile
               </Button>
               <Button
-                onClick={() => navigate('/messages')}
+                onClick={() => navigate('/profile-stats')}
                 className="text-sm sm:text-base touch-target"
               >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                View Messages
+                <TrendingUp className="w-4 h-4 mr-2" />
+                View Stats
               </Button>
             </div>
           </div>
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardContent className="p-3 sm:p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Total Earnings</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-green-600">${stats.totalEarnings}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Profile Views</p>
+                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-pink-600">1,247</p>
                 </div>
-                <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-green-600" />
+                <Eye className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-pink-600" />
               </div>
             </CardContent>
           </Card>
@@ -166,10 +188,10 @@ const TherapistDashboard = () => {
             <CardContent className="p-3 sm:p-4 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Total Sessions</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600">{stats.totalSessions}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Contact Requests</p>
+                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600">23</p>
                 </div>
-                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-blue-600" />
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
@@ -185,99 +207,45 @@ const TherapistDashboard = () => {
               </div>
             </CardContent>
           </Card>
-
-          <Card>
-            <CardContent className="p-3 sm:p-4 md:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Total Clients</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-purple-600">{stats.totalClients}</p>
-                </div>
-                <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-purple-600" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-6 md:space-y-8">
-            {/* Recent Bookings */}
+            {/* Recent Contact Requests */}
             <Card>
               <CardHeader className="pb-3 sm:pb-4">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg sm:text-xl">Recent Bookings</CardTitle>
-                  <Button variant="outline" size="sm" className="text-xs sm:text-sm touch-target">
+                  <CardTitle className="text-lg sm:text-xl">Recent Contact Requests</CardTitle>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs sm:text-sm touch-target"
+                    onClick={() => setShowAllRequests(!showAllRequests)}
+                  >
                     <Eye className="w-4 h-4 mr-2" />
-                    View All
+                    {showAllRequests ? 'Show Less' : 'View All'}
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="p-3 sm:p-4 md:p-6">
-                <div className="space-y-3 sm:space-y-4">
-                  {recentBookings.map((booking) => (
-                    <div key={booking.id} className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg">
+                <div className={`space-y-3 sm:space-y-4 ${showAllRequests ? 'max-h-96 overflow-y-auto' : ''}`}>
+                  {(showAllRequests ? allContactRequests : allContactRequests.slice(0, 3)).map((request) => (
+                    <div key={request.id} className="flex items-center p-3 sm:p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3 sm:space-x-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                          <Users className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                          <Users className="w-5 h-5 sm:w-6 sm:h-6 text-pink-600" />
                         </div>
                         <div>
-                          <p className="font-medium text-sm sm:text-base">{booking.clientName}</p>
-                          <p className="text-xs sm:text-sm text-gray-600">{booking.service}</p>
+                          <p className="font-medium text-sm sm:text-base">{request.clientName}</p>
+                          <p className="text-xs sm:text-sm text-gray-600">{request.service}</p>
                           <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
-                            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                            <span>{new Date(booking.date).toLocaleDateString()}</span>
-                            <Clock className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                            <span>{booking.time}</span>
+                            <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                            <span>{request.timeAgo}</span>
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <Badge className={`text-xs ${getStatusColor(booking.status)}`}>
-                          {getStatusText(booking.status)}
-                        </Badge>
-                        <p className="text-sm sm:text-base font-semibold text-green-600 mt-1">
-                          ${booking.amount}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Upcoming Sessions */}
-            <Card>
-              <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="text-lg sm:text-xl">Upcoming Sessions</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
-                  Your next scheduled appointments
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-4 md:p-6">
-                <div className="space-y-3 sm:space-y-4">
-                  {upcomingSessions.map((session) => (
-                    <div key={session.id} className="flex items-center justify-between p-3 sm:p-4 bg-blue-50 rounded-lg">
-                      <div className="flex items-center space-x-3 sm:space-x-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm sm:text-base">{session.clientName}</p>
-                          <p className="text-xs sm:text-sm text-gray-600">{session.service}</p>
-                          <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
-                            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                            <span>{new Date(session.date).toLocaleDateString()}</span>
-                            <Clock className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
-                            <span>{session.time} ({session.duration})</span>
-                          </div>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs sm:text-sm touch-target">
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        Message
-                      </Button>
                     </div>
                   ))}
                 </div>
@@ -331,38 +299,6 @@ const TherapistDashboard = () => {
 
           {/* Right Column - Sidebar */}
           <div className="space-y-4 sm:space-y-6 md:space-y-8">
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-4 md:p-6 space-y-2 sm:space-y-3">
-                <Button
-                  onClick={() => navigate('/create-profile')}
-                  className="w-full justify-start text-sm sm:text-base touch-target"
-                  variant="outline"
-                >
-                  <Edit3 className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
-                <Button
-                  onClick={() => navigate('/messages')}
-                  className="w-full justify-start text-sm sm:text-base touch-target"
-                  variant="outline"
-                >
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  View Messages
-                </Button>
-                <Button
-                  onClick={() => navigate('/explore')}
-                  className="w-full justify-start text-sm sm:text-base touch-target"
-                  variant="outline"
-                >
-                  <Eye className="w-4 h-4 mr-2" />
-                  View My Profile
-                </Button>
-              </CardContent>
-            </Card>
 
             {/* Contact Information */}
             <Card>
@@ -385,41 +321,34 @@ const TherapistDashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Performance Insights */}
+            {/* Profile Status */}
             <Card>
               <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="text-lg sm:text-xl">Performance Insights</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Profile Status</CardTitle>
                 <CardDescription className="text-xs sm:text-sm">
-                  This week's performance
+                  Your profile completion
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-3 sm:p-4 md:p-6">
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base text-gray-600">Sessions</span>
-                    <span className="text-sm sm:text-base font-semibold">8</span>
+                    <span className="text-sm sm:text-base text-gray-600">Profile Complete</span>
+                    <span className="text-sm sm:text-base font-semibold text-green-600">95%</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base text-gray-600">Earnings</span>
-                    <span className="text-sm sm:text-base font-semibold text-green-600">$640</span>
+                    <span className="text-sm sm:text-base text-gray-600">Services Listed</span>
+                    <span className="text-sm sm:text-base font-semibold">5</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base text-gray-600">New Clients</span>
-                    <span className="text-sm sm:text-base font-semibold">3</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm sm:text-base text-gray-600">Rating</span>
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm sm:text-base font-semibold">4.9</span>
-                    </div>
+                    <span className="text-sm sm:text-base text-gray-600">Profile Verified</span>
+                    <span className="text-sm sm:text-base font-semibold text-green-600">Yes</span>
                   </div>
                 </div>
                 <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-200">
-                  <div className="flex items-center justify-center text-xs sm:text-sm text-green-600">
-                    <TrendingUp className="w-4 h-4 mr-2" />
-                    +12% from last week
-                  </div>
+                  <Button className="w-full text-sm sm:text-base touch-target" variant="outline">
+                    <Edit3 className="w-4 h-4 mr-2" />
+                    Complete Profile
+                  </Button>
                 </div>
               </CardContent>
             </Card>

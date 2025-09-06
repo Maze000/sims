@@ -5,42 +5,53 @@
 /* ===== DESIGN SYSTEM VARIABLES ===== */
 @layer base {
   :root {
-    /* Light theme - Nueva paleta vibrante */
-    --background: 0 0% 98%; /* Blanco puro */
-    --foreground: 0 0% 15%; /* Negro suave */
-    --card: 0 0% 100%; /* Blanco */
-    --card-foreground: 0 0% 15%;
+    /* Colores Principales */
+    --primary: 25 95% 53%;        /* Orange #FF6B35 */
+    --secondary: 192 65% 54%;      /* Plastic Sky Blue #3BAFDA */
+    --accent: 180 100% 40%;        /* Darker Cyan #00CCCC */
+    --highlight: 45 96% 64%;       /* Plastic Yellow #FCD34D */
+    
+    /* Neutros */
+    --background: 210 16% 97%;     /* Cloud White #F8FAFC */
+    --foreground: 0 0% 7%;         /* All Blacks Black #111111 */
+    --muted: 210 20% 94%;
+    --border: 220 13% 87%;
+    
+    /* Efectos Plásticos */
+    --plastic-shine: linear-gradient(135deg, hsl(0 0% 100% / 0.3) 0%, transparent 50%);
+    --plastic-shadow: 0 10px 25px -5px hsl(210 20% 20% / 0.15);
+    --plastic-shadow-lg: 0 20px 40px -10px hsl(210 20% 20% / 0.25);
+    --plastic-glow: 0 0 20px hsl(var(--primary) / 0.4);
+    
+    /* Shadcn compatibility */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
-    --primary: 30 100% 56%; /* #e28000 - Naranja vibrante */
+    --popover-foreground: 0 0% 7%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 330 100% 71%; /* #ff69b4 - Rosa vibrante */
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
-    --accent: 45 100% 62%; /* #ffc340 - Amarillo dorado */
-    --accent-foreground: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 90%;
     --input: 0 0% 100%; /* Blanco para inputs */
     --ring: 30 100% 56%; /* #e28000 */
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 15%;
-    --sidebar-primary: 30 100% 56%; /* #e28000 */
+    --sidebar-primary: 330 100% 71%; /* #FF6B9D */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 330 100% 71%; /* #ff69b4 */
+    --sidebar-accent: 45 100% 62%; /* #FF9F43 */
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 90%;
     --sidebar-ring: 30 100% 56%;
 
     /* Brand extensions */
-    --cta: 30 100% 56%; /* #e28000 - Naranja vibrante */
+    --cta: 330 100% 71%; /* #FF6B9D - Rosa vibrante */
     --cta-foreground: 0 0% 100%;
-    --gold: 45 100% 62%; /* #ffc340 - Amarillo dorado */
+    --gold: 45 100% 62%; /* #FF9F43 - Amarillo dorado */
     --gold-foreground: 0 0% 15%;
 
     /* Paleta completa de colores */
@@ -110,7 +121,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply text-foreground font-sans;
     max-width: 100vw;
     min-height: 100vh;
     height: auto;
@@ -120,6 +131,9 @@
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    /* Aplicar textura de ondas maoríes globalmente - mismo patrón que homepage */
+    background-color: hsl(var(--background));
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='wave-pattern' x='0' y='0' width='80' height='80' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 40 Q20 20 40 40 T80 40' fill='none' stroke='%233BAFDA' stroke-width='1' opacity='0.2'/%3E%3Cpath d='M0 60 Q20 40 40 60 T80 60' fill='none' stroke='%233BAFDA' stroke-width='1' opacity='0.2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23wave-pattern)' /%3E%3C/svg%3E");
   }
 
   h1, h2, h3, h4 {
@@ -178,13 +192,291 @@
 
 /* ===== COMPONENT STYLES ===== */
 @layer components {
-  .story-link {
-    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
-  }
   
-  .hover-scale { 
-    @apply transition-transform duration-200 hover:scale-105; 
+
+  /* ===== COMPONENTES PLÁSTICOS ===== */
+  
+  /* Botones Plásticos */
+  .btn-plastic {
+    @apply px-6 py-3 font-bold text-white rounded-2xl relative overflow-hidden;
+    background: hsl(var(--primary));
+    border: 2px solid hsl(var(--foreground) / 0.1);
+    box-shadow: var(--plastic-shadow);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(0);
   }
+
+  .btn-plastic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--plastic-shine);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .btn-plastic:hover {
+    transform: translateY(-1px) scale(1.005);
+    box-shadow: var(--plastic-shadow-lg);
+  }
+
+  .btn-plastic:hover::before {
+    opacity: 1;
+  }
+
+  .btn-plastic:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  /* Variantes de botones */
+  .btn-plastic-kiwi {
+    background: hsl(var(--primary));
+  }
+
+  .btn-plastic-sky {
+    background: hsl(var(--secondary));
+  }
+
+  .btn-plastic-maori {
+    background: hsl(var(--accent));
+  }
+
+  .btn-plastic-highlight {
+    background: hsl(var(--highlight));
+    color: hsl(var(--foreground));
+  }
+
+  .btn-plastic-collectible {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    border: 3px solid hsl(var(--highlight));
+    box-shadow: var(--plastic-glow);
+  }
+
+  .btn-plastic-ghost {
+    background: transparent;
+    border: 2px solid #3BAFDA;
+    color: #3BAFDA;
+  }
+
+  .btn-plastic-ghost:hover {
+    background: rgba(59, 175, 218, 0.1);
+    border-color: #3BAFDA;
+    color: #3BAFDA;
+  }
+
+  /* Cards Coleccionables */
+  .card-collectible {
+    @apply p-6 rounded-3xl relative overflow-hidden;
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(16px);
+    border: 2px solid hsl(var(--border));
+    box-shadow: var(--plastic-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+  }
+
+  .card-collectible::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--plastic-shine);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card-collectible:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--plastic-shadow-lg);
+    border-color: hsl(var(--primary) / 0.3);
+  }
+
+  .card-collectible:hover::before {
+    opacity: 0.5;
+  }
+
+  .card-collectible-featured {
+    border: 3px solid hsl(var(--primary));
+    box-shadow: var(--plastic-glow);
+  }
+
+  .card-collectible-premium {
+    background: linear-gradient(135deg, hsl(var(--background) / 0.9), hsl(var(--primary) / 0.05));
+    border: 3px solid hsl(var(--highlight));
+    box-shadow: var(--plastic-glow), var(--plastic-shadow-lg);
+  }
+
+  /* Inputs Plásticos */
+  .input-plastic {
+    @apply rounded-2xl shadow-lg border-2;
+    background: hsl(var(--background));
+    border-color: hsl(var(--border));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+  }
+
+  .input-plastic:focus {
+    transform: scale(1.02);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.2), var(--plastic-shadow);
+    outline: none;
+  }
+
+  /* Avatares Plásticos */
+  .avatar-plastic {
+    @apply w-28 h-28 rounded-full border-4 shadow-xl overflow-hidden;
+    border-color: hsl(var(--primary));
+    background: hsl(var(--background));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
+  }
+
+  .avatar-plastic:hover {
+    transform: scale(1.05);
+    box-shadow: var(--plastic-shadow-lg);
+    border-color: hsl(var(--secondary));
+  }
+
+  /* Tipografía */
+  .title-primary {
+    @apply text-3xl font-extrabold tracking-tight;
+    color: hsl(var(--foreground));
+  }
+
+  .title-secondary {
+    @apply text-xl font-bold;
+    color: hsl(var(--foreground) / 0.8);
+  }
+
+  .text-descriptive {
+    @apply text-sm font-medium;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* ===== ELEMENTOS CULTURALES MAORÍES ===== */
+  
+  /* Patrones de Fondo */
+  .maori-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 20%, hsl(var(--primary) / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(var(--secondary) / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 40% 60%, hsl(var(--highlight) / 0.08) 0%, transparent 50%);
+  }
+
+  .maori-pattern-koru {
+    background-image: 
+      conic-gradient(from 0deg at 30% 30%, hsl(var(--primary) / 0.1) 0deg, transparent 90deg),
+      conic-gradient(from 180deg at 70% 70%, hsl(var(--secondary) / 0.1) 0deg, transparent 90deg);
+  }
+
+  .maori-pattern-wave {
+    background-image: 
+      linear-gradient(45deg, hsl(var(--primary) / 0.05) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--secondary) / 0.05) 25%, transparent 25%);
+    background-size: 20px 20px;
+  }
+
+  .maori-pattern-fern {
+    background-image: 
+      radial-gradient(ellipse at center, hsl(var(--primary) / 0.1) 0%, transparent 70%);
+  }
+
+  /* ===== ANIMACIONES PERSONALIZADAS ===== */
+  
+  .animate-plastic-bounce {
+    animation: plasticBounce 0.6s ease-out;
+  }
+
+  @keyframes plasticBounce {
+    0% {
+      transform: translateY(-20px) scale(0.9);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(5px) scale(1.05);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+ /* 🔄 Animación de giro estilo Koru */
+.animate-koru-spin {
+  animation: koruSpin 8s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* 📱 Versión más suave para móvil */
+@media (max-width: 768px) {
+  .animate-koru-spin {
+    animation: koruSpinMobile 12s ease-in-out infinite alternate;
+    transform-origin: center center;
+  }
+}
+
+/* Giro completo para escritorio */
+@keyframes koruSpin {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.05);
+  }
+}
+
+/* Oscilación suave para móvil */
+@keyframes koruSpinMobile {
+  0% {
+    transform: rotate(-5deg) scale(1);
+  }
+  100% {
+    transform: rotate(200deg) scale(1);
+  }
+}
+
+/* ✨ Glow Pulse efecto plástico */
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: var(--plastic-shadow);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: var(--plastic-glow), var(--plastic-shadow-lg);
+    transform: scale(1.03);
+  }
+}
+
+
+  /* Efectos de focus */
+  .glow-primary:focus {
+    box-shadow: var(--plastic-glow);
+  }
+
+  /* Transiciones suaves */
+  .smooth-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .smooth-hover:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+
 
   /* Clases de colores personalizados */
   .bg-orange-vibrant { background-color: hsl(var(--orange-vibrant)); }
@@ -728,4 +1020,19 @@
   .touch-target {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
   }
+}
+
+/* Import elegant font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* ===== MODERN SIMS LOGO TYPOGRAPHY ===== */
+.logo-sims {
+  font-family: 'Orbitron', 'Rajdhani', monospace !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
 }

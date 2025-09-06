@@ -39,8 +39,8 @@ const Settings = () => {
     emailNotifications: true,
     pushNotifications: true,
     marketingEmails: false,
-    appointmentReminders: true,
-    newMessageAlerts: true,
+    contactRequestAlerts: true,
+    profileViewAlerts: true,
     weeklyUpdates: false
   });
 
@@ -48,7 +48,7 @@ const Settings = () => {
     profileVisibility: 'public',
     showEmail: false,
     showPhone: false,
-    allowMessages: true,
+    allowContactRequests: true,
     showOnlineStatus: true,
     dataSharing: false
   });
@@ -115,11 +115,25 @@ const Settings = () => {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 text-left transition-colors ${
-                        activeTab === tab.id
-                          ? 'bg-purple-50 text-purple-700 border-r-2 border-purple-600'
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                      }`}
+                      className={`w-full flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 text-left transition-colors`}
+                      style={{
+                        backgroundColor: activeTab === tab.id ? 'rgba(109, 190, 69, 0.1)' : 'transparent',
+                        color: activeTab === tab.id ? '#FF6B35' : '#374151',
+                        borderRightColor: activeTab === tab.id ? '#FF6B35' : 'transparent',
+                        transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (activeTab !== tab.id) {
+                          e.target.style.color = '#FF6B35';
+                          e.target.style.backgroundColor = 'rgba(109, 190, 69, 0.05)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (activeTab !== tab.id) {
+                          e.target.style.color = '#374151';
+                          e.target.style.backgroundColor = 'transparent';
+                        }
+                      }}
                     >
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       <span className="text-sm sm:text-base font-medium">{tab.label}</span>
@@ -207,7 +221,7 @@ const Settings = () => {
                     value={profileSettings.bio}
                     onChange={(e) => updateProfileSettings('bio', e.target.value)}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                 </div>
 
@@ -261,29 +275,29 @@ const Settings = () => {
 
                   <Separator />
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-sm sm:text-base font-medium">Appointment Reminders</Label>
-                      <p className="text-xs sm:text-sm text-gray-600">Get reminded about upcoming appointments</p>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label className="text-sm sm:text-base font-medium">Contact Request Alerts</Label>
+                        <p className="text-xs sm:text-sm text-gray-600">Get notified when someone requests contact</p>
+                      </div>
+                      <Switch
+                        checked={notificationSettings.contactRequestAlerts}
+                        onCheckedChange={(checked) => updateNotificationSettings('contactRequestAlerts', checked)}
+                      />
                     </div>
-                    <Switch
-                      checked={notificationSettings.appointmentReminders}
-                      onCheckedChange={(checked) => updateNotificationSettings('appointmentReminders', checked)}
-                    />
-                  </div>
 
                   <Separator />
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-sm sm:text-base font-medium">New Message Alerts</Label>
-                      <p className="text-xs sm:text-sm text-gray-600">Notify when you receive new messages</p>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label className="text-sm sm:text-base font-medium">Profile View Alerts</Label>
+                        <p className="text-xs sm:text-sm text-gray-600">Notify when someone views your profile</p>
+                      </div>
+                      <Switch
+                        checked={notificationSettings.profileViewAlerts}
+                        onCheckedChange={(checked) => updateNotificationSettings('profileViewAlerts', checked)}
+                      />
                     </div>
-                    <Switch
-                      checked={notificationSettings.newMessageAlerts}
-                      onCheckedChange={(checked) => updateNotificationSettings('newMessageAlerts', checked)}
-                    />
-                  </div>
 
                   <Separator />
 
@@ -326,10 +340,10 @@ const Settings = () => {
                       <select
                         value={privacySettings.profileVisibility}
                         onChange={(e) => updatePrivacySettings('profileVisibility', e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-md text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="px-3 py-2 border border-gray-300 rounded-md text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                       >
                         <option value="public">Public</option>
-                        <option value="therapists">Therapists Only</option>
+                        <option value="providers">Service Providers Only</option>
                         <option value="private">Private</option>
                       </select>
                     </div>
@@ -364,12 +378,12 @@ const Settings = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label className="text-sm sm:text-base font-medium">Allow Messages</Label>
-                        <p className="text-xs sm:text-sm text-gray-600">Let others send you messages</p>
+                        <Label className="text-sm sm:text-base font-medium">Allow Contact Requests</Label>
+                        <p className="text-xs sm:text-sm text-gray-600">Let others send you contact requests</p>
                       </div>
                       <Switch
-                        checked={privacySettings.allowMessages}
-                        onCheckedChange={(checked) => updatePrivacySettings('allowMessages', checked)}
+                        checked={privacySettings.allowContactRequests}
+                        onCheckedChange={(checked) => updatePrivacySettings('allowContactRequests', checked)}
                       />
                     </div>
                   </div>
@@ -474,9 +488,9 @@ const Settings = () => {
               <CardContent className="space-y-4 sm:space-y-6">
                 <div className="text-center py-8 sm:py-12">
                   <Palette className="w-16 h-16 sm:w-20 sm:h-20 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-2">Appearance Settings</h3>
+                  <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-2">Profile Appearance</h3>
                   <p className="text-sm sm:text-base text-gray-600">
-                    Customize your app experience with themes and display options
+                    Customize how your public profile appears to clients
                   </p>
                   <p className="text-xs sm:text-sm text-gray-500 mt-2">
                     Coming soon...

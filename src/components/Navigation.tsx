@@ -7,15 +7,13 @@ import { Button } from './ui/button';
 import { 
   Home, 
   User, 
-  Calendar, 
-  MessageSquare, 
-  CreditCard, 
   Settings, 
   LogOut,
   Users,
   Star,
   Menu,
-  X
+  X,
+  BarChart3
 } from 'lucide-react';
 
 const Navigation = () => {
@@ -88,8 +86,16 @@ const Navigation = () => {
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="text-lg sm:text-xl md:text-2xl font-bold">
-                <span className="text-purple-600">NU</span>
-                <span className="text-gray-900">MASSAGE</span>
+                <span style={{
+                  color: '#FF6B35',
+                  fontFamily: 'Orbitron, Rajdhani, monospace',
+                  fontWeight: '900',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+                  textRendering: 'optimizeLegibility',
+                  WebkitFontSmoothing: 'antialiased'
+                }}>SIMS</span>
               </Link>
             </div>
 
@@ -97,17 +103,41 @@ const Navigation = () => {
             <div className="hidden sm:flex items-center space-x-4 md:space-x-6 lg:space-x-8">
               <Link 
                 to="/" 
-                className={`text-gray-700 hover:text-purple-600 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
-                  isActive('/') ? 'text-purple-600' : ''
-                }`}
+                className={`text-gray-700 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors`}
+                style={{
+                  color: isActive('/') ? '#FF6B35' : '#374151',
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive('/')) {
+                    e.target.style.color = '#FF6B35';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive('/')) {
+                    e.target.style.color = '#374151';
+                  }
+                }}
               >
                 Home
               </Link>
               <Link 
                 to="/home" 
-                className={`text-gray-700 hover:text-purple-600 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
-                  isActive('/home') ? 'text-purple-600' : ''
-                }`}
+                className={`text-gray-700 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors`}
+                style={{
+                  color: isActive('/home') ? '#FF6B35' : '#374151',
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive('/home')) {
+                    e.target.style.color = '#FF6B35';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive('/home')) {
+                    e.target.style.color = '#374151';
+                  }
+                }}
               >
                 Explore
               </Link>
@@ -129,24 +159,20 @@ const Navigation = () => {
 
   // If user is logged in, show full sidebar navigation
   if (user) {
-    const navItems = user.userType === 'therapist' 
+    const navItems = user.userType === 'service_provider' 
       ? [
           { path: '/therapist-dashboard', label: 'Dashboard', icon: Home },
-          { path: '/explore', label: 'Explore Therapists', icon: Users },
+          { path: '/explore', label: 'Find Your Sims', icon: Users },
           { path: '/profile', label: 'Profile', icon: User },
           { path: '/services', label: 'Services', icon: Star },
-          { path: '/availability', label: 'Availability', icon: Calendar },
-          { path: '/messages', label: 'Messages', icon: MessageSquare },
-          { path: '/membership', label: 'Membership', icon: CreditCard },
+          { path: '/profile-stats', label: 'Profile Stats', icon: BarChart3 },
           { path: '/settings', label: 'Settings', icon: Settings }
         ]
       : [
           { path: '/dashboard', label: 'Dashboard', icon: Home },
-          { path: '/explore', label: 'Explore Therapists', icon: Users },
-          { path: '/messages', label: 'Messages', icon: MessageSquare },
-          { path: '/membership', label: 'Membership', icon: CreditCard },
+          { path: '/explore', label: 'Find Your Sims', icon: Users },
           { path: '/profile', label: 'Profile', icon: User },
-          { path: '/create-profile', label: 'Are you a Therapist?', icon: Star },
+          { path: '/create-profile', label: 'Are you a Provider?', icon: Star },
           { path: '/settings', label: 'Settings', icon: Settings }
         ];
 
@@ -188,8 +214,16 @@ const Navigation = () => {
             {/* Logo */}
             <div className="flex items-center mb-6 sm:mb-8">
               <Link to="/" className="text-lg sm:text-xl md:text-2xl font-bold">
-                <span className="text-purple-600">NU</span>
-                <span className="text-gray-900">MASSAGE</span>
+                <span style={{
+                  color: '#FF6B35',
+                  fontFamily: 'Orbitron, Rajdhani, monospace',
+                  fontWeight: '900',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
+                  textRendering: 'optimizeLegibility',
+                  WebkitFontSmoothing: 'antialiased'
+                }}>SIMS</span>
               </Link>
             </div>
 
@@ -198,7 +232,7 @@ const Navigation = () => {
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
                   <AvatarImage src={user.avatar} alt={`${user.firstName} ${user.lastName}`} />
-                  <AvatarFallback className="bg-purple-600 text-white font-semibold text-xs sm:text-sm">
+                  <AvatarFallback style={{background: '#FF6B35', color: 'white'}} className="font-semibold text-xs sm:text-sm">
                     {user.firstName?.charAt(0) || user.lastName?.charAt(0) || "U"}
                   </AvatarFallback>
                 </Avatar>
@@ -207,7 +241,7 @@ const Navigation = () => {
                     {user.firstName} {user.lastName}
                   </p>
                   <p className="text-xs text-gray-600 capitalize truncate">
-                    {user.userType === 'therapist' ? 'Therapist' : 'Client'}
+                    {user.userType === 'service_provider' ? 'Service Provider' : 'Client'}
                   </p>
                 </div>
               </div>
@@ -223,9 +257,27 @@ const Navigation = () => {
                       to={item.path}
                       className={`flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors duration-200 text-xs sm:text-sm touch-target mobile-nav-link ${
                         isActive(item.path)
-                          ? 'bg-purple-100 text-purple-700 border-r-2 border-purple-600'
-                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                      }`}
+                          ? 'border-r-2'
+                          : ''
+                        }`}
+                        style={{
+                          backgroundColor: isActive(item.path) ? 'rgba(109, 190, 69, 0.1)' : 'transparent',
+                          color: isActive(item.path) ? '#FF6B35' : '#374151',
+                          borderRightColor: isActive(item.path) ? '#FF6B35' : 'transparent',
+                          transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isActive(item.path)) {
+                            e.target.style.color = '#FF6B35';
+                            e.target.style.backgroundColor = 'rgba(109, 190, 69, 0.05)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive(item.path)) {
+                            e.target.style.color = '#374151';
+                            e.target.style.backgroundColor = 'transparent';
+                          }
+                        }}
                       onClick={() => handleNavigation(item.path)}
                     >
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />

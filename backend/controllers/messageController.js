@@ -14,18 +14,17 @@ exports.sendInitialMessage = async (req, res) => {
       return res.status(400).json({ message: 'Recipient must be a therapist' });
     }
 
-    // Check if sender has active membership
+    // Check if sender is authenticated
     const user = await User.findById(req.userId);
-    if (user.userType !== 'therapist') {
-      // For clients, check if they have active membership
-      // This would require membership check logic
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
     }
 
     // Create payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 300, // 3.00 NZD in cents
       currency: 'nzd',
-      customer: req.userId, // You might want to get this from membership
+      customer: req.userId,
       payment_method: paymentMethodId,
       confirm: true,
       return_url: `${process.env.FRONTEND_URL}/messages`,

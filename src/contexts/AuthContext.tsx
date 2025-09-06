@@ -5,7 +5,7 @@ interface User {
   email: string;
   firstName: string;
   lastName: string;
-  userType: 'client' | 'therapist';
+  userType: 'client' | 'service_provider';
   isVerified: boolean;
   avatar?: string;
 }
@@ -17,7 +17,7 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
   updateUser: (userData: Partial<User>) => void;
-  becomeTherapist: () => Promise<void>;
+  becomeServiceProvider: () => Promise<void>;
 }
 
 interface RegisterData {
@@ -26,7 +26,7 @@ interface RegisterData {
   firstName: string;
   lastName: string;
   phone?: string;
-  userType?: 'client' | 'therapist';
+  userType?: 'client' | 'service_provider';
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -154,9 +154,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const becomeTherapist = async () => {
+  const becomeServiceProvider = async () => {
     try {
-      // TODO: Implement actual API call to become therapist
+      // TODO: Implement actual API call to become service provider
       // const response = await fetch('/api/auth/become-therapist', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' }
@@ -164,13 +164,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       // Simulate API response for now
       if (user) {
-        const updatedUser = { ...user, userType: 'therapist' as const };
+        const updatedUser = { ...user, userType: 'service_provider' as const };
         setUser(updatedUser);
         localStorage.setItem('userData', JSON.stringify(updatedUser));
       }
     } catch (error) {
-      console.error('Error becoming therapist:', error);
-      throw new Error('Failed to become therapist');
+      console.error('Error becoming service provider:', error);
+      throw new Error('Failed to become service provider');
     }
   };
 
@@ -181,7 +181,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     updateUser,
-    becomeTherapist
+    becomeServiceProvider
   };
 
   return (

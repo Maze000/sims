@@ -6,15 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   User, 
-  MessageSquare, 
-  Crown, 
   Calendar, 
   Star, 
   MapPin, 
   Phone, 
   Mail,
   Settings,
-  LogOut
+  LogOut,
+  Users,
+  TrendingUp
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
@@ -26,11 +26,8 @@ const Dashboard: React.FC = () => {
     navigate('/login');
   };
 
-  const handleNavigateToMembership = () => {
-    navigate('/membership');
-  };
 
-  const handleNavigateToTherapistDashboard = () => {
+  const handleNavigateToServiceProviderDashboard = () => {
     navigate('/therapist-dashboard');
   };
 
@@ -39,7 +36,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Welcome Section */}
         <div className="mb-4 sm:mb-6 md:mb-8">
@@ -47,73 +44,68 @@ const Dashboard: React.FC = () => {
             Welcome back, {user?.firstName}!
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-gray-600 mt-1 sm:mt-2">
-            Manage your {user?.userType === 'therapist' ? 'therapist profile' : 'wellness journey'} and connect with others
+            Manage your {user?.userType === 'service_provider' ? 'service provider profile' : 'service discovery'} and connect with others
           </p>
         </div>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 md:mb-8">
-          <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleNavigateToMembership}>
-            <CardContent className="p-3 sm:p-4 md:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Membership</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600">Active</p>
-                </div>
-                <Crown className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-blue-600" />
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardContent className="p-3 sm:p-4 md:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Messages</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-green-600">3</p>
+          {user?.userType === 'service_provider' && (
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-600">Contact Requests</p>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold" style={{color: '#FF6B35'}}>5</p>
+                  </div>
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" style={{color: '#FF6B35'}} />
                 </div>
-                <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-green-600" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
           {user?.userType === 'client' && (
             <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleNavigateToCreateProfile}>
               <CardContent className="p-3 sm:p-4 md:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-gray-600">¿Eres Terapeuta?</p>
-                    <p className="text-xs sm:text-sm md:text-lg font-bold text-purple-600">Registrarse como Terapeuta</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Are you a Provider?</p>
+                    <p className="text-xs sm:text-sm md:text-lg font-bold" style={{color: '#FF6B35'}}>Register as Provider</p>
                   </div>
-                  <Star className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-purple-600" />
+                  <Star className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" style={{color: '#FF6B35'}} />
                 </div>
               </CardContent>
             </Card>
           )}
 
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardContent className="p-3 sm:p-4 md:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Appointments</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-purple-600">2</p>
+          {user?.userType === 'service_provider' && (
+            <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/profile-stats')}>
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-600">Profile Views</p>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold" style={{color: '#FF6B35'}}>24</p>
+                  </div>
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" style={{color: '#FF6B35'}} />
                 </div>
-                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-purple-600" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
 
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardContent className="p-3 sm:p-4 md:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Rating</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-600">4.8</p>
+          {user?.userType === 'service_provider' && (
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-600">Rating</p>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-600">4.8</p>
+                  </div>
+                  <Star className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-yellow-600" />
                 </div>
-                <Star className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-yellow-600" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Main Content */}
@@ -140,8 +132,8 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div>
                     <Label className="text-xs sm:text-sm font-medium text-gray-600">User Type</Label>
-                    <Badge variant={user?.userType === 'therapist' ? 'default' : 'secondary'} className="text-xs sm:text-sm">
-                      {user?.userType === 'therapist' ? 'Therapist' : 'Client'}
+                    <Badge variant={user?.userType === 'service_provider' ? 'default' : 'secondary'} className="text-xs sm:text-sm">
+                      {user?.userType === 'service_provider' ? 'Service Provider' : 'Client'}
                     </Badge>
                   </div>
                   <div>
@@ -172,14 +164,14 @@ const Dashboard: React.FC = () => {
                   <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 border rounded-lg">
                     <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs sm:text-sm md:text-base font-medium">New message received</p>
+                      <p className="text-xs sm:text-sm md:text-base font-medium">New contact request received</p>
                       <p className="text-xs sm:text-sm text-gray-600">1 day ago</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 border rounded-lg">
                     <div className="w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs sm:text-sm md:text-base font-medium">Appointment scheduled</p>
+                      <p className="text-xs sm:text-sm md:text-base font-medium">Profile viewed by client</p>
                       <p className="text-xs sm:text-sm text-gray-600">3 days ago</p>
                     </div>
                   </div>
@@ -190,75 +182,7 @@ const Dashboard: React.FC = () => {
 
           {/* Right Column */}
           <div className="space-y-3 sm:space-y-4 md:space-y-6">
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader className="p-3 sm:p-4 md:p-6">
-                <CardTitle className="text-sm sm:text-base md:text-lg">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-4 md:p-6 space-y-2 sm:space-y-3">
-                {user?.userType === 'therapist' ? (
-                  <Button 
-                    onClick={handleNavigateToTherapistDashboard} 
-                    className="w-full justify-start text-xs sm:text-sm touch-target"
-                    variant="outline"
-                  >
-                    <User className="h-3 w-3 sm:h-4 sm:w-4 mr-2 flex-shrink-0" />
-                    Manage Profile
-                  </Button>
-                                 ) : (
-                   <Button 
-                     onClick={handleNavigateToCreateProfile} 
-                     className="w-full justify-start text-xs sm:text-sm touch-target"
-                     variant="outline"
-                   >
-                     <User className="h-3 w-3 sm:h-4 sm:w-4 mr-2 flex-shrink-0" />
-                     Register as Therapist
-                   </Button>
-                 )}
-                
-                <Button 
-                  onClick={handleNavigateToMembership} 
-                  className="w-full justify-start text-xs sm:text-sm touch-target"
-                  variant="outline"
-                >
-                  <Crown className="h-3 w-3 sm:h-4 sm:w-4 mr-2 flex-shrink-0" />
-                  Manage Membership
-                </Button>
-                
-                <Button className="w-full justify-start text-xs sm:text-sm touch-target" variant="outline">
-                  <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-2 flex-shrink-0" />
-                  View Messages
-                </Button>
-                
-                <Button className="w-full justify-start text-xs sm:text-sm touch-target" variant="outline">
-                  <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-2 flex-shrink-0" />
-                  Schedule Session
-                </Button>
-              </CardContent>
-            </Card>
 
-            {/* Membership Status */}
-            <Card>
-              <CardHeader className="p-3 sm:p-4 md:p-6">
-                <CardTitle className="flex items-center gap-2 text-sm sm:text-base md:text-lg">
-                  <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" />
-                  Membership Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-4 md:p-6">
-                <div className="text-center">
-                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-blue-600 mb-1 sm:mb-2">Free Trial</div>
-                  <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 md:mb-4">14 days remaining</p>
-                  <Button 
-                    onClick={handleNavigateToMembership} 
-                    className="w-full text-xs sm:text-sm touch-target"
-                    size="sm"
-                  >
-                    View Details
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Contact Information */}
             <Card>

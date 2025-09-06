@@ -1,27 +1,90 @@
-# Numassage - MVP Platform
+# Sims - Service Provider Platform
 
-A modern massage therapy platform connecting clients with professional therapists in New Zealand.
+A modern service provider platform connecting clients with professional service providers in New Zealand. Built with a playful, toy-like aesthetic inspired by The Sims game.
 
-## 🚀 MVP Features
+## 🎮 Platform Features
 
 ### Core Functionality
 - **User Authentication**: Secure login/registration system
-- **Therapist Profiles**: Complete therapist management dashboard
-- **Membership System**: 14-day free trial + monthly subscription
+- **Service Provider Profiles**: Complete provider management dashboard
+- **Direct Marketplace**: Simple service provider platform
 - **Messaging System**: Paid messaging ($3 NZD per initial message)
 - **Stripe Integration**: Secure payment processing
 
-### For Therapists
+### For Service Providers
 - **Dashboard**: Manage profile, services, and availability
-- **Service Management**: Add, edit, and price massage services
+- **Service Management**: Add, edit, and price services
 - **Availability Settings**: Set working hours and availability
 - **Profile Customization**: Business details, specializations, experience
 
 ### For Clients
-- **Browse Therapists**: Search and filter by location, specialty
-- **Membership Plans**: Free trial with automatic conversion
-- **Direct Messaging**: Connect with therapists (paid service)
-- **User Dashboard**: Manage account and membership
+- **Browse Providers**: Search and filter by location, specialty
+- **Contact Requests**: Direct contact form for service inquiries
+- **Direct Messaging**: Connect with providers (paid service)
+- **User Dashboard**: Manage account and profile
+
+## 🎨 Service Categories
+
+### 1️⃣ Health and Wellness
+- Masajistas
+- Fisioterapeutas / Kinesiologistas
+- Terapeutas ocupacionales
+- Psicólogos / Consejeros
+- Nutricionistas / Dietistas
+- Entrenadores personales / Personal trainers
+- Yoga / Pilates instructors
+- Acupunturistas
+- Quiroprácticos
+
+### 2️⃣ Beauty and Aesthetics
+- Estilistas / Hairdressers
+- Manicuristas / Pedicuristas
+- Maquilladores / Makeup artists
+- Depiladores / Waxing specialists
+- Barberos
+- Esteticistas / Skin care specialists
+
+### 3️⃣ Personal Care and Assistance
+- Niñeras / Babysitters
+- Cuidadores de ancianos / Caregivers
+- Acompañantes personales / Companions
+- Paseadores de perros / Dog walkers
+- Entrenadores de mascotas / Pet trainers
+- Cuidadores de mascotas / Pet sitters
+
+### 4️⃣ Education and Development
+- Tutores / Private tutors
+- Instructores de idiomas / Language teachers
+- Clases de música / Music teachers
+- Clases de arte / Art instructors
+- Coaching / Life coaches
+- Mentores profesionales
+
+### 5️⃣ Creative Services and Entertainment
+- Fotógrafos / Videographers
+- Diseñadores gráficos / Graphic designers
+- DJs / Músicos
+- Animadores / Performers
+- Organizadores de eventos / Event coordinators
+- Modelos / Talent for casting
+
+### 6️⃣ Home and Practical Assistance
+- Asistentes personales / Personal assistants
+- Organización de hogar / Home organizers
+- Limpieza doméstica / House cleaners
+- Reparaciones menores / Handyman services
+
+### 7️⃣ Sports and Physical Activities
+- Entrenadores de fitness / Fitness instructors
+- Entrenadores de deportes específicos (tenis, fútbol, natación…)
+- Guías de senderismo / Hiking guides
+- Monitores de actividades al aire libre / Outdoor activity instructors
+
+### 8️⃣ Technology and Digital Support
+- Asistentes virtuales / Virtual assistants
+- Soporte técnico / IT support
+- Community managers / Social media managers
+- Desarrolladores freelance / Freelance developers
 
 ## 🛠️ Technology Stack
 
@@ -55,7 +118,7 @@ A modern massage therapy platform connecting clients with professional therapist
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd numassage-platform
+   cd sims-platform
    ```
 
 2. **Install dependencies**
@@ -94,7 +157,7 @@ PORT=3000
 NODE_ENV=development
 
 # Database
-MONGODB_URI=mongodb://localhost:27017/numassage
+MONGODB_URI=mongodb://localhost:27017/sims
 
 # JWT
 JWT_SECRET=your_jwt_secret_key
@@ -124,10 +187,11 @@ src/
 │   └── ui/            # shadcn/ui components
 ├── contexts/           # React contexts
 │   └── AuthContext.tsx # Authentication state
+├── data/              # Data and configurations
+│   └── categories.ts  # Service categories
 ├── pages/              # Application pages
 │   ├── Dashboard.tsx   # Main dashboard
-│   ├── TherapistDashboard.tsx # Therapist management
-│   ├── Membership.tsx  # Membership & billing
+│   ├── TherapistDashboard.tsx # Provider management
 │   └── Login.tsx       # Authentication
 └── App.tsx             # Main application
 
@@ -160,17 +224,12 @@ backend/
 - `GET /api/auth/me` - Get current user
 - `PUT /api/auth/profile` - Update profile
 
-### Therapists
-- `GET /api/therapists` - List all therapists
-- `GET /api/therapists/:id` - Get therapist profile
-- `POST /api/therapists/profile` - Create therapist profile
-- `PUT /api/therapists/profile` - Update therapist profile
+### Service Providers
+- `GET /api/providers` - List all providers
+- `GET /api/providers/:id` - Get provider profile
+- `POST /api/providers/profile` - Create provider profile
+- `PUT /api/providers/profile` - Update provider profile
 
-### Memberships
-- `POST /api/memberships/trial` - Start free trial
-- `GET /api/memberships/status` - Get membership status
-- `POST /api/memberships/subscription` - Create subscription
-- `PUT /api/memberships/cancel` - Cancel subscription
 
 ### Messages
 - `POST /api/messages/send` - Send initial message
@@ -182,8 +241,22 @@ backend/
 
 1. **Free Trial**: 14 days of full access
 2. **Automatic Conversion**: Trial converts to monthly subscription
-3. **Message Pricing**: $3 NZD per initial message to therapists
+3. **Message Pricing**: $3 NZD per initial message to providers
 4. **Subscription Management**: Cancel or reactivate anytime
+
+## 🎨 Design System
+
+### Toy-like Aesthetic
+- **Plastic Button Style**: Rounded corners, gradients, and shadows
+- **Vibrant Colors**: Pink (#FF6B9D), Yellow (#FF9F43), Orange (#e28000)
+- **Playful Interactions**: Hover effects and smooth transitions
+- **Sims-inspired**: References to the popular life simulation game
+
+### Color Palette
+- Primary: Pink (#FF6B9D)
+- Secondary: Yellow (#FF9F43)
+- Accent: Orange (#e28000)
+- Background: Light gradients
 
 ## 🔒 Security Features
 
@@ -205,11 +278,13 @@ backend/
 
 ### ✅ Completed
 - User authentication system
-- Therapist dashboard
-- Membership management
+- Service provider dashboard
+- Profile management
 - Stripe integration
 - Responsive UI components
 - API endpoints structure
+- Service categories system
+- Toy-like aesthetic design
 
 ### 🔄 In Progress
 - Real-time messaging
@@ -241,4 +316,4 @@ For support and questions, please contact the development team.
 
 ---
 
-**Built with ❤️ for the New Zealand wellness community**
+**Built with ❤️ for the New Zealand service provider community**

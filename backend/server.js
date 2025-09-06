@@ -36,7 +36,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/numassage
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/therapists', require('./routes/therapists'));
-app.use('/api/memberships', require('./routes/memberships'));
 app.use('/api/messages', require('./routes/messages'));
 
 // Health check endpoint

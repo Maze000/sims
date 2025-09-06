@@ -1,105 +1,47 @@
 {
-  "name": "Numassage - Plataforma de Masajes",
-  "short_name": "Numassage",
-      "description": "Premium massage services platform - find and book your favorite therapists",
+  "name": "Sims - Service Provider Platform",
+  "short_name": "Sims",
+  "description": "Connect with professional service providers in New Zealand. Find tutors, trainers, beauty specialists, and more for all your needs.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#9333ea",
+  "background_color": "#F8FAFC",
+  "theme_color": "#FF6B35",
   "orientation": "portrait-primary",
   "scope": "/",
-  "lang": "es",
+  "lang": "en",
   "dir": "ltr",
-  "categories": ["wellness", "health", "lifestyle"],
+  "categories": ["business", "services", "lifestyle"],
   "icons": [
     {
-      "src": "/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "maskable any"
     }
   ],
   "shortcuts": [
     {
-              "name": "Search Therapists",
-        "short_name": "Search",
-      "description": "Find available therapists",
-      "url": "/therapists/featured",
-      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+      "name": "Find Your Sims",
+      "short_name": "Explore",
+      "description": "Find service providers",
+      "url": "/explore",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
     },
     {
-              "name": "My Messages",
-        "short_name": "Messages",
-              "description": "View conversations",
-      "url": "/messages",
-      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
     },
     {
-              "name": "My Profile",
-        "short_name": "Profile",
-        "description": "Manage profile",
-      "url": "/profile",
-      "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
+      "name": "Create Profile",
+      "short_name": "Profile",
+      "description": "Create your service provider profile",
+      "url": "/create-profile",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
     }
   ],
   "related_applications": [],
-  "prefer_related_applications": false,
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile-1.png",
-      "sizes": "375x812",
-      "type": "image/png",
-      "platform": "mobile",
-      "label": "Página principal en móvil"
-    },
-    {
-      "src": "/screenshot-desktop-1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide",
-      "label": "Página principal en escritorio"
-    }
-  ]
+  "prefer_related_applications": false
 }

@@ -4,14 +4,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Edit, Trash2, DollarSign, Clock } from 'lucide-react';
+import { Plus, Edit, Trash2, Clock } from 'lucide-react';
 
 interface Service {
   id: string;
   name: string;
   description: string;
   duration: number;
-  price: number;
   category: string;
 }
 
@@ -19,19 +18,24 @@ const Services = () => {
   const [services, setServices] = useState<Service[]>([
     {
       id: '1',
-      name: 'Masaje Terapéutico',
-      description: 'Masaje profundo para aliviar tensiones musculares y dolores crónicos',
+      name: 'Personal Training Session',
+      description: 'One-on-one fitness training tailored to your goals and fitness level',
       duration: 60,
-      price: 85,
-      category: 'Terapéutico'
+      category: 'Health & Wellness'
     },
     {
       id: '2',
-      name: 'Masaje Relajante',
-      description: 'Masaje suave para reducir el estrés y promover la relajación',
+      name: 'Guitar Lessons',
+      description: 'Learn guitar from basics to advanced techniques with personalised instruction',
       duration: 45,
-      price: 65,
-      category: 'Relajación'
+      category: 'Education & Development'
+    },
+    {
+      id: '3',
+      name: 'Photography Session',
+      description: 'Professional photography for portraits, events, or special occasions',
+      duration: 120,
+      category: 'Creative Services & Entertainment'
     }
   ]);
 
@@ -41,7 +45,6 @@ const Services = () => {
     name: '',
     description: '',
     duration: 60,
-    price: 0,
     category: ''
   });
 
@@ -69,7 +72,6 @@ const Services = () => {
       name: '',
       description: '',
       duration: 60,
-      price: 0,
       category: ''
     });
     setShowForm(false);
@@ -81,7 +83,6 @@ const Services = () => {
       name: service.name,
       description: service.description,
       duration: service.duration,
-      price: service.price,
       category: service.category
     });
     setShowForm(true);
@@ -98,7 +99,6 @@ const Services = () => {
       name: '',
       description: '',
       duration: 60,
-      price: 0,
       category: ''
     });
   };
@@ -107,15 +107,26 @@ const Services = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Mis Servicios</h1>
-          <p className="text-gray-600 mt-2">Gestiona tus servicios y precios</p>
+          <h1 className="text-3xl font-bold text-gray-900">My Services</h1>
+          <p className="text-gray-600 mt-2">Manage your services and offerings</p>
         </div>
         <Button 
           onClick={() => setShowForm(true)}
-          className="bg-purple-600 hover:bg-purple-700"
+          style={{
+            background: '#FF6B35',
+            transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = '#5A9F3A';
+            e.target.style.transform = 'translateY(-1px) scale(1.005)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = '#FF6B35';
+            e.target.style.transform = 'translateY(0) scale(1)';
+          }}
         >
           <Plus className="w-4 h-4 mr-2" />
-          Agregar Servicio
+          Add Service
         </Button>
       </div>
 
@@ -144,7 +155,7 @@ const Services = () => {
                   </Button>
                 </div>
               </CardTitle>
-              <div className="text-sm text-purple-600 font-medium">
+              <div className="text-sm font-medium" style={{color: '#FF6B35'}}>
                 {service.category}
               </div>
             </CardHeader>
@@ -154,10 +165,6 @@ const Services = () => {
                 <div className="flex items-center text-gray-500">
                   <Clock className="w-4 h-4 mr-1" />
                   {service.duration} min
-                </div>
-                <div className="flex items-center font-semibold text-green-600">
-                  <DollarSign className="w-4 h-4 mr-1" />
-                  {service.price} NZD
                 </div>
               </div>
             </CardContent>
@@ -170,79 +177,78 @@ const Services = () => {
         <Card className="max-w-2xl">
           <CardHeader>
             <CardTitle>
-              {editingService ? 'Editar Servicio' : 'Agregar Nuevo Servicio'}
+              {editingService ? 'Edit Service' : 'Add New Service'}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name">Nombre del Servicio</Label>
+                <Label htmlFor="name">Service Name</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Ej: Masaje Terapéutico"
+                  placeholder="e.g. Personal Training Session"
                   required
                 />
               </div>
               
               <div>
-                <Label htmlFor="description">Descripción</Label>
+                <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Describe tu servicio..."
+                  placeholder="Describe your service..."
                   rows={3}
                   required
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="duration">Duración (minutos)</Label>
-                  <Input
-                    id="duration"
-                    type="number"
-                    value={formData.duration}
-                    onChange={(e) => setFormData(prev => ({ ...prev, duration: parseInt(e.target.value) }))}
-                    min="15"
-                    step="15"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="price">Precio (NZD)</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
-                    min="0"
-                    step="0.01"
-                    required
-                  />
-                </div>
+              <div>
+                <Label htmlFor="duration">Duration (minutes)</Label>
+                <Input
+                  id="duration"
+                  type="number"
+                  value={formData.duration}
+                  onChange={(e) => setFormData(prev => ({ ...prev, duration: parseInt(e.target.value) }))}
+                  min="15"
+                  step="15"
+                  required
+                />
               </div>
               
               <div>
-                <Label htmlFor="category">Categoría</Label>
+                <Label htmlFor="category">Category</Label>
                 <Input
                   id="category"
                   value={formData.category}
                   onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  placeholder="Ej: Terapéutico, Relajación, Deportivo"
+                  placeholder="e.g. Health & Wellness, Education & Development"
                   required
                 />
               </div>
               
               <div className="flex justify-end space-x-3 pt-4">
                 <Button type="button" variant="outline" onClick={handleCancel}>
-                  Cancelar
+                  Cancel
                 </Button>
-                <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-                  {editingService ? 'Actualizar' : 'Agregar'} Servicio
+                <Button 
+                  type="submit" 
+                  style={{
+                    background: '#FF6B35',
+                    transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = '#5A9F3A';
+                    e.target.style.transform = 'translateY(-1px) scale(1.005)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = '#FF6B35';
+                    e.target.style.transform = 'translateY(0) scale(1)';
+                  }}
+                >
+                  {editingService ? 'Update' : 'Add'} Service
                 </Button>
               </div>
             </form>
