@@ -104,15 +104,15 @@ const Home = () => {
     },
     {
       id: '3',
-      name: 'Sarah Thompson',
-      specialization: 'Hair Stylist',
-      category: 'beauty-aesthetics',
+      name: 'Emma Wilson',
+      specialization: 'Massage Therapist',
+      category: 'health-wellness',
       location: 'Christchurch',
       rating: 4.7,
       reviews: 156,
       price: '75',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
-      available: false
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
+      available: true
     }
   ];
 
