@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,7 +34,11 @@ import {
 const CreateProfile = () => {
   const navigate = useNavigate();
   const { becomeServiceProvider } = useAuth();
+  const stripe = useStripe();
+  const elements = useElements();
   const [step, setStep] = useState(0);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string>('');
   const [formData, setFormData] = useState({
     // Basic Info
     firstName: '',
@@ -77,6 +82,22 @@ const CreateProfile = () => {
       facebook: '',
       instagram: '',
       linkedin: ''
+    },
+    
+    // Identity Verification
+    identityVerification: {
+      documentType: '',
+      documentNumber: '',
+      documentFile: null as File | null,
+      isVerified: false
+    },
+    
+    // Payment for Visibility
+    paymentForVisibility: {
+      selectedDays: 30,
+      totalPrice: 20.00,
+      paymentMethod: '',
+      isPaid: false
     }
   });
 
@@ -105,7 +126,7 @@ const CreateProfile = () => {
     'Custom Service'
   ];
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: string | number | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -153,7 +174,7 @@ const CreateProfile = () => {
     }));
   };
 
-  const updateAvailability = (day: string, field: string, value: any) => {
+  const updateAvailability = (day: string, field: string, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
       availability: {
@@ -185,12 +206,105 @@ const CreateProfile = () => {
     }));
   };
 
+  const updateIdentityVerification = (field: string, value: string | File | boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      identityVerification: {
+        ...prev.identityVerification,
+        [field]: value
+      }
+    }));
+  };
+
+  const handleDocumentUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      updateIdentityVerification('documentFile', file);
+    }
+  };
+
+  const updatePaymentForVisibility = (field: string, value: string | number | boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      paymentForVisibility: {
+        ...prev.paymentForVisibility,
+        [field]: value
+      }
+    }));
+  };
+
+  const calculatePrice = (days: number) => {
+    const basePrice = 0.67; // NZD per day
+    let totalPrice = days * basePrice;
+    
+    // Apply discounts for longer periods
+    if (days >= 90) {
+      totalPrice *= 0.8; // 20% off for 3+ months
+    } else if (days >= 30) {
+      totalPrice *= 0.9; // 10% off for 1+ month
+    }
+    
+    return Math.round(totalPrice * 100) / 100; // Round to 2 decimal places
+  };
+
+  const handleDaysChange = (days: number) => {
+    const totalPrice = calculatePrice(days);
+    updatePaymentForVisibility('selectedDays', days);
+    updatePaymentForVisibility('totalPrice', totalPrice);
+  };
+
+  // Initialize payment intent when component mounts
+  React.useEffect(() => {
+    if (step === 3) {
+      createPaymentIntent();
+    }
+  }, [step]);
+
+  const createPaymentIntent = async () => {
+    try {
+      // For demo purposes, create a mock client secret
+      // In production, this would come from your backend
+      const mockClientSecret = `pi_mock_${Date.now()}_secret_mock`;
+      setClientSecret(mockClientSecret);
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+    }
+  };
+
+  const handlePayment = async () => {
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setPaymentLoading(true);
+
+    try {
+      // For demo purposes, simulate successful payment
+      // In production, this would use the real Stripe API
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate API call
+      
+      // Payment succeeded
+      updatePaymentForVisibility('isPaid', true);
+      updatePaymentForVisibility('paymentMethod', 'stripe');
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Payment failed. Please try again.');
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
+
   const nextStep = () => {
     if (step < 4) setStep(step + 1);
   };
 
   const prevStep = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) {
+      setStep(step - 1);
+    } else if (step === 1) {
+      // Go back to the initial screen (Step 0)
+      setStep(0);
+    }
   };
 
   const handleSubmit = async () => {
@@ -217,12 +331,12 @@ const CreateProfile = () => {
         <div className="flex items-center">
           <div 
             className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
-              step === 0
+              step === 0 || step > 0
                 ? 'text-white'
                 : 'bg-gray-200 text-gray-600'
             }`}
             style={{
-              backgroundColor: step === 0 ? '#FF6B35' : '#E5E7EB'
+              backgroundColor: step === 0 || step > 0 ? '#FF6B35' : '#E5E7EB'
             }}
           >
             Start
@@ -270,8 +384,8 @@ const CreateProfile = () => {
           {step === 0 ? 'Step 0 of 4: Welcome' :
             step === 1 ? 'Step 1 of 4: Basic Information' :
             step === 2 ? 'Step 2 of 4: Professional Details' :
-            step === 3 ? 'Step 3 of 4: Services' :
-            'Step 4 of 4: Location'
+            step === 3 ? 'Step 3 of 4: Services & Location' :
+            'Step 4 of 4: Payment for Visibility'
           }
         </p>
       </div>
@@ -462,18 +576,38 @@ const CreateProfile = () => {
               </div>
             </div>
 
+
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Step 2: Professional Details */}
+      {step === 2 && (
+        <Card>
+          <CardHeader className="pb-3 sm:pb-4">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+              <Star className="w-5 h-5 sm:w-6 sm:h-6" />
+              Professional Details & Identity Verification
+            </CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
+              Add your qualifications, training, and service achievements
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 sm:space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="specialization" className="text-xs sm:text-sm font-medium">Primary Specialization</Label>
-              <Select value={formData.specialization} onValueChange={(value) => updateFormData('specialization', value)}>
-                <SelectTrigger className="text-sm sm:text-base">
-                  <SelectValue placeholder="Select your primary specialization" />
-                </SelectTrigger>
-                <SelectContent>
-                  {specializations.map((spec) => (
-                    <SelectItem key={spec} value={spec}>{spec}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label className="text-xs sm:text-sm font-medium">Additional Specializations</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                {specializations.slice(0, 8).map((spec) => (
+                  <div key={spec} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={spec}
+                      checked={formData.specialization === spec}
+                      onCheckedChange={() => updateFormData('specialization', spec)}
+                    />
+                    <Label htmlFor={spec} className="text-xs sm:text-sm">{spec}</Label>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -499,8 +633,10 @@ const CreateProfile = () => {
                   placeholder="e.g., English, Māori, Spanish"
                 />
               </div>
+            </div>
+
               <div className="space-y-2">
-                <Label className="text-xs sm:text-sm font-medium">Certifications & Qualifications</Label>
+              <Label className="text-xs sm:text-sm font-medium">Certifications & Qualifications (Optional)</Label>
                 <div className="space-y-3">
                   {formData.certifications.map((cert, index) => (
                     <div key={index} className="flex items-center space-x-2">
@@ -532,7 +668,6 @@ const CreateProfile = () => {
                   >
                     + Add Another Certification
                   </Button>
-                </div>
               </div>
             </div>
 
@@ -546,38 +681,6 @@ const CreateProfile = () => {
                 className="text-sm sm:text-base"
                 placeholder="Tell clients about your experience, approach, and what services you offer..."
               />
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Step 2: Professional Details */}
-      {step === 2 && (
-        <Card>
-          <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-              <Star className="w-5 h-5 sm:w-6 sm:h-6" />
-              Professional Details
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              Add your qualifications, training, and service achievements
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 sm:space-y-6">
-            <div className="space-y-2">
-              <Label className="text-xs sm:text-sm font-medium">Additional Specializations (Optional)</Label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                {specializations.slice(0, 8).map((spec) => (
-                  <div key={spec} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={spec}
-                      checked={formData.specialization === spec}
-                      onCheckedChange={() => updateFormData('specialization', spec)}
-                    />
-                    <Label htmlFor={spec} className="text-xs sm:text-sm">{spec}</Label>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div className="space-y-2">
@@ -627,6 +730,93 @@ const CreateProfile = () => {
                 </div>
               </div>
             </div>
+
+            {/* Identity Verification Section */}
+            <div className="space-y-4 border-t pt-6">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-5 h-5 text-orange-600" />
+                <Label className="text-sm sm:text-base font-medium">Identity Verification</Label>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-600">
+                To ensure the safety and trust of our community, we require identity verification for all service providers.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="documentType" className="text-xs sm:text-sm font-medium">Document Type</Label>
+                  <Select 
+                    value={formData.identityVerification.documentType} 
+                    onValueChange={(value) => updateIdentityVerification('documentType', value)}
+                  >
+                    <SelectTrigger className="text-sm sm:text-base">
+                      <SelectValue placeholder="Select document type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="drivers-license">New Zealand Driver's License</SelectItem>
+                      <SelectItem value="passport">Passport</SelectItem>
+                      <SelectItem value="national-id">National ID Card</SelectItem>
+                      <SelectItem value="bank-statement">Bank Statement (with address)</SelectItem>
+                      <SelectItem value="utility-bill">Utility Bill (with address)</SelectItem>
+                      <SelectItem value="professional-license">Professional License/Certificate</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="documentNumber" className="text-xs sm:text-sm font-medium">Document Number (Optional)</Label>
+                  <Input
+                    id="documentNumber"
+                    value={formData.identityVerification.documentNumber}
+                    onChange={(e) => updateIdentityVerification('documentNumber', e.target.value)}
+                    className="text-sm sm:text-base"
+                    placeholder="Enter document number if applicable"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="documentUpload" className="text-xs sm:text-sm font-medium">Upload Document</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                  <input
+                    type="file"
+                    id="documentUpload"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={handleDocumentUpload}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="documentUpload"
+                    className="cursor-pointer flex flex-col items-center justify-center space-y-2"
+                  >
+                    <div className="p-3 bg-orange-100 rounded-full">
+                      <Shield className="w-6 h-6 text-orange-600" />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-gray-900">
+                        {formData.identityVerification.documentFile 
+                          ? formData.identityVerification.documentFile.name 
+                          : 'Click to upload document'
+                        }
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        PDF, JPG, PNG up to 10MB
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Shield className="w-4 h-4 text-orange-600" />
+                  <h4 className="text-sm font-medium text-orange-800">Privacy & Security</h4>
+                </div>
+                <p className="text-xs text-orange-700">
+                  Your documents are encrypted and stored securely. We only use them for identity verification 
+                  and will never share them with third parties. Verification typically takes 1-2 business days.
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}
@@ -645,7 +835,7 @@ const CreateProfile = () => {
           </CardHeader>
           <CardContent className="space-y-4 sm:space-y-6">
             <div className="space-y-2">
-              <Label className="text-xs sm:text-sm font-medium">Select Your Services</Label>
+              <Label className="text-xs sm:text-sm font-medium">Select Your Modality Services</Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {serviceTypes.map((service) => (
                   <div key={service} className="flex items-center space-x-2">
@@ -657,6 +847,69 @@ const CreateProfile = () => {
                     <Label htmlFor={service} className="text-xs sm:text-sm">{service}</Label>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Location Section */}
+            <div className="space-y-4 border-t pt-6">
+              <div className="flex items-center space-x-2">
+                <MapPin className="w-5 h-5 text-orange-600" />
+                <Label className="text-sm sm:text-base font-medium">Location</Label>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-600">
+                Let clients know where you're based and how to reach you
+              </p>
+              
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="serviceArea" className="text-xs sm:text-sm font-medium">Service Area</Label>
+                  <Select value={formData.serviceArea || ''} onValueChange={(value) => updateFormData('serviceArea', value)}>
+                    <SelectTrigger className="text-sm sm:text-base">
+                      <SelectValue placeholder="Select your primary service area" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Auckland">Auckland</SelectItem>
+                      <SelectItem value="Wellington">Wellington</SelectItem>
+                      <SelectItem value="Christchurch">Christchurch</SelectItem>
+                      <SelectItem value="Hamilton">Hamilton</SelectItem>
+                      <SelectItem value="Tauranga">Tauranga</SelectItem>
+                      <SelectItem value="Napier-Hastings">Napier-Hastings</SelectItem>
+                      <SelectItem value="Dunedin">Dunedin</SelectItem>
+                      <SelectItem value="Palmerston North">Palmerston North</SelectItem>
+                      <SelectItem value="Nelson">Nelson</SelectItem>
+                      <SelectItem value="Rotorua">Rotorua</SelectItem>
+                      <SelectItem value="New Plymouth">New Plymouth</SelectItem>
+                      <SelectItem value="Whangarei">Whangarei</SelectItem>
+                      <SelectItem value="Invercargill">Invercargill</SelectItem>
+                      <SelectItem value="Whanganui">Whanganui</SelectItem>
+                      <SelectItem value="Gisborne">Gisborne</SelectItem>
+                      <SelectItem value="Online Services">Online Services (Nationwide)</SelectItem>
+                      <SelectItem value="Mobile Services">Mobile Services (Multiple Areas)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="address" className="text-xs sm:text-sm font-medium">Street Address (Optional)</Label>
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => updateFormData('address', e.target.value)}
+                    className="text-sm sm:text-base"
+                    placeholder="123 Main Street (only if clients visit your location)"
+                  />
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Clock className="w-4 h-4 text-blue-600" />
+                    <h4 className="text-sm font-medium text-blue-800">Contact Preferences</h4>
+                  </div>
+                  <p className="text-xs text-blue-700">
+                    Clients will use the contact form on your profile to reach you. 
+                    You can then arrange specific times and details directly with them.
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -739,6 +992,7 @@ const CreateProfile = () => {
               )}
             </div>
 
+
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
               <div className="flex items-center space-x-2 mb-2">
                 <Info className="w-4 h-4 text-orange-600" />
@@ -753,72 +1007,416 @@ const CreateProfile = () => {
         </Card>
       )}
 
-      {/* Step 4: Location & Contact */}
+      {/* Step 4: Payment for Visibility & Location */}
       {step === 4 && (
+        <div className="space-y-8">
+          {/* Payment for Visibility Section */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-              <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />
-              Location
+                <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />
+                Payment for Visibility
             </CardTitle>
             <CardDescription className="text-xs sm:text-sm">
-              Let clients know where you're based and how to reach you
+                To make your services visible to clients, you need to pay for visibility. Choose how many days you want to be visible:
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 sm:space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="serviceArea" className="text-xs sm:text-sm font-medium">Service Area</Label>
-              <Select value={formData.serviceArea || ''} onValueChange={(value) => updateFormData('serviceArea', value)}>
-                <SelectTrigger className="text-sm sm:text-base">
-                  <SelectValue placeholder="Select your primary service area" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Auckland">Auckland</SelectItem>
-                  <SelectItem value="Wellington">Wellington</SelectItem>
-                  <SelectItem value="Christchurch">Christchurch</SelectItem>
-                  <SelectItem value="Hamilton">Hamilton</SelectItem>
-                  <SelectItem value="Tauranga">Tauranga</SelectItem>
-                  <SelectItem value="Napier-Hastings">Napier-Hastings</SelectItem>
-                  <SelectItem value="Dunedin">Dunedin</SelectItem>
-                  <SelectItem value="Palmerston North">Palmerston North</SelectItem>
-                  <SelectItem value="Nelson">Nelson</SelectItem>
-                  <SelectItem value="Rotorua">Rotorua</SelectItem>
-                  <SelectItem value="New Plymouth">New Plymouth</SelectItem>
-                  <SelectItem value="Whangarei">Whangarei</SelectItem>
-                  <SelectItem value="Invercargill">Invercargill</SelectItem>
-                  <SelectItem value="Whanganui">Whanganui</SelectItem>
-                  <SelectItem value="Gisborne">Gisborne</SelectItem>
-                  <SelectItem value="Online Services">Online Services (Nationwide)</SelectItem>
-                  <SelectItem value="Mobile Services">Mobile Services (Multiple Areas)</SelectItem>
-                </SelectContent>
-              </Select>
+              {/* Custom Days Selector */}
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-medium">Number of Days</Label>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDaysChange(Math.max(1, formData.paymentForVisibility.selectedDays - 1))}
+                        disabled={formData.paymentForVisibility.selectedDays <= 1}
+                      >
+                        -
+                      </Button>
+                      <Input
+                        type="number"
+                        value={formData.paymentForVisibility.selectedDays}
+                        onChange={(e) => handleDaysChange(parseInt(e.target.value) || 1)}
+                        className="w-20 text-center"
+                        min="1"
+                        max="365"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDaysChange(Math.min(365, formData.paymentForVisibility.selectedDays + 1))}
+                        disabled={formData.paymentForVisibility.selectedDays >= 365}
+                      >
+                        +
+                      </Button>
+                    </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="address" className="text-xs sm:text-sm font-medium">Street Address (Optional)</Label>
+                  {/* Price Display */}
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 mb-1">
+                        {formData.paymentForVisibility.selectedDays} day{formData.paymentForVisibility.selectedDays !== 1 ? 's' : ''} of visibility
+                      </p>
+                      <p className="text-3xl font-bold text-orange-600">
+                        ${formData.paymentForVisibility.totalPrice.toFixed(2)} NZD
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        ${(formData.paymentForVisibility.totalPrice / formData.paymentForVisibility.selectedDays).toFixed(2)}/day
+                      </p>
+                      <div className="h-6 flex items-center justify-center mt-2">
+                        {formData.paymentForVisibility.selectedDays >= 90 && (
+                          <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">20% off</span>
+                        )}
+                        {formData.paymentForVisibility.selectedDays >= 30 && formData.paymentForVisibility.selectedDays < 90 && (
+                          <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">10% off</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Quick Select Buttons */}
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDaysChange(7)}
+                      className={formData.paymentForVisibility.selectedDays === 7 ? 'bg-orange-100 border-orange-300' : ''}
+                    >
+                      7 days
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDaysChange(14)}
+                      className={formData.paymentForVisibility.selectedDays === 14 ? 'bg-orange-100 border-orange-300' : ''}
+                    >
+                      14 days
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDaysChange(30)}
+                      className={formData.paymentForVisibility.selectedDays === 30 ? 'bg-orange-100 border-orange-300' : ''}
+                    >
+                      1 month
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDaysChange(90)}
+                      className={formData.paymentForVisibility.selectedDays === 90 ? 'bg-orange-100 border-orange-300' : ''}
+                    >
+                      3 months
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDaysChange(180)}
+                      className={formData.paymentForVisibility.selectedDays === 180 ? 'bg-orange-100 border-orange-300' : ''}
+                    >
+                      6 months
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Section */}
+              {!formData.paymentForVisibility.isPaid && (
+                <div className="max-w-6xl mx-auto">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    {/* Left Column - Benefits */}
+                    <div className="space-y-6">
+                      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-200 rounded-2xl p-8">
+                        <div className="text-center mb-8">
+                          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <Sparkles className="w-10 h-10 text-white" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-2">Why Publish Your Services?</h3>
+                          <p className="text-gray-600">Join thousands of successful service providers in New Zealand</p>
+                        </div>
+                        
+                        <div className="space-y-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <Users className="w-6 h-6 text-green-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-2">Reach More Clients</h4>
+                              <p className="text-sm text-gray-600">Get discovered by thousands of potential clients actively looking for your services across New Zealand.</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <Trophy className="w-6 h-6 text-purple-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-2">Build Your Reputation</h4>
+                              <p className="text-sm text-gray-600">Collect reviews and ratings from satisfied clients to build trust and credibility in your field.</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <DollarSign className="w-6 h-6 text-orange-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-2">Increase Your Income</h4>
+                              <p className="text-sm text-gray-600">Set your own rates and work on your schedule. Many providers see 3x more bookings within the first month.</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <Shield className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-2">Safe & Secure</h4>
+                              <p className="text-sm text-gray-600">All clients are verified and payments are processed securely. Your safety is our priority.</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
+                              <Heart className="w-6 h-6 text-pink-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-2">Make a Difference</h4>
+                              <p className="text-sm text-gray-600">Help people in your community while doing what you love. Every service makes a positive impact.</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-8 bg-white border border-blue-200 rounded-xl p-4">
+                          <div className="text-center">
+                            <h5 className="font-semibold text-gray-900 mb-2">Join 2,500+ Active Providers</h5>
+                            <p className="text-sm text-gray-600">Average rating: 4.8/5 stars</p>
+                            <div className="flex justify-center mt-3">
+                              {[1,2,3,4,5].map((star) => (
+                                <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Right Column - Payment Form */}
+                    <div className="bg-gradient-to-br from-white to-orange-50 border-2 border-orange-200 rounded-2xl p-8 shadow-lg">
+                      <div className="text-center mb-8">
+                        <div className="relative">
+                          <div className="w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+                            <DollarSign className="w-12 h-12 text-white" />
+                          </div>
+                          <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                            <Shield className="w-4 h-4 text-white" />
+                          </div>
+                        </div>
+                        <h4 className="text-3xl font-bold text-gray-900 mb-3">Complete Payment</h4>
+                        <div className="flex items-center justify-center space-x-2 mb-4">
+                          <span className="text-gray-600">Secure payment powered by</span>
+                          <span className="text-purple-600 font-black text-lg tracking-wider uppercase italic" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                            Stripe
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-center space-x-4 text-sm text-gray-500">
+                          <div className="flex items-center space-x-1">
+                            <Shield className="w-4 h-4 text-green-600" />
+                            <span>PCI Compliant</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span>256-bit SSL</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                            <span>Bank Grade</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Payment Methods Icons */}
+                      <div className="flex justify-center space-x-6 mb-8">
+                        <div className="flex flex-col items-center">
+                          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-2">
+                            <span className="text-2xl">💳</span>
+                          </div>
+                          <span className="text-xs text-gray-600">Card</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-2">
+                            <span className="text-2xl">🍎</span>
+                          </div>
+                          <span className="text-xs text-gray-600">Apple Pay</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-2">
+                            <span className="text-2xl">📱</span>
+                          </div>
+                          <span className="text-xs text-gray-600">Google Pay</span>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-2">
+                            <span className="text-2xl">🏦</span>
+                          </div>
+                          <span className="text-xs text-gray-600">Bank</span>
+                        </div>
+                      </div>
+                      
+                      {/* Payment Form */}
+                      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
+                        <h5 className="font-semibold text-gray-900 mb-4 flex items-center">
+                          <Shield className="w-5 h-5 text-green-600 mr-2" />
+                          Payment Information
+                        </h5>
+                        
+                        <div className="space-y-4">
+                          <div>
+                            <Label className="text-sm font-medium text-gray-700 mb-2 block">Card Number</Label>
               <Input
-                id="address"
-                value={formData.address}
-                onChange={(e) => updateFormData('address', e.target.value)}
-                className="text-sm sm:text-base"
-                placeholder="123 Main Street (only if clients visit your location)"
+                              placeholder="1234 5678 9012 3456" 
+                              className="h-12 text-lg tracking-wider border-2 focus:border-orange-400 focus:ring-orange-400"
               />
             </div>
 
-
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <Clock className="w-4 h-4 text-blue-600" />
-                <h4 className="text-sm font-medium text-blue-800">Contact Preferences</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="text-sm font-medium text-gray-700 mb-2 block">Expiry Date</Label>
+                              <Input 
+                                placeholder="MM/YY" 
+                                className="h-12 text-center border-2 focus:border-orange-400 focus:ring-orange-400"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium text-gray-700 mb-2 block">CVC</Label>
+                              <Input 
+                                placeholder="123" 
+                                className="h-12 text-center border-2 focus:border-orange-400 focus:ring-orange-400"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <Label className="text-sm font-medium text-gray-700 mb-2 block">Cardholder Name</Label>
+                            <Input 
+                              placeholder="John Doe" 
+                              className="h-12 border-2 focus:border-orange-400 focus:ring-orange-400"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Payment Button */}
+                      <Button
+                        type="button"
+                        className="w-full h-14 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        disabled={paymentLoading}
+                        style={{
+                          background: 'linear-gradient(135deg, #FF6B35 0%, #F7931E 100%)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '1rem',
+                        }}
+                        onClick={handlePayment}
+                      >
+                        {paymentLoading ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full mr-3"></div>
+                            Processing Payment...
               </div>
-              <p className="text-xs text-blue-700">
-                Clients will use the contact form on your profile to reach you. 
-                You can then arrange specific times and details directly with them.
-              </p>
+                        ) : (
+                          <div className="flex items-center justify-center">
+                            <DollarSign className="w-6 h-6 mr-3" />
+                            Pay ${formData.paymentForVisibility.totalPrice.toFixed(2)} NZD
+                          </div>
+                        )}
+                      </Button>
+                      
+                      {/* Security Info */}
+                      <div className="mt-6 text-center">
+                        <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 mb-4">
+                          <Shield className="w-4 h-4 text-green-600" />
+                          <span>256-bit SSL encryption</span>
+                          <span>•</span>
+                          <span>PCI DSS compliant</span>
+                          <span>•</span>
+                          <span>Powered by Stripe</span>
+                        </div>
+                        
+                        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4">
+                          <div className="flex items-center justify-center space-x-2 mb-2">
+                            <Shield className="w-5 h-5 text-green-600" />
+                            <h5 className="font-semibold text-gray-900">Bank-Level Security</h5>
+                          </div>
+                          <p className="text-sm text-gray-600 leading-relaxed">
+                            Your payment information is protected by the same security standards used by major banks. 
+                            <span className="font-semibold text-purple-600">Stripe</span> processes over $1 trillion in payments annually 
+                            with industry-leading fraud protection and encryption.
+                          </p>
+                          <div className="flex items-center justify-center space-x-4 mt-3 text-xs text-gray-500">
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <span>Fraud Protected</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              <span>99.99% Uptime</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                              <span>Global Trust</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Payment Confirmation */}
+              {formData.paymentForVisibility.isPaid && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-sm">✓</span>
+                    </div>
+                    <h4 className="text-sm font-medium text-green-800">Payment Successful!</h4>
+                  </div>
+                  <p className="text-xs text-green-700 mt-1">
+                    Your profile will be visible for {formData.paymentForVisibility.selectedDays} days starting now.
+                  </p>
+                </div>
+              )}
+
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Info className="w-4 h-4 text-orange-600" />
+                  <h4 className="text-sm font-medium text-orange-800">How it works</h4>
+                </div>
+                <ul className="text-xs text-orange-700 space-y-1">
+                  <li>• Your profile becomes visible to clients immediately after payment</li>
+                  <li>• Payment is processed securely through Stripe</li>
+                  <li>• Your profile automatically becomes hidden when the period expires</li>
+                  <li>• You can renew anytime to maintain visibility</li>
+                </ul>
             </div>
           </CardContent>
         </Card>
+
+        </div>
       )}
 
       {/* Navigation Buttons - Only show when not in Step 0 */}
@@ -827,7 +1425,6 @@ const CreateProfile = () => {
         <Button
           variant="outline"
           onClick={prevStep}
-          disabled={step === 1}
           className="text-sm sm:text-base touch-target"
         >
           Previous

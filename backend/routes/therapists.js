@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const therapistController = require('../controllers/therapistController');
-const auth = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 // Public routes (for clients to browse)
 router.get('/', therapistController.getAllTherapists);

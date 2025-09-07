@@ -1,3 +1,6 @@
+/* Import elegant font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -802,8 +805,8 @@
 
   /* Reduce animations on mobile for better performance */
   * {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.2s !important;
+    animation-duration: 2s !important;
+    transition-duration: 2s !important;
   }
   
   /* Optimize transforms for mobile */
@@ -1021,9 +1024,6 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
   }
 }
-
-/* Import elegant font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 /* ===== MODERN SIMS LOGO TYPOGRAPHY ===== */
 .logo-sims {

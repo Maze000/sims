@@ -87,12 +87,12 @@ const ExploreTherapists = () => {
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-1px) scale(1.005)';
-              e.target.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.15)';
+              (e.target as HTMLElement).style.transform = 'translateY(-1px) scale(1.005)';
+              (e.target as HTMLElement).style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.15)';
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0) scale(1)';
-              e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+              (e.target as HTMLElement).style.transform = 'translateY(0) scale(1)';
+              (e.target as HTMLElement).style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
             }}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -231,12 +231,12 @@ const ExploreTherapists = () => {
                     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-1px) scale(1.005)';
-                    e.target.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.15)';
+                    (e.target as HTMLElement).style.transform = 'translateY(-1px) scale(1.005)';
+                    (e.target as HTMLElement).style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.15)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0) scale(1)';
-                    e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                    (e.target as HTMLElement).style.transform = 'translateY(0) scale(1)';
+                    (e.target as HTMLElement).style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
                   }}
                   variant={provider.available ? "default" : "outline"}
                   disabled={!provider.available}
@@ -274,14 +274,14 @@ const ExploreTherapists = () => {
               transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             }}
             onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(109, 190, 69, 0.1)';
-              e.target.style.borderColor = '#FF6B35';
-              e.target.style.color = '#FF6B35';
+              (e.target as HTMLElement).style.background = 'rgba(109, 190, 69, 0.1)';
+              (e.target as HTMLElement).style.borderColor = '#FF6B35';
+              (e.target as HTMLElement).style.color = '#FF6B35';
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = 'transparent';
-              e.target.style.borderColor = '#FF6B35';
-              e.target.style.color = '#FF6B35';
+              (e.target as HTMLElement).style.background = 'transparent';
+              (e.target as HTMLElement).style.borderColor = '#FF6B35';
+              (e.target as HTMLElement).style.color = '#FF6B35';
             }}
           >
             Clear Filters

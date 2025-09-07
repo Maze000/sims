@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Camera, Save, X, User, Mail, Phone, MapPin, Edit3 } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Camera, Save, X, User, Mail, Phone, MapPin, Edit3, FileText } from 'lucide-react';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
@@ -17,8 +18,9 @@ const Profile = () => {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
-    phone: (user as any)?.phone || '',
-    location: (user as any)?.location || ''
+    phone: (user as { phone?: string })?.phone || '',
+    location: (user as { location?: string })?.location || '',
+    bio: (user as { bio?: string })?.bio || ''
   });
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +47,9 @@ const Profile = () => {
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
       email: user?.email || '',
-      phone: (user as any)?.phone || '',
-      location: (user as any)?.location || ''
+      phone: (user as { phone?: string })?.phone || '',
+      location: (user as { location?: string })?.location || '',
+      bio: (user as { bio?: string })?.bio || ''
     });
     setIsEditing(false);
     setSelectedFile(null);
@@ -237,6 +240,28 @@ const Profile = () => {
                   />
                 </div>
               </div>
+
+              {/* Bio field - Only for service providers */}
+              {user?.userType === 'service_provider' && (
+                <div className="space-y-2">
+                  <Label htmlFor="bio" className="text-xs sm:text-sm font-medium">
+                    <FileText className="w-4 h-4 inline mr-2" />
+                    Professional Bio
+                  </Label>
+                  <Textarea
+                    id="bio"
+                    value={formData.bio}
+                    onChange={(e) => updateFormData('bio', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="Tell clients about your experience, specialties, and approach..."
+                    rows={4}
+                    className="text-sm sm:text-base"
+                  />
+                  <p className="text-xs text-gray-500">
+                    This will appear in your service listings and profile to help clients understand your expertise.
+                  </p>
+                </div>
+              )}
 
               {isEditing && (
                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4">

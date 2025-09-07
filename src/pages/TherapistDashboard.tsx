@@ -152,14 +152,6 @@ const TherapistDashboard = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-0">
               <Button
-                variant="outline"
-                onClick={() => navigate('/create-profile')}
-                className="text-sm sm:text-base touch-target"
-              >
-                <Edit3 className="w-4 h-4 mr-2" />
-                Edit Profile
-              </Button>
-              <Button
                 onClick={() => navigate('/profile-stats')}
                 className="text-sm sm:text-base touch-target"
               >

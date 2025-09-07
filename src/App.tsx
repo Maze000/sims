@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import Navigation from './components/Navigation';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -195,11 +197,16 @@ const AppContent = () => {
   );
 };
 
+// Initialize Stripe
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51234567890abcdef');
+
 // Root App Component
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <Elements stripe={stripePromise}>
+        <AppContent />
+      </Elements>
     </AuthProvider>
   );
 }
