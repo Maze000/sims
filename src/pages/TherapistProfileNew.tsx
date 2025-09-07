@@ -96,7 +96,7 @@ const TherapistProfileNew = () => {
       name: service,
         duration: "60 min",
       price: parseInt(provider.price),
-      description: `Professional ${service.toLowerCase()} service`
+      description: `Professional ${service.toLowerCase()} service`,
     })),
     availability: {
       "2025-01-20": ["09:00", "11:00", "14:00", "16:00"],
@@ -248,6 +248,13 @@ const TherapistProfileNew = () => {
                       {therapist.specialties.map((specialty) => (
                         <Badge key={specialty} variant="secondary" className="text-xs">
                           {specialty}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {['One-on-One Service', 'Home Visit', 'Consultation'].map((serviceType) => (
+                        <Badge key={serviceType} variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200">
+                          {serviceType}
                         </Badge>
                       ))}
                     </div>
