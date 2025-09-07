@@ -6,49 +6,6 @@ import { Star, MapPin, Clock, DollarSign, Heart, Eye } from 'lucide-react';
 import { serviceCategories } from '@/data/categories';
 import Footer from '@/components/Footer';
 
-// MaoriPattern Component
-const MaoriPattern = ({ pattern }: { pattern: 'koru' | 'wave' }) => {
-  if (pattern === 'koru') {
-    return (
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="koru-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-            <path d="M50 50 Q30 30 50 10 Q70 30 50 50 Q30 70 50 90 Q70 70 50 50" 
-                  fill="none" 
-                  stroke="hsl(var(--primary))" 
-                  strokeWidth="1" 
-                  opacity="0.3"/>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#koru-pattern)" />
-      </svg>
-    );
-  }
-  
-  if (pattern === 'wave') {
-    return (
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="wave-pattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-            <path d="M0 40 Q20 20 40 40 T80 40" 
-                  fill="none" 
-                  stroke="hsl(var(--secondary))" 
-                  strokeWidth="1" 
-                  opacity="0.2"/>
-            <path d="M0 60 Q20 40 40 60 T80 60" 
-                  fill="none" 
-                  stroke="hsl(var(--secondary))" 
-                  strokeWidth="1" 
-                  opacity="0.2"/>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#wave-pattern)" />
-      </svg>
-    );
-  }
-  
-  return null;
-};
 
 // KiwiSilhouette Component
 const KiwiSilhouette = ({ size = 80, className = "" }: { size?: number; className?: string }) => {
@@ -117,15 +74,11 @@ const Home = () => {
   ];
 
   return (
-    <div className="pt-14 sm:pt-16 md:pt-20 min-h-screen relative overflow-hidden">
+    <div className="pt-14 sm:pt-16 md:pt-20 min-h-screen relative overflow-hidden" style={{
+      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234CAF50' fill-opacity='0.2'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='15' r='1'/%3E%3Ccircle cx='15' cy='45' r='1.5'/%3E%3Ccircle cx='45' cy='50' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+    }}>
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12 relative">
-        {/* Maori Patterns for Hero */}
-        <div className="absolute inset-0 opacity-30 pointer-events-none z-0">
-          <div className="absolute inset-0">
-            <MaoriPattern pattern="wave" />
-          </div>
-        </div>
         <div className="text-center mb-8 sm:mb-12 md:mb-16 relative z-10">
           {/* Kiwi Silhouette */}
           <div className="flex justify-center mb-4">
