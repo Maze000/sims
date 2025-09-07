@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Eye, EyeOff, Mail, Lock, User, Phone, MapPin } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,14 +25,9 @@ const Login = () => {
 
   // Registration form state
   const [registerForm, setRegisterForm] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
-    phone: '',
-    location: '',
     password: '',
-    confirmPassword: '',
-    userType: 'client'
+    confirmPassword: ''
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -213,40 +208,6 @@ const Login = () => {
             ) : (
               // Registration Form
               <form onSubmit={handleRegister} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-xs sm:text-sm">First Name</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <Input
-                        id="firstName"
-                        type="text"
-                        placeholder="First name"
-                        value={registerForm.firstName}
-                        onChange={(e) => updateRegisterForm('firstName', e.target.value)}
-                        className="pl-10 text-sm sm:text-base"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-xs sm:text-sm">Last Name</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <Input
-                        id="lastName"
-                        type="text"
-                        placeholder="Last name"
-                        value={registerForm.lastName}
-                        onChange={(e) => updateRegisterForm('lastName', e.target.value)}
-                        className="pl-10 text-sm sm:text-base"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-xs sm:text-sm">Email</Label>
                   <div className="relative">
@@ -261,53 +222,6 @@ const Login = () => {
                       required
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-xs sm:text-sm">Phone</Label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <Input
-                        id="phone"
-                        type="tel"
-                        placeholder="Phone number"
-                        value={registerForm.phone}
-                        onChange={(e) => updateRegisterForm('phone', e.target.value)}
-                        className="pl-10 text-sm sm:text-base"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="location" className="text-xs sm:text-sm">Location</Label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <Input
-                        id="location"
-                        type="text"
-                        placeholder="City, NZ"
-                        value={registerForm.location}
-                        onChange={(e) => updateRegisterForm('location', e.target.value)}
-                        className="pl-10 text-sm sm:text-base"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="userType" className="text-xs sm:text-sm">I am a:</Label>
-                  <select
-                    id="userType"
-                    value={registerForm.userType}
-                    onChange={(e) => updateRegisterForm('userType', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  >
-                    <option value="client">Client</option>
-                    <option value="therapist">Therapist</option>
-                  </select>
                 </div>
 
                 <div className="space-y-2">
@@ -363,7 +277,7 @@ const Login = () => {
                     onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
                   />
                   <Label htmlFor="acceptTerms" className="text-xs sm:text-sm">
-                    I accept the <a href="#" className="text-purple-600 hover:underline">Terms and Conditions</a>
+                    I accept the <a href="/terms" className="text-purple-600 hover:underline">Terms of Service</a>, <a href="/privacy" className="text-purple-600 hover:underline">Privacy Policy</a>, and <a href="/cookies" className="text-purple-600 hover:underline">Cookie Policy</a>
                   </Label>
                 </div>
 

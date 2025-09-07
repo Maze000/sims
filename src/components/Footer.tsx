@@ -100,9 +100,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-sm sm:text-base transition-colors font-medium" style={{color: 'hsl(var(--muted-foreground))'}} onMouseEnter={(e) => e.target.style.color = 'hsl(var(--primary))'} onMouseLeave={(e) => e.target.style.color = 'hsl(var(--muted-foreground))'}>
+                <Link to="/how-it-works" className="text-sm sm:text-base transition-colors font-medium" style={{color: 'hsl(var(--muted-foreground))'}} onMouseEnter={(e) => e.target.style.color = 'hsl(var(--primary))'} onMouseLeave={(e) => e.target.style.color = 'hsl(var(--muted-foreground))'}>
                   How It Works
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -112,24 +112,24 @@ const Footer = () => {
             <h3 className="text-lg sm:text-xl font-bold text-emerald-600 mb-4">Support</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
+                <Link to="/help" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
                   Help Center
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
+                <Link to="/contact" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
+                <Link to="/safety" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
                   Safety Guidelines
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
+                <Link to="/report" className="text-sm sm:text-base text-slate-700 hover:text-emerald-600 transition-colors font-medium">
                   Report Issue
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -163,15 +163,15 @@ const Footer = () => {
               <span>in New Zealand</span>
             </div>
             <div className="flex flex-wrap justify-center sm:justify-end space-x-4 sm:space-x-6">
-              <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-blue-600 transition-colors font-medium">
+              <Link to="/terms" className="text-sm sm:text-base text-slate-700 hover:text-blue-600 transition-colors font-medium">
                 Terms of Service
-              </a>
-              <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-blue-600 transition-colors font-medium">
+              </Link>
+              <Link to="/privacy" className="text-sm sm:text-base text-slate-700 hover:text-blue-600 transition-colors font-medium">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-sm sm:text-base text-slate-700 hover:text-blue-600 transition-colors font-medium">
+              </Link>
+              <Link to="/cookies" className="text-sm sm:text-base text-slate-700 hover:text-blue-600 transition-colors font-medium">
                 Cookie Policy
-              </a>
+              </Link>
             </div>
           </div>
         </div>

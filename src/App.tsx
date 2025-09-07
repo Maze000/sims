@@ -15,6 +15,14 @@ import Services from './pages/Services';
 import Availability from './pages/Availability';
 import Settings from './pages/Settings';
 import ProfileStats from './pages/ProfileStats';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import CookiePolicy from './pages/CookiePolicy';
+import HelpCenter from './pages/HelpCenter';
+import ContactUs from './pages/ContactUs';
+import SafetyGuidelines from './pages/SafetyGuidelines';
+import ReportIssue from './pages/ReportIssue';
+import HowItWorks from './pages/HowItWorks';
 
 // Unified Layout Component - Always renders Navigation
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
@@ -96,6 +104,57 @@ const AppContent = () => {
         <Route path="/login" element={
           <PublicLayout>
             <Login />
+          </PublicLayout>
+        } />
+
+        {/* Policy Pages - Public access */}
+        <Route path="/terms" element={
+          <PublicLayout>
+            <TermsOfService />
+          </PublicLayout>
+        } />
+        
+        <Route path="/privacy" element={
+          <PublicLayout>
+            <PrivacyPolicy />
+          </PublicLayout>
+        } />
+        
+        <Route path="/cookies" element={
+          <PublicLayout>
+            <CookiePolicy />
+          </PublicLayout>
+        } />
+
+        {/* Support Pages - Public access */}
+        <Route path="/help" element={
+          <PublicLayout>
+            <HelpCenter />
+          </PublicLayout>
+        } />
+        
+        <Route path="/contact" element={
+          <PublicLayout>
+            <ContactUs />
+          </PublicLayout>
+        } />
+        
+        <Route path="/safety" element={
+          <PublicLayout>
+            <SafetyGuidelines />
+          </PublicLayout>
+        } />
+        
+        <Route path="/report" element={
+          <PublicLayout>
+            <ReportIssue />
+          </PublicLayout>
+        } />
+
+        {/* How It Works Page - Public access */}
+        <Route path="/how-it-works" element={
+          <PublicLayout>
+            <HowItWorks />
           </PublicLayout>
         } />
 
