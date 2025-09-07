@@ -35,10 +35,10 @@ const Availability = () => {
       ]
     },
     {
-      day: 'Miércoles',
+      day: 'Wednesday',
       isWorking: true,
       timeSlots: [
-        { id: '3', day: 'Miércoles', startTime: '09:00', endTime: '17:00', isAvailable: true }
+        { id: '3', day: 'Wednesday', startTime: '09:00', endTime: '17:00', isAvailable: true }
       ]
     },
     {
@@ -56,7 +56,7 @@ const Availability = () => {
       ]
     },
     {
-      day: 'Sábado',
+      day: 'Saturday',
       isWorking: false,
       timeSlots: []
     },

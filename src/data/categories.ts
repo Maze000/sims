@@ -10,119 +10,119 @@ export interface ServiceCategory {
 export const serviceCategories: ServiceCategory[] = [
   {
     id: 'health-wellness',
-    name: 'Salud y bienestar',
+    name: 'Health & Wellness',
     icon: '🏥',
-    description: 'Servicios de salud y bienestar personal',
+    description: 'Health and wellness services',
     color: '#FF6B9D',
     services: [
-      'Masajistas',
-      'Fisioterapeutas / Kinesiologistas',
-      'Terapeutas ocupacionales',
-      'Psicólogos / Consejeros',
-      'Nutricionistas / Dietistas',
-      'Entrenadores personales / Personal trainers',
+      'Massage therapists',
+      'Physiotherapists',
+      'Occupational therapists',
+      'Psychologists / Counsellors',
+      'Nutritionists / Dietitians',
+      'Personal trainers',
       'Yoga / Pilates instructors',
-      'Acupunturistas',
-      'Quiroprácticos'
+      'Acupuncturists',
+      'Chiropractors'
     ]
   },
   {
     id: 'beauty-aesthetics',
-    name: 'Belleza y estética',
+    name: 'Beauty & Aesthetics',
     icon: '💄',
-    description: 'Servicios de belleza y cuidado personal',
+    description: 'Beauty and personal care services',
     color: '#FF9F43',
     services: [
-      'Estilistas / Hairdressers',
-      'Manicuristas / Pedicuristas',
-      'Maquilladores / Makeup artists',
-      'Depiladores / Waxing specialists',
-      'Barberos',
-      'Esteticistas / Skin care specialists'
+      'Hairdressers / Hair stylists',
+      'Nail technicians',
+      'Makeup artists',
+      'Waxing specialists',
+      'Barbers',
+      'Skincare specialists'
     ]
   },
   {
     id: 'personal-care',
-    name: 'Cuidado y asistencia personal',
+    name: 'Personal Care & Assistance',
     icon: '👶',
-    description: 'Cuidado personal y asistencia',
+    description: 'Personal care and assistance services',
     color: '#10AC84',
     services: [
-      'Niñeras / Babysitters',
-      'Cuidadores de ancianos / Caregivers',
-      'Acompañantes personales / Companions',
-      'Paseadores de perros / Dog walkers',
-      'Entrenadores de mascotas / Pet trainers',
-      'Cuidadores de mascotas / Pet sitters'
+      'Babysitters',
+      'Caregivers',
+      'Personal companions',
+      'Dog walkers',
+      'Pet trainers',
+      'Pet sitters'
     ]
   },
   {
     id: 'education-development',
-    name: 'Educación y desarrollo',
+    name: 'Education & Development',
     icon: '📚',
-    description: 'Servicios educativos y de desarrollo personal',
+    description: 'Educational and personal development services',
     color: '#5F27CD',
     services: [
-      'Tutores / Private tutors',
-      'Instructores de idiomas / Language teachers',
-      'Clases de música / Music teachers',
-      'Clases de arte / Art instructors',
-      'Coaching / Life coaches',
-      'Mentores profesionales'
+      'Private tutors',
+      'Language teachers',
+      'Music teachers',
+      'Art instructors',
+      'Life coaches',
+      'Professional mentors'
     ]
   },
   {
     id: 'creative-entertainment',
-    name: 'Servicios creativos y entretenimiento',
+    name: 'Creative Services & Entertainment',
     icon: '🎨',
-    description: 'Servicios creativos y de entretenimiento',
+    description: 'Creative and entertainment services',
     color: '#00D2D3',
     services: [
-      'Fotógrafos / Videographers',
-      'Diseñadores gráficos / Graphic designers',
-      'DJs / Músicos',
-      'Animadores / Performers',
-      'Organizadores de eventos / Event coordinators',
-      'Modelos / Talent for casting'
+      'Photographers / Videographers',
+      'Graphic designers',
+      'DJs / Musicians',
+      'Performers',
+      'Event coordinators',
+      'Models / Talent for casting'
     ]
   },
   {
     id: 'home-practical',
-    name: 'Hogar y asistencia práctica',
+    name: 'Home & Practical Assistance',
     icon: '🏠',
-    description: 'Servicios para el hogar y asistencia práctica',
+    description: 'Home and practical assistance services',
     color: '#FF6348',
     services: [
-      'Asistentes personales / Personal assistants',
-      'Organización de hogar / Home organizers',
-      'Limpieza doméstica / House cleaners',
-      'Reparaciones menores / Handyman services'
+      'Personal assistants',
+      'Home organisers',
+      'House cleaners',
+      'Handyman services'
     ]
   },
   {
     id: 'sports-physical',
-    name: 'Deportes y actividades físicas',
+    name: 'Sports & Physical Activities',
     icon: '⚽',
-    description: 'Servicios deportivos y actividades físicas',
+    description: 'Sports and physical activity services',
     color: '#2ED573',
     services: [
-      'Entrenadores de fitness / Fitness instructors',
-      'Entrenadores de deportes específicos (tenis, fútbol, natación…)',
-      'Guías de senderismo / Hiking guides',
-      'Monitores de actividades al aire libre / Outdoor activity instructors'
+      'Fitness instructors',
+      'Sports coaches (tennis, football, swimming, etc.)',
+      'Hiking guides',
+      'Outdoor activity instructors'
     ]
   },
   {
     id: 'technology-digital',
-    name: 'Tecnología y soporte digital',
+    name: 'Technology & Digital Support',
     icon: '💻',
-    description: 'Servicios tecnológicos y soporte digital',
+    description: 'Technology and digital support services',
     color: '#3742FA',
     services: [
-      'Asistentes virtuales / Virtual assistants',
-      'Soporte técnico / IT support',
-      'Community managers / Social media managers',
-      'Desarrolladores freelance / Freelance developers'
+      'Virtual assistants',
+      'IT support',
+      'Social media managers',
+      'Freelance developers'
     ]
   }
 ];

@@ -80,7 +80,7 @@ const Home = () => {
   const featuredProviders = [
     {
       id: '1',
-      name: 'María González',
+      name: 'Sarah Mitchell',
       specialization: 'Personal Trainer',
       category: 'health-wellness',
       location: 'Auckland Central',
@@ -139,7 +139,7 @@ const Home = () => {
           </h2>
           <p className="text-descriptive text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 md:mb-8 max-w-3xl mx-auto px-2">
             Connect directly with local service providers. 
-            No booking fees, no middleman - just direct contact with the people who can help you.
+            No booking fees, no middleman, just direct contact with the people who can help you.
           </p>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center px-2">
             <Button 

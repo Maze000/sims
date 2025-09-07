@@ -31,7 +31,7 @@ const TherapistProfile = () => {
   // Mock data for therapist
   const therapist = {
     id: '1',
-    name: 'María González',
+    name: 'Sarah Mitchell',
     specialization: 'Therapeutic Massage',
     location: 'Auckland Central',
     rating: 4.8,
@@ -85,7 +85,7 @@ const TherapistProfile = () => {
         id: '1',
         clientName: 'Sarah Johnson',
         rating: 5,
-        comment: 'María is absolutely amazing! Her therapeutic massage helped me recover from a sports injury much faster than expected. Very professional and skilled.',
+        comment: 'Sarah is absolutely amazing! Her therapeutic massage helped me recover from a sports injury much faster than expected. Very professional and skilled.',
         date: '2024-01-10'
       },
       {
@@ -99,7 +99,7 @@ const TherapistProfile = () => {
         id: '3',
         clientName: 'Emma Wilson',
         rating: 4,
-        comment: 'Great experience! María is very professional and the relaxation massage was exactly what I needed. Will definitely book again.',
+        comment: 'Great experience! Sarah is very professional and the relaxation massage was exactly what I needed. Will definitely book again.',
         date: '2024-01-05'
       }
     ],

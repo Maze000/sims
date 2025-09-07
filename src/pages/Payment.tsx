@@ -49,7 +49,7 @@ const Payment = () => {
       setProcessing(false);
       setPaymentSuccess(true);
       
-      // Redirigir después de 3 segundos
+      // Redirect after 3 seconds
       setTimeout(() => {
         navigate("/therapists/featured", { 
           state: { message: "Booking confirmed! We'll send you the details by email." }

@@ -242,7 +242,7 @@ const EditProfile = () => {
                   <div className="mb-6">
                     <div className="flex items-center justify-center mb-4">
                       <CreditCard className="w-6 h-6 text-gray-600 mr-2" />
-                      <h3 className="text-lg font-semibold text-gray-800">Tarjeta Crédito / Débito / Prepago</h3>
+                      <h3 className="text-lg font-semibold text-gray-800">Credit / Debit / Prepaid Card</h3>
                     </div>
                     
                     <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4">
@@ -254,11 +254,11 @@ const EditProfile = () => {
                     </div>
 
                     <div className="text-center text-sm text-gray-600 mb-4">
-                      <p>Ingresa el monto que quieres recargar expresado en dólares.</p>
-                      <p className="mt-2">Para pagar con medios de pago chilenos, solo debes cambiar el país configurado en tu cuenta Aromate por Chile.</p>
-                      <p className="mt-2 text-xs">SI TIENES INCONVENIENTES CON ALGUNA TRANSACCIÓN, HÁBLANOS VÍA WHATSAPP AL +56975444457</p>
-                      <p className="text-xs mt-1">Se aplicarán tarifas por uso de la plataforma y procesamiento de pagos</p>
-                      <p className="text-xs font-semibold">IMPORTANTE: Los saldos recargados NO SON REEMBOLSABLES</p>
+                      <p>Enter the amount you want to top up in New Zealand dollars.</p>
+                      <p className="mt-2">For New Zealand payment methods, ensure your account is set to New Zealand.</p>
+                      <p className="mt-2 text-xs">IF YOU HAVE ISSUES WITH ANY TRANSACTION, CONTACT US VIA WHATSAPP AT +64 21 123 4567</p>
+                      <p className="text-xs mt-1">Platform usage fees and payment processing fees will apply</p>
+                      <p className="text-xs font-semibold">IMPORTANT: Top-up balances are NON-REFUNDABLE</p>
                     </div>
                   </div>
 

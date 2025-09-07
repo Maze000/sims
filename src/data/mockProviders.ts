@@ -21,7 +21,7 @@ export const mockProviders: ServiceProvider[] = [
   // Health and Wellness
   {
     id: '1',
-    name: 'María González',
+    name: 'Sarah Mitchell',
     specialization: 'Personal Trainer',
     category: 'health-wellness',
     location: 'Auckland Central',
