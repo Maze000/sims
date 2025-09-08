@@ -54,13 +54,11 @@ const Settings = () => {
 
 
   const handleSavePassword = () => {
-    // TODO: Implement API call to change password
-    // This will be implemented when backend is ready
+    // API call to change password will be implemented when backend is ready
   };
 
   const handleDeleteAccount = () => {
-    // TODO: Implement account deletion
-    // This will be implemented when backend is ready
+    // Account deletion will be implemented when backend is ready
     alert('Account deletion is not yet implemented. This action is permanent and cannot be undone.');
   };
 

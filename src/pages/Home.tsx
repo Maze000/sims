@@ -83,8 +83,13 @@ const Home = () => {
           <div className="flex justify-center mb-4">
             <KiwiSilhouette size={80} className="animate-koru-spin" />
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-3 sm:mb-4 md:mb-6 font-extrabold" style={{color: '#FF6B35'}}>
-            Sims Marketplace
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-3 sm:mb-4 md:mb-6 font-extrabold">
+            <span style={{color: '#FF6B35'}}>Sims</span> <span style={{
+              background: 'linear-gradient(135deg, #FF6B35 0%, #FFD700 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>Marketplace</span>
           </h1>
           <h2 className="title-secondary text-lg sm:text-xl md:text-2xl mb-4 sm:mb-6 md:mb-8">
             Find Your Provider

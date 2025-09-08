@@ -317,8 +317,7 @@ const CreateProfile = () => {
 
   const handleSubmit = async () => {
     try {
-      // TODO: Implement API call to create service provider profile
-      // This will be implemented when backend is ready
+      // API call to create service provider profile will be implemented when backend is ready
       
       // Update user type to service provider
       await becomeServiceProvider();

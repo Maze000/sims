@@ -81,8 +81,6 @@ const SimsDashboard = () => {
 
 
   const handleReportRequest = (requestId: string, clientName: string) => {
-    // TODO: Implement report functionality
-    console.log(`Reporting request ${requestId} from ${clientName}`);
     // This would typically open a modal or navigate to a report form
     alert(`Report submitted for ${clientName}. Thank you for helping maintain platform quality.`);
   };

@@ -67,7 +67,7 @@ const ExploreSims = () => {
               placeholder="Search providers by name or specialization..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="toy-input pl-10 text-sm sm:text-base"
+              className="toy-input pl-10 text-sm sm:text-base border border-yellow-400 focus:border-white focus:ring-0 focus:outline-none shadow-md"
             />
           </div>
 

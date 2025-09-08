@@ -82,8 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      // TODO: Implement actual API call
-      // This will be implemented when backend is ready
+      // API call will be implemented when backend is ready
       // const response = await fetch('/api/auth/login', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -115,8 +114,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (userData: RegisterData) => {
     try {
-      // TODO: Implement actual API call
-      // This will be implemented when backend is ready
+      // API call will be implemented when backend is ready
       // const response = await fetch('/api/auth/register', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -162,8 +160,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const becomeServiceProvider = async () => {
     try {
-      // TODO: Implement actual API call
-      // This will be implemented when backend is ready to become service provider
+      // API call will be implemented when backend is ready to become service provider
       // const response = await fetch('/api/auth/become-therapist', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' }
