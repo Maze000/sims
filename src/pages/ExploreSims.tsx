@@ -11,7 +11,8 @@ import {
   Clock, 
   Filter,
   X,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Heart
 } from 'lucide-react';
 import { mockProviders, ServiceProvider } from '@/data/mockProviders';
 import { serviceCategories } from '@/data/categories';
@@ -178,9 +179,15 @@ const ExploreSims = () => {
                     <p className="text-xs sm:text-sm text-gray-600 truncate">{provider.specialization}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <Star className="w-3 h-3 sm:w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="text-xs sm:text-sm font-medium">{provider.rating}</span>
+                <div className="flex items-center space-x-3 mt-3">
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-3 h-3 sm:w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="text-xs sm:text-sm font-medium">{provider.rating}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Heart className="w-3 h-3 sm:w-4 h-4 fill-red-500 text-red-500" />
+                    <span className="text-xs sm:text-sm text-gray-600">{Math.floor(Math.random() * 200) + 50}</span>
+                  </div>
                 </div>
               </div>
             </CardHeader>

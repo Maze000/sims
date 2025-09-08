@@ -243,6 +243,10 @@ const SimsProfileNew = () => {
                         <span className="font-medium">{sim.rating}</span>
                       </div>
                       <span className="text-gray-600">(Profile Score)</span>
+                      <div className="flex items-center gap-1 ml-2">
+                        <Heart className="w-4 h-4 fill-red-500 text-red-500" />
+                        <span className="text-sm text-gray-600">127</span>
+                      </div>
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {sim.specialties.map((specialty) => (
