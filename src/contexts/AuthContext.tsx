@@ -8,6 +8,8 @@ interface User {
   userType: 'client' | 'service_provider';
   isVerified: boolean;
   avatar?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface AuthContextType {
@@ -59,13 +61,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const token = localStorage.getItem('authToken');
     if (token) {
       // TODO: Validate token with backend
+      // This will be implemented when backend is ready
       // For now, just check if it exists
       const userData = localStorage.getItem('userData');
       if (userData) {
         try {
           setUser(JSON.parse(userData));
         } catch (error) {
-          console.error('Error parsing user data:', error);
+          // console.error('Error parsing user data:', error);
           localStorage.removeItem('userData');
           localStorage.removeItem('authToken');
         }
@@ -77,6 +80,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       // TODO: Implement actual API call
+      // This will be implemented when backend is ready
       // const response = await fetch('/api/auth/login', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -102,7 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setUser(mockUser);
     } catch (error) {
-      console.error('Login error:', error);
+      // console.error('Login error:', error);
       throw new Error('Login failed');
     }
   };
@@ -110,6 +114,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (userData: RegisterData) => {
     try {
       // TODO: Implement actual API call
+      // This will be implemented when backend is ready
       // const response = await fetch('/api/auth/register', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -135,7 +140,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setUser(mockUser);
     } catch (error) {
-      console.error('Registration error:', error);
+      // console.error('Registration error:', error);
       throw new Error('Registration failed');
     }
   };
@@ -156,7 +161,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const becomeServiceProvider = async () => {
     try {
-      // TODO: Implement actual API call to become service provider
+      // TODO: Implement actual API call
+      // This will be implemented when backend is ready to become service provider
       // const response = await fetch('/api/auth/become-therapist', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' }
@@ -169,7 +175,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem('userData', JSON.stringify(updatedUser));
       }
     } catch (error) {
-      console.error('Error becoming service provider:', error);
+      // console.error('Error becoming service provider:', error);
       throw new Error('Failed to become service provider');
     }
   };

@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { mockProviders } from "@/data/mockProviders";
 
-const TherapistProfileNew = () => {
+const SimsProfileNew = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [contactForm, setContactForm] = useState({
@@ -71,7 +71,7 @@ const TherapistProfileNew = () => {
     );
   }
 
-  const therapist = {
+  const sim = {
     id: provider.id,
     name: provider.name,
     avatar: provider.image,
@@ -131,12 +131,12 @@ const TherapistProfileNew = () => {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the data to your backend
-    console.log('Contact request:', {
-      providerId: provider?.id,
-      providerName: provider?.name,
-      ...contactForm,
-      contactType
-    });
+    // console.log('Contact request:', {
+    //   providerId: provider?.id,
+    //   providerName: provider?.name,
+    //   ...contactForm,
+    //   contactType
+    // });
     setIsSubmitted(true);
   };
 
@@ -211,10 +211,10 @@ const TherapistProfileNew = () => {
                 <div className="flex items-start gap-4">
                   <div className="relative">
                     <Avatar className="w-20 h-20">
-                      <AvatarImage src={therapist.avatar} />
-                      <AvatarFallback className="text-2xl">{therapist.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={sim.avatar} />
+                      <AvatarFallback className="text-2xl">{sim.name.charAt(0)}</AvatarFallback>
                     </Avatar>
-                    {therapist.verified && (
+                    {sim.verified && (
                       <div className="absolute -bottom-1 -right-1 bg-green-500 text-white rounded-full p-1">
                         <Shield className="w-3 h-3" />
                       </div>
@@ -222,30 +222,30 @@ const TherapistProfileNew = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h1 className="text-2xl font-bold">{therapist.name}</h1>
-                      {therapist.verified && (
+                      <h1 className="text-2xl font-bold">{sim.name}</h1>
+                      {sim.verified && (
                         <Badge className="bg-green-100 text-green-800">Verified</Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                       <div className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
-                        {therapist.location}
+                        {sim.location}
                       </div>
                       <div className="flex items-center gap-1">
                         <Award className="w-4 h-4" />
-                        {therapist.yearsExperience} years exp.
+                        {sim.yearsExperience} years exp.
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">{therapist.rating}</span>
+                        <span className="font-medium">{sim.rating}</span>
                       </div>
-                      <span className="text-gray-600">({therapist.reviewsCount} reviews)</span>
+                      <span className="text-gray-600">({sim.reviewsCount} reviews)</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
-                      {therapist.specialties.map((specialty) => (
+                      {sim.specialties.map((specialty) => (
                         <Badge key={specialty} variant="secondary" className="text-xs">
                           {specialty}
                         </Badge>
@@ -262,7 +262,7 @@ const TherapistProfileNew = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 leading-relaxed">{therapist.description}</p>
+                <p className="text-gray-700 leading-relaxed">{sim.description}</p>
               </CardContent>
             </Card>
 
@@ -274,7 +274,7 @@ const TherapistProfileNew = () => {
               </TabsList>
               
               <TabsContent value="services" className="space-y-4 max-h-96 overflow-y-auto scrollable">
-                {therapist.services.map((service) => (
+                {sim.services.map((service) => (
                   <Card key={service.id} className="toy-card">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
@@ -303,7 +303,7 @@ const TherapistProfileNew = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 leading-relaxed">{therapist.description}</p>
+                    <p className="text-gray-700 leading-relaxed">{sim.description}</p>
                     </CardContent>
                   </Card>
 
@@ -316,7 +316,7 @@ const TherapistProfileNew = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      {therapist.certifications.map((cert, index) => (
+                      {sim.certifications.map((cert, index) => (
                         <div key={index} className="flex items-center gap-2 text-sm">
                           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                           <span>{cert}</span>
@@ -335,7 +335,7 @@ const TherapistProfileNew = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
-                      {therapist.languages.map((language) => (
+                      {sim.languages.map((language) => (
                         <Badge key={language} variant="outline">{language}</Badge>
                       ))}
                     </div>
@@ -363,7 +363,7 @@ const TherapistProfileNew = () => {
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Request Sent!</h3>
                     <p className="text-sm text-gray-600">
-                      {therapist.name} will contact you soon to discuss your needs and schedule.
+                      {sim.name} will contact you soon to discuss your needs and schedule.
                     </p>
                   </div>
                 ) : (
@@ -455,7 +455,7 @@ const TherapistProfileNew = () => {
                     </Button>
                     
                     <p className="text-xs text-gray-500 text-center">
-                      {therapist.name} will contact you directly to discuss details and schedule.
+                      {sim.name} will contact you directly to discuss details and schedule.
                     </p>
                   </form>
                 )}
@@ -473,15 +473,15 @@ const TherapistProfileNew = () => {
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
                   <MapPin className="w-4 h-4 text-gray-500" />
-                  <span>{therapist.location}</span>
+                  <span>{sim.location}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Clock className="w-4 h-4 text-gray-500" />
-                  <span>{therapist.yearsExperience} years experience</span>
+                  <span>{sim.yearsExperience} years experience</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Star className="w-4 h-4 text-yellow-500" />
-                  <span>{therapist.rating} ({therapist.reviewsCount} reviews)</span>
+                  <span>{sim.rating} ({sim.reviewsCount} reviews)</span>
                 </div>
               </CardContent>
             </Card>
@@ -493,4 +493,4 @@ const TherapistProfileNew = () => {
   );
 };
 
-export default TherapistProfileNew;
+export default SimsProfileNew;

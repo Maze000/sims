@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,7 +23,7 @@ const Settings = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('notifications');
   
-  console.log('Current activeTab:', activeTab);
+  // console.log('Current activeTab:', activeTab);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -58,7 +58,8 @@ const Settings = () => {
 
   const handleSavePassword = () => {
     // TODO: Implement API call to change password
-    console.log('Changing password:', passwordSettings);
+    // This will be implemented when backend is ready
+    // console.log('Changing password:', passwordSettings);
   };
 
   const tabs = [
@@ -89,9 +90,9 @@ const Settings = () => {
                     <button
                       key={tab.id}
                       onClick={() => {
-                        console.log('Clicking tab:', tab.id, 'Current activeTab:', activeTab);
+                        // console.log('Clicking tab:', tab.id, 'Current activeTab:', activeTab);
                         setActiveTab(tab.id);
-                        console.log('After setActiveTab, activeTab should be:', tab.id);
+                        // console.log('After setActiveTab, activeTab should be:', tab.id);
                       }}
                       className={`w-full flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 text-left transition-colors rounded-md ${
                         activeTab === tab.id 

@@ -5,11 +5,11 @@ import { Elements } from '@stripe/react-stripe-js';
 import Navigation from './components/Navigation';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import TherapistDashboard from './pages/TherapistDashboard';
+import SimsDashboard from './pages/SimsDashboard';
 import Home from './pages/Home';
-import ExploreTherapists from './pages/ExploreTherapists';
+import ExploreSims from './pages/ExploreSims';
 import Profile from './pages/Profile';
-import TherapistProfile from './pages/TherapistProfileNew';
+import SimsProfile from './pages/SimsProfileNew';
 import CreateProfile from './pages/CreateProfile';
 import Services from './pages/Services';
 import Availability from './pages/Availability';
@@ -170,7 +170,7 @@ const AppContent = () => {
         <Route path="/therapist-dashboard" element={
           <ProtectedRoute allowedUserTypes={['service_provider']} redirectTo="/dashboard">
             <AppLayout>
-              <TherapistDashboard />
+              <SimsDashboard />
             </AppLayout>
           </ProtectedRoute>
         } />
@@ -178,23 +178,23 @@ const AppContent = () => {
         <Route path="/explore" element={
           <ProtectedRoute>
             <AppLayout>
-              <ExploreTherapists />
+              <ExploreSims />
             </AppLayout>
           </ProtectedRoute>
         } />
         
-        <Route path="/therapist/:id" element={
+        <Route path="/sims/:id" element={
           <ProtectedRoute>
             <AppLayout>
-              <TherapistProfile />
+              <SimsProfile />
             </AppLayout>
           </ProtectedRoute>
         } />
         
-        <Route path="/provider/:id" element={
+        <Route path="/sims/:id" element={
           <ProtectedRoute>
             <AppLayout>
-              <TherapistProfile />
+              <SimsProfile />
             </AppLayout>
           </ProtectedRoute>
         } />

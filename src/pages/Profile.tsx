@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -38,7 +38,7 @@ const Profile = () => {
       await updateUser(formData);
       setIsEditing(false);
     } catch (error) {
-      console.error('Failed to update profile:', error);
+      // console.error('Failed to update profile:', error);
     }
   };
 
@@ -304,7 +304,7 @@ const Profile = () => {
                 <div>
                   <Label className="text-xs sm:text-sm font-medium text-gray-600">Member Since</Label>
                   <p className="text-sm sm:text-base font-medium mt-1">
-                    {(user as any)?.createdAt ? new Date((user as any).createdAt).toLocaleDateString() : 'N/A'}
+                    {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                   </p>
                 </div>
                 <div>
@@ -316,7 +316,7 @@ const Profile = () => {
                 <div>
                   <Label className="text-xs sm:text-sm font-medium text-gray-600">Last Updated</Label>
                   <p className="text-sm sm:text-base font-medium mt-1">
-                    {(user as any)?.updatedAt ? new Date((user as any).updatedAt).toLocaleDateString() : 'N/A'}
+                    {user?.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : 'N/A'}
                   </p>
                 </div>
               </div>

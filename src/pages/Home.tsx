@@ -220,7 +220,7 @@ const Home = () => {
                       className={`w-full mt-2 sm:mt-3 text-xs sm:text-sm touch-target ${provider.available ? 'btn-plastic btn-plastic-kiwi' : 'btn-plastic btn-plastic-ghost'}`}
                       variant={provider.available ? "default" : "outline"}
                       disabled={!provider.available}
-                      onClick={() => navigate(`/provider/${provider.id}`)}
+                      onClick={() => navigate(`/sims/${provider.id}`)}
                     >
                       {provider.available ? 'View Profile' : 'Not Available'}
                     </Button>

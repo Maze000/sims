@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -277,7 +277,7 @@ const CreateProfile = () => {
       const mockClientSecret = `pi_mock_${Date.now()}_secret_mock`;
       setClientSecret(mockClientSecret);
     } catch (error) {
-      console.error('Error creating payment intent:', error);
+      // console.error('Error creating payment intent:', error);
     }
   };
 
@@ -297,7 +297,7 @@ const CreateProfile = () => {
       updatePaymentForVisibility('isPaid', true);
       updatePaymentForVisibility('paymentMethod', 'stripe');
     } catch (error) {
-      console.error('Payment error:', error);
+      // console.error('Payment error:', error);
       alert('Payment failed. Please try again.');
     } finally {
       setPaymentLoading(false);
@@ -320,7 +320,8 @@ const CreateProfile = () => {
   const handleSubmit = async () => {
     try {
       // TODO: Implement API call to create service provider profile
-      console.log('Creating service provider profile:', formData);
+      // This will be implemented when backend is ready
+      // console.log('Creating service provider profile:', formData);
       
       // Update user type to service provider
       await becomeServiceProvider();
@@ -328,7 +329,7 @@ const CreateProfile = () => {
       // Redirect to service provider dashboard
     navigate('/therapist-dashboard');
     } catch (error) {
-      console.error('Error creating profile:', error);
+      // console.error('Error creating profile:', error);
       // Fallback to regular dashboard
       navigate('/dashboard');
     }

@@ -16,7 +16,7 @@ import {
 import { mockProviders, ServiceProvider } from '@/data/mockProviders';
 import { serviceCategories } from '@/data/categories';
 
-const ExploreTherapists = () => {
+const ExploreSims = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -51,7 +51,7 @@ const ExploreTherapists = () => {
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{color: '#FF6B35'}}>Explore Service Providers</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{color: '#FF6B35'}}>Explore Sims</h1>
         <p className="text-sm sm:text-base text-gray-600">
           Find the perfect service provider for your needs
         </p>
@@ -240,7 +240,7 @@ const ExploreTherapists = () => {
                   }}
                   variant={provider.available ? "default" : "outline"}
                   disabled={!provider.available}
-                  onClick={() => navigate(`/provider/${provider.id}`)}
+                  onClick={() => navigate(`/sims/${provider.id}`)}
                 >
                   {provider.available ? 'View Profile' : 'Not Available'}
                 </Button>
@@ -299,4 +299,4 @@ const Label: React.FC<{ children: React.ReactNode; className?: string }> = ({ ch
   </label>
 );
 
-export default ExploreTherapists;
+export default ExploreSims;

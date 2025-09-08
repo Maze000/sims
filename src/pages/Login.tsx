@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -36,7 +36,7 @@ const Login = () => {
       await login(loginForm.email, loginForm.password);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Login failed:', error);
+      // console.error('Login failed:', error);
     }
   };
 
@@ -54,7 +54,7 @@ const Login = () => {
       await register(registerForm);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Registration failed:', error);
+      // console.error('Registration failed:', error);
     }
   };
 

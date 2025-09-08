@@ -21,7 +21,7 @@ import {
   Plus
 } from 'lucide-react';
 
-const TherapistDashboard = () => {
+const SimsDashboard = () => {
   const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState('week');
   const [showAllRequests, setShowAllRequests] = useState(false);
@@ -145,7 +145,7 @@ const TherapistDashboard = () => {
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Service Provider Dashboard</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Sims Dashboard</h1>
               <p className="text-sm sm:text-base text-gray-600">
                 Manage your profile and track your visibility
               </p>
@@ -308,7 +308,7 @@ const TherapistDashboard = () => {
                 </div>
                 <div className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
-                  <span className="text-gray-700">therapist@example.com</span>
+                  <span className="text-gray-700">sim@example.com</span>
                 </div>
               </CardContent>
             </Card>
@@ -351,4 +351,4 @@ const TherapistDashboard = () => {
   );
 };
 
-export default TherapistDashboard;
+export default SimsDashboard;
