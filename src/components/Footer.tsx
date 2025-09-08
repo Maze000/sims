@@ -25,7 +25,7 @@ const Footer = () => {
                 <Twitter className="w-4 h-4" style={{color: 'hsl(var(--secondary))'}} />
               </a>
               <a href="#" className="p-2 rounded-full bg-white/60 backdrop-blur-md border-2 hover:scale-105 transition-transform" style={{borderColor: 'hsl(var(--highlight))'}}>
-                <Instagram className="w-4 h-4" style={{color: 'hsl(var(--highlight))'}} />
+                <Instagram className="w-4 h-4" style={{color: 'hsl(var(--highlight))', filter: 'brightness(0.85)'}} />
               </a>
             </div>
           </div>
