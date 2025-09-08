@@ -117,12 +117,12 @@ const Services = () => {
             transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
           }}
           onMouseEnter={(e) => {
-            e.target.style.background = '#5A9F3A';
-            e.target.style.transform = 'translateY(-1px) scale(1.005)';
+            (e.target as HTMLElement).style.background = '#5A9F3A';
+            (e.target as HTMLElement).style.transform = 'translateY(-1px) scale(1.005)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = '#FF6B35';
-            e.target.style.transform = 'translateY(0) scale(1)';
+            (e.target as HTMLElement).style.background = '#FF6B35';
+            (e.target as HTMLElement).style.transform = 'translateY(0) scale(1)';
           }}
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -240,12 +240,12 @@ const Services = () => {
                     transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.background = '#5A9F3A';
-                    e.target.style.transform = 'translateY(-1px) scale(1.005)';
+                    (e.target as HTMLElement).style.background = '#5A9F3A';
+                    (e.target as HTMLElement).style.transform = 'translateY(-1px) scale(1.005)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.background = '#FF6B35';
-                    e.target.style.transform = 'translateY(0) scale(1)';
+                    (e.target as HTMLElement).style.background = '#FF6B35';
+                    (e.target as HTMLElement).style.transform = 'translateY(0) scale(1)';
                   }}
                 >
                   {editingService ? 'Update' : 'Add'} Service

@@ -130,6 +130,16 @@ const CreateProfile = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const updateSocialMedia = (platform: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      socialMedia: {
+        ...prev.socialMedia,
+        [platform]: value
+      }
+    }));
+  };
+
   const updateCertification = (index: number, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -464,6 +474,112 @@ const CreateProfile = () => {
               </div>
             </div>
 
+            {/* Identity Verification Section */}
+            <div className="bg-white rounded-lg p-6 mb-8 border border-orange-200 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <Shield className="w-6 h-6 text-orange-600" />
+                <h3 className="text-xl font-semibold text-gray-900">Identity Verification</h3>
+              </div>
+              <p className="text-gray-600 mb-6 text-center">
+                To ensure the safety and trust of our community, we require identity verification for all service providers.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="documentType" className="text-sm font-medium">Document Type</Label>
+                  <Select 
+                    value={formData.identityVerification.documentType} 
+                    onValueChange={(value) => updateIdentityVerification('documentType', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select document type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="drivers-license">New Zealand Driver's License</SelectItem>
+                      <SelectItem value="passport">Passport</SelectItem>
+                      <SelectItem value="national-id">National ID Card</SelectItem>
+                      <SelectItem value="bank-statement">Bank Statement (with address)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="documentNumber" className="text-sm font-medium">Document Number (Optional)</Label>
+                  <Input
+                    id="documentNumber"
+                    type="text"
+                    placeholder="Enter document number if applicable"
+                    value={formData.identityVerification.documentNumber}
+                    onChange={(e) => updateIdentityVerification('documentNumber', e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2 mt-6">
+                <Label htmlFor="documentUpload" className="text-sm font-medium">Upload Document</Label>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0">
+                      <div className="p-2 bg-blue-100 rounded-full">
+                        <Shield className="w-4 h-4 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-blue-800 font-medium mb-1">
+                        📸 Quick Identity Verification
+                      </p>
+                      <p className="text-sm text-blue-700">
+                        Simply take a photo of any ID with your picture (driver's license, passport, etc.) alongside your face. 
+                        This helps us keep our community safe and trustworthy! ✨
+                      </p>
+                      <p className="text-xs text-blue-600 mt-2 font-medium">
+                        ⏰ After verification, you'll be able to register as a provider (2-5 business days)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                  <input
+                    type="file"
+                    id="documentUpload"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={handleDocumentUpload}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="documentUpload"
+                    className="cursor-pointer flex flex-col items-center justify-center space-y-2"
+                  >
+                    <div className="p-3 bg-orange-100 rounded-full">
+                      <Shield className="w-6 h-6 text-orange-600" />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-gray-700">
+                        {formData.identityVerification.documentFile 
+                          ? formData.identityVerification.documentFile.name 
+                          : 'Click to upload document'
+                        }
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        PDF, JPG, PNG (Max 5MB)
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-8 max-w-2xl mx-auto">
+              <div className="flex items-center space-x-2 mb-2">
+                <Shield className="w-4 h-4 text-orange-600" />
+                <h4 className="text-sm font-medium text-orange-800">Privacy & Security</h4>
+              </div>
+              <p className="text-xs text-orange-700">
+                Your documents are encrypted and stored securely. We only use them for identity verification 
+                and will never share them with third parties. Verification typically takes 2-5 business days.
+              </p>
+            </div>
+
             <div className="bg-white rounded-2xl p-8 shadow-lg max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-6">
                 <Sparkles className="w-8 h-8 text-orange-600 mr-3" />
@@ -703,7 +819,7 @@ const CreateProfile = () => {
                   <Input
                     id="facebook"
                     value={formData.socialMedia.facebook}
-                    onChange={(e) => updateFormData('socialMedia', { ...formData.socialMedia, facebook: e.target.value })}
+                    onChange={(e) => updateSocialMedia('facebook', e.target.value)}
                     className="text-sm sm:text-base"
                     placeholder="Username"
                   />
@@ -713,7 +829,7 @@ const CreateProfile = () => {
                   <Input
                     id="instagram"
                     value={formData.socialMedia.instagram}
-                    onChange={(e) => updateFormData('socialMedia', { ...formData.socialMedia, instagram: e.target.value })}
+                    onChange={(e) => updateSocialMedia('instagram', e.target.value)}
                     className="text-sm sm:text-base"
                     placeholder="Username"
                   />
@@ -723,7 +839,7 @@ const CreateProfile = () => {
                   <Input
                     id="linkedin"
                     value={formData.socialMedia.linkedin}
-                    onChange={(e) => updateFormData('socialMedia', { ...formData.socialMedia, linkedin: e.target.value })}
+                    onChange={(e) => updateSocialMedia('linkedin', e.target.value)}
                     className="text-sm sm:text-base"
                     placeholder="Profile URL"
                   />
@@ -731,92 +847,6 @@ const CreateProfile = () => {
               </div>
             </div>
 
-            {/* Identity Verification Section */}
-            <div className="space-y-4 border-t pt-6">
-              <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-orange-600" />
-                <Label className="text-sm sm:text-base font-medium">Identity Verification</Label>
-              </div>
-              <p className="text-xs sm:text-sm text-gray-600">
-                To ensure the safety and trust of our community, we require identity verification for all service providers.
-              </p>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="documentType" className="text-xs sm:text-sm font-medium">Document Type</Label>
-                  <Select 
-                    value={formData.identityVerification.documentType} 
-                    onValueChange={(value) => updateIdentityVerification('documentType', value)}
-                  >
-                    <SelectTrigger className="text-sm sm:text-base">
-                      <SelectValue placeholder="Select document type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="drivers-license">New Zealand Driver's License</SelectItem>
-                      <SelectItem value="passport">Passport</SelectItem>
-                      <SelectItem value="national-id">National ID Card</SelectItem>
-                      <SelectItem value="bank-statement">Bank Statement (with address)</SelectItem>
-                      <SelectItem value="utility-bill">Utility Bill (with address)</SelectItem>
-                      <SelectItem value="professional-license">Professional License/Certificate</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="documentNumber" className="text-xs sm:text-sm font-medium">Document Number (Optional)</Label>
-                  <Input
-                    id="documentNumber"
-                    value={formData.identityVerification.documentNumber}
-                    onChange={(e) => updateIdentityVerification('documentNumber', e.target.value)}
-                    className="text-sm sm:text-base"
-                    placeholder="Enter document number if applicable"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="documentUpload" className="text-xs sm:text-sm font-medium">Upload Document</Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                  <input
-                    type="file"
-                    id="documentUpload"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={handleDocumentUpload}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="documentUpload"
-                    className="cursor-pointer flex flex-col items-center justify-center space-y-2"
-                  >
-                    <div className="p-3 bg-orange-100 rounded-full">
-                      <Shield className="w-6 h-6 text-orange-600" />
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium text-gray-900">
-                        {formData.identityVerification.documentFile 
-                          ? formData.identityVerification.documentFile.name 
-                          : 'Click to upload document'
-                        }
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        PDF, JPG, PNG up to 10MB
-                      </p>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Shield className="w-4 h-4 text-orange-600" />
-                  <h4 className="text-sm font-medium text-orange-800">Privacy & Security</h4>
-                </div>
-                <p className="text-xs text-orange-700">
-                  Your documents are encrypted and stored securely. We only use them for identity verification 
-                  and will never share them with third parties. Verification typically takes 1-2 business days.
-                </p>
-              </div>
-            </div>
           </CardContent>
         </Card>
       )}

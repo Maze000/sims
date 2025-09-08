@@ -117,12 +117,12 @@ const Login = () => {
                 }}
                 onMouseEnter={(e) => {
                   if (!isLogin) {
-                    e.target.style.color = '#374151';
+                    (e.target as HTMLElement).style.color = '#374151';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isLogin) {
-                    e.target.style.color = '#6B7280';
+                    (e.target as HTMLElement).style.color = '#6B7280';
                   }
                 }}
               >
@@ -139,12 +139,12 @@ const Login = () => {
                 }}
                 onMouseEnter={(e) => {
                   if (isLogin) {
-                    e.target.style.color = '#374151';
+                    (e.target as HTMLElement).style.color = '#374151';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (isLogin) {
-                    e.target.style.color = '#6B7280';
+                    (e.target as HTMLElement).style.color = '#6B7280';
                   }
                 }}
               >

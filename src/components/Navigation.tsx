@@ -110,12 +110,12 @@ const Navigation = () => {
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive('/')) {
-                    e.target.style.color = '#FF6B35';
+                    (e.target as HTMLElement).style.color = '#FF6B35';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive('/')) {
-                    e.target.style.color = '#374151';
+                    (e.target as HTMLElement).style.color = '#374151';
                   }
                 }}
               >
@@ -130,12 +130,12 @@ const Navigation = () => {
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive('/home')) {
-                    e.target.style.color = '#FF6B35';
+                    (e.target as HTMLElement).style.color = '#FF6B35';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive('/home')) {
-                    e.target.style.color = '#374151';
+                    (e.target as HTMLElement).style.color = '#374151';
                   }
                 }}
               >
@@ -268,14 +268,14 @@ const Navigation = () => {
                         }}
                         onMouseEnter={(e) => {
                           if (!isActive(item.path)) {
-                            e.target.style.color = '#FF6B35';
-                            e.target.style.backgroundColor = 'rgba(109, 190, 69, 0.05)';
+                            (e.target as HTMLElement).style.color = '#FF6B35';
+                            (e.target as HTMLElement).style.backgroundColor = 'rgba(109, 190, 69, 0.05)';
                           }
                         }}
                         onMouseLeave={(e) => {
                           if (!isActive(item.path)) {
-                            e.target.style.color = '#374151';
-                            e.target.style.backgroundColor = 'transparent';
+                            (e.target as HTMLElement).style.color = '#374151';
+                            (e.target as HTMLElement).style.backgroundColor = 'transparent';
                           }
                         }}
                       onClick={() => handleNavigation(item.path)}
