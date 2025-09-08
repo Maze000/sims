@@ -16,6 +16,10 @@ const Login = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+  const [loginErrors, setLoginErrors] = useState<{[key: string]: string}>({});
+  const [registerErrors, setRegisterErrors] = useState<{[key: string]: string}>({});
 
   // Login form state
   const [loginForm, setLoginForm] = useState({
@@ -32,10 +36,13 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await login(loginForm.email, loginForm.password);
       navigate('/dashboard');
     } catch (error) {
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,19 +56,39 @@ const Login = () => {
       alert('Please accept the terms and conditions');
       return;
     }
+    setIsRegisterLoading(true);
     try {
       await register(registerForm);
       navigate('/dashboard');
     } catch (error) {
+    } finally {
+      setIsRegisterLoading(false);
     }
   };
 
   const updateLoginForm = (field: string, value: string) => {
     setLoginForm(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (loginErrors[field]) {
+      setLoginErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
 
   const updateRegisterForm = (field: string, value: string) => {
     setRegisterForm(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (registerErrors[field]) {
+      setRegisterErrors(prev => ({ ...prev, [field]: '' }));
+    }
+    
+    // Real-time password confirmation validation
+    if (field === 'confirmPassword' && registerForm.password) {
+      if (value !== registerForm.password) {
+        setRegisterErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+      } else {
+        setRegisterErrors(prev => ({ ...prev, confirmPassword: '' }));
+      }
+    }
   };
 
   return (
@@ -152,7 +179,7 @@ const Login = () => {
 
             {isLogin ? (
               // Login Form
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4" aria-label="Sign in form">
                 <div className="space-y-2">
                   <Label htmlFor="login-email" className="text-xs sm:text-sm">Email</Label>
                   <div className="relative">
@@ -163,9 +190,14 @@ const Login = () => {
                       placeholder="Enter your email"
                       value={loginForm.email}
                       onChange={(e) => updateLoginForm('email', e.target.value)}
-                      className="pl-10 text-sm sm:text-base"
+                      className={`pl-10 text-sm sm:text-base ${loginErrors.email ? 'input-error' : ''}`}
                       required
+                      aria-describedby={loginErrors.email ? "login-email-error" : undefined}
+                      aria-invalid={!!loginErrors.email}
                     />
+                    {loginErrors.email && (
+                      <p id="login-email-error" className="text-red-500 text-xs mt-1" role="alert">{loginErrors.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -179,9 +211,12 @@ const Login = () => {
                       placeholder="Enter your password"
                       value={loginForm.password}
                       onChange={(e) => updateLoginForm('password', e.target.value)}
-                      className="pl-10 pr-10 text-sm sm:text-base"
+                      className={`pl-10 pr-10 text-sm sm:text-base ${loginErrors.password ? 'input-error' : ''}`}
                       required
                     />
+                    {loginErrors.password && (
+                      <p className="text-red-500 text-xs mt-1">{loginErrors.password}</p>
+                    )}
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
@@ -201,13 +236,18 @@ const Login = () => {
                   <Label htmlFor="keepLoggedIn" className="text-xs sm:text-sm">Keep me signed in</Label>
                 </div>
 
-                <Button type="submit" className="w-full text-sm sm:text-base touch-target">
-                  Sign In
+                <Button 
+                  type="submit" 
+                  className={`w-full text-sm sm:text-base touch-target btn-micro-interaction ${isLoading ? 'btn-loading' : ''}`}
+                  disabled={isLoading}
+                  aria-describedby="login-form-description"
+                >
+                  {isLoading ? 'Signing In...' : 'Sign In'}
                 </Button>
               </form>
             ) : (
               // Registration Form
-              <form onSubmit={handleRegister} className="space-y-4">
+              <form onSubmit={handleRegister} className="space-y-4" aria-label="Create account form">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-xs sm:text-sm">Email</Label>
                   <div className="relative">
@@ -218,9 +258,12 @@ const Login = () => {
                       placeholder="Enter your email"
                       value={registerForm.email}
                       onChange={(e) => updateRegisterForm('email', e.target.value)}
-                      className="pl-10 text-sm sm:text-base"
+                      className={`pl-10 text-sm sm:text-base ${registerErrors.email ? 'input-error' : ''}`}
                       required
                     />
+                    {registerErrors.email && (
+                      <p className="text-red-500 text-xs mt-1">{registerErrors.email}</p>
+                    )}
                   </div>
                 </div>
 
@@ -257,9 +300,12 @@ const Login = () => {
                       placeholder="Confirm your password"
                       value={registerForm.confirmPassword}
                       onChange={(e) => updateRegisterForm('confirmPassword', e.target.value)}
-                      className="pl-10 pr-10 text-sm sm:text-base"
+                      className={`pl-10 pr-10 text-sm sm:text-base ${registerErrors.confirmPassword ? 'input-error' : ''}`}
                       required
                     />
+                    {registerErrors.confirmPassword && (
+                      <p className="text-red-500 text-xs mt-1">{registerErrors.confirmPassword}</p>
+                    )}
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -281,8 +327,12 @@ const Login = () => {
                   </Label>
                 </div>
 
-                <Button type="submit" className="w-full text-sm sm:text-base touch-target">
-                  Create Account
+                <Button 
+                  type="submit" 
+                  className={`w-full text-sm sm:text-base touch-target btn-micro-interaction ${isRegisterLoading ? 'btn-loading' : ''}`}
+                  disabled={isRegisterLoading}
+                >
+                  {isRegisterLoading ? 'Creating Account...' : 'Create Account'}
                 </Button>
               </form>
             )}

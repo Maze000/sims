@@ -115,7 +115,7 @@ const ExploreSims = () => {
               </Button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 fade-in">
               {/* Category Filter */}
               <div>
                 <Label className="text-xs sm:text-sm font-medium text-gray-700 mb-2 block">
@@ -162,9 +162,9 @@ const ExploreSims = () => {
       </div>
 
       {/* Providers Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 fade-in">
         {filteredProviders.map((provider) => (
-          <Card key={provider.id} className="toy-card hover:shadow-lg transition-shadow cursor-pointer">
+          <Card key={provider.id} className="toy-card hover:shadow-lg transition-shadow cursor-pointer card-hover">
             <CardHeader className="pb-3 sm:pb-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">
@@ -220,13 +220,13 @@ const ExploreSims = () => {
                       ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800'
                   }`}>
-                    {provider.available ? 'Active' : 'Not Available'}
+                    {provider.available ? 'Verified' : 'Not Available'}
                   </span>
                 </div>
                 
                 {/* View Profile Button */}
                 <Button
-                  className="text-xs sm:text-sm touch-target w-full mt-2"
+                  className="text-xs sm:text-sm touch-target w-full mt-2 btn-micro-interaction"
                   style={{
                     background: '#FF6B35',
                     color: 'white',

@@ -74,7 +74,7 @@ const Home = () => {
 
   return (
     <div className="pt-14 sm:pt-16 md:pt-20 min-h-screen relative overflow-hidden" style={{
-      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234CAF50' fill-opacity='0.2'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='15' r='1'/%3E%3Ccircle cx='15' cy='45' r='1.5'/%3E%3Ccircle cx='45' cy='50' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A8E6CF' fill-opacity='0.5'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='15' r='1'/%3E%3Ccircle cx='15' cy='45' r='1.5'/%3E%3Ccircle cx='45' cy='50' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
     }}>
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12 relative">
@@ -133,7 +133,7 @@ const Home = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
           <div className="card-collectible text-center">
             <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2" style={{color: 'hsl(var(--primary))'}}>500+</div>
-            <div className="text-xs sm:text-sm md:text-base font-bold" style={{color: 'hsl(var(--foreground))'}}>Active Providers</div>
+            <div className="text-xs sm:text-sm md:text-base font-bold" style={{color: 'hsl(var(--foreground))'}}>Verified Providers</div>
           </div>
           <div className="card-collectible card-collectible-featured text-center">
             <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2" style={{color: 'hsl(var(--secondary))'}}>2,000+</div>
@@ -212,7 +212,7 @@ const Home = () => {
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {provider.available ? 'Available' : 'Not Available'}
+                        {provider.available ? 'Verified' : 'Not Available'}
                       </span>
                     </div>
                     <Button 

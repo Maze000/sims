@@ -3,26 +3,29 @@ import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import Navigation from './components/Navigation';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import SimsDashboard from './pages/SimsDashboard';
-import Home from './pages/Home';
-import ExploreSims from './pages/ExploreSims';
-import Profile from './pages/Profile';
-import SimsProfile from './pages/SimsProfileNew';
-import CreateProfile from './pages/CreateProfile';
-import Services from './pages/Services';
-import Availability from './pages/Availability';
-import Settings from './pages/Settings';
-import ProfileStats from './pages/ProfileStats';
-import TermsOfService from './pages/TermsOfService';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import CookiePolicy from './pages/CookiePolicy';
-import HelpCenter from './pages/HelpCenter';
-import ContactUs from './pages/ContactUs';
-import SafetyGuidelines from './pages/SafetyGuidelines';
-import ReportIssue from './pages/ReportIssue';
-import HowItWorks from './pages/HowItWorks';
+import { lazy, Suspense } from 'react';
+
+// Lazy load pages for better performance
+const Login = lazy(() => import('./pages/Login'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const SimsDashboard = lazy(() => import('./pages/SimsDashboard'));
+const Home = lazy(() => import('./pages/Home'));
+const ExploreSims = lazy(() => import('./pages/ExploreSims'));
+const Profile = lazy(() => import('./pages/Profile'));
+const SimsProfile = lazy(() => import('./pages/SimsProfileNew'));
+const CreateProfile = lazy(() => import('./pages/CreateProfile'));
+const Services = lazy(() => import('./pages/Services'));
+const Availability = lazy(() => import('./pages/Availability'));
+const Settings = lazy(() => import('./pages/Settings'));
+const ProfileStats = lazy(() => import('./pages/ProfileStats'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
+const HelpCenter = lazy(() => import('./pages/HelpCenter'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
+const SafetyGuidelines = lazy(() => import('./pages/SafetyGuidelines'));
+const ReportIssue = lazy(() => import('./pages/ReportIssue'));
+const HowItWorks = lazy(() => import('./pages/HowItWorks'));
 
 // Unified Layout Component - Always renders Navigation
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
@@ -32,7 +35,13 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 transition-all duration-300 lg:ml-64">
         {/* Mobile header spacer - Only visible on mobile */}
         <div className="lg:hidden h-14 sm:h-16" />
-        {children}
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+          </div>
+        }>
+          {children}
+        </Suspense>
       </main>
     </div>
   );
@@ -42,7 +51,13 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-gray-50">
-      {children}
+      <Suspense fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        </div>
+      }>
+        {children}
+      </Suspense>
     </div>
   );
 };
