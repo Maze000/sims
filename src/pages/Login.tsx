@@ -36,7 +36,6 @@ const Login = () => {
       await login(loginForm.email, loginForm.password);
       navigate('/dashboard');
     } catch (error) {
-      // console.error('Login failed:', error);
     }
   };
 
@@ -54,7 +53,6 @@ const Login = () => {
       await register(registerForm);
       navigate('/dashboard');
     } catch (error) {
-      // console.error('Registration failed:', error);
     }
   };
 

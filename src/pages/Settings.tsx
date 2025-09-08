@@ -12,14 +12,16 @@ import {
   Smartphone,
   Eye,
   EyeOff,
-  Save
+  Save,
+  Lock,
+  Trash2,
+  AlertTriangle
 } from 'lucide-react';
 
 const Settings = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('notifications');
   
-  // console.log('Current activeTab:', activeTab);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -54,7 +56,12 @@ const Settings = () => {
   const handleSavePassword = () => {
     // TODO: Implement API call to change password
     // This will be implemented when backend is ready
-    // console.log('Changing password:', passwordSettings);
+  };
+
+  const handleDeleteAccount = () => {
+    // TODO: Implement account deletion
+    // This will be implemented when backend is ready
+    alert('Account deletion is not yet implemented. This action is permanent and cannot be undone.');
   };
 
   const tabs = [
@@ -85,9 +92,7 @@ const Settings = () => {
                     <button
                       key={tab.id}
                       onClick={() => {
-                        // console.log('Clicking tab:', tab.id, 'Current activeTab:', activeTab);
                         setActiveTab(tab.id);
-                        // console.log('After setActiveTab, activeTab should be:', tab.id);
                       }}
                       className={`w-full flex items-center space-x-3 px-3 sm:px-4 py-2 sm:py-3 text-left transition-colors rounded-md ${
                         activeTab === tab.id 
@@ -256,6 +261,45 @@ const Settings = () => {
                     <Button onClick={handleSavePassword} className="text-sm sm:text-base touch-target">
                       <Save className="w-4 h-4 mr-2" />
                       Change Password
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Delete Account */}
+              <Card className="border-red-200 bg-red-50">
+                <CardHeader className="pb-3 sm:pb-4">
+                  <CardTitle className="flex items-center gap-2 text-lg sm:text-xl text-red-800">
+                    <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
+                    Delete Account
+                  </CardTitle>
+                  <CardDescription className="text-xs sm:text-sm text-red-700">
+                    Permanently delete your account and all associated data. This action cannot be undone.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 sm:space-y-6">
+                  <div className="bg-red-100 border border-red-300 rounded-lg p-4">
+                    <div className="flex items-start space-x-3">
+                      <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-red-800">
+                        <p className="font-medium mb-1">Warning: This action is irreversible</p>
+                        <ul className="list-disc list-inside space-y-1 text-xs">
+                          <li>All your profile data will be permanently deleted</li>
+                          <li>All your services and listings will be removed</li>
+                          <li>All contact requests and messages will be lost</li>
+                          <li>You will not be able to recover your account</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Button 
+                      onClick={handleDeleteAccount} 
+                      className="text-sm sm:text-base touch-target bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete Account
                     </Button>
                   </div>
                 </CardContent>

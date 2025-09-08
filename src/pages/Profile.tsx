@@ -51,7 +51,6 @@ const Profile = () => {
       await updateUser(formData);
       setIsEditing(false);
     } catch (error) {
-      // console.error('Failed to update profile:', error);
     }
   };
 

@@ -220,7 +220,7 @@ const ExploreSims = () => {
                       ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800'
                   }`}>
-                    {provider.available ? 'Available' : 'Not Available'}
+                    {provider.available ? 'Active' : 'Not Available'}
                   </span>
                 </div>
                 

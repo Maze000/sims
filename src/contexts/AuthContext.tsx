@@ -72,7 +72,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
           setUser(JSON.parse(userData));
         } catch (error) {
-          // console.error('Error parsing user data:', error);
           localStorage.removeItem('userData');
           localStorage.removeItem('authToken');
         }
@@ -110,7 +109,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setUser(mockUser);
     } catch (error) {
-      // console.error('Login error:', error);
       throw new Error('Login failed');
     }
   };
@@ -144,7 +142,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setUser(mockUser);
     } catch (error) {
-      // console.error('Registration error:', error);
       throw new Error('Registration failed');
     }
   };
@@ -179,7 +176,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem('userData', JSON.stringify(updatedUser));
       }
     } catch (error) {
-      // console.error('Error becoming service provider:', error);
       throw new Error('Failed to become service provider');
     }
   };

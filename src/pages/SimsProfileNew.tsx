@@ -18,7 +18,8 @@ import {
   Shield,
   Award,
   Users,
-  Send
+  Send,
+  AlertTriangle
 } from "lucide-react";
 import { mockProviders } from "@/data/mockProviders";
 
@@ -131,7 +132,6 @@ const SimsProfileNew = () => {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the data to your backend
-    // console.log('Contact request:', {
     //   providerId: provider?.id,
     //   providerName: provider?.name,
     //   ...contactForm,
@@ -475,6 +475,21 @@ const SimsProfileNew = () => {
                     <p className="text-xs text-gray-500 text-center">
                       {sim.name} will contact you directly to discuss details and schedule.
                     </p>
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-shrink-0">
+                            <AlertTriangle className="w-4 h-4 text-red-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-xs font-semibold text-red-800 mb-1">
+                              Professional Communication Required
+                            </h4>
+                            <p className="text-xs text-red-700">
+                              Messages must be serious and professional. Inappropriate messages may result in your profile being reported and potentially banned from the platform.
+                            </p>
+                          </div>
+                        </div>
+                    </div>
                   </form>
                 )}
                </CardContent>
