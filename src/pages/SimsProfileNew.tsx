@@ -495,29 +495,6 @@ const SimsProfileNew = () => {
                </CardContent>
              </Card>
 
-            {/* Provider Info Card */}
-            <Card className="toy-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  Provider Info
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <MapPin className="w-4 h-4 text-gray-500" />
-                  <span>{sim.location}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock className="w-4 h-4 text-gray-500" />
-                  <span>{sim.yearsExperience} years experience</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  <span>{sim.rating} (Profile Score)</span>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
