@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -208,18 +208,25 @@ const ExploreSims = () => {
                 ))}
               </div>
 
-              {/* Availability Status */}
-              <div className="flex items-center justify-between">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  provider.available
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {provider.available ? 'Available' : 'Not Available'}
-                </span>
+              {/* Price and Availability */}
+              <div className="space-y-2">
+                {/* Lowest Price */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold" style={{color: '#FF6B35'}}>
+                    From ${Math.min(...provider.services.map(s => s.price))}
+                  </span>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    provider.available
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    {provider.available ? 'Available' : 'Not Available'}
+                  </span>
+                </div>
                 
+                {/* View Profile Button */}
                 <Button
-                  className="text-xs sm:text-sm touch-target"
+                  className="text-xs sm:text-sm touch-target w-full mt-2"
                   style={{
                     background: '#FF6B35',
                     color: 'white',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,7 @@ interface Service {
   description: string;
   duration: number;
   category: string;
+  price: number;
 }
 
 const Services = () => {
@@ -21,21 +22,24 @@ const Services = () => {
       name: 'Personal Training Session',
       description: 'One-on-one fitness training tailored to your goals and fitness level',
       duration: 60,
-      category: 'Health & Wellness'
+      category: 'Health & Wellness',
+      price: 75
     },
     {
       id: '2',
-      name: 'Guitar Lessons',
-      description: 'Learn guitar from basics to advanced techniques with personalised instruction',
+      name: 'Nutrition Consultation',
+      description: 'Personalized nutrition advice and meal planning for your health goals',
       duration: 45,
-      category: 'Education & Development'
+      category: 'Health & Wellness',
+      price: 50
     },
     {
       id: '3',
-      name: 'Photography Session',
-      description: 'Professional photography for portraits, events, or special occasions',
-      duration: 120,
-      category: 'Creative Services & Entertainment'
+      name: 'Yoga Session',
+      description: 'Individual or group yoga sessions for flexibility and mindfulness',
+      duration: 60,
+      category: 'Health & Wellness',
+      price: 40
     }
   ]);
 
@@ -45,7 +49,8 @@ const Services = () => {
     name: '',
     description: '',
     duration: 60,
-    category: ''
+    category: 'Health & Wellness',
+    price: 0
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -72,7 +77,8 @@ const Services = () => {
       name: '',
       description: '',
       duration: 60,
-      category: ''
+      category: 'Health & Wellness',
+      price: 0
     });
     setShowForm(false);
   };
@@ -83,7 +89,8 @@ const Services = () => {
       name: service.name,
       description: service.description,
       duration: service.duration,
-      category: service.category
+      category: service.category,
+      price: service.price
     });
     setShowForm(true);
   };
@@ -99,7 +106,8 @@ const Services = () => {
       name: '',
       description: '',
       duration: 60,
-      category: ''
+      category: 'Health & Wellness',
+      price: 0
     });
   };
 
@@ -162,9 +170,14 @@ const Services = () => {
             <CardContent>
               <p className="text-gray-600 mb-4">{service.description}</p>
               <div className="flex justify-between items-center text-sm">
-                <div className="flex items-center text-gray-500">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {service.duration} min
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-gray-500">
+                    <Clock className="w-4 h-4 mr-1" />
+                    {service.duration} min
+                  </div>
+                  <div className="text-lg font-bold" style={{color: '#FF6B35'}}>
+                    ${service.price}
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -177,7 +190,7 @@ const Services = () => {
         <Card className="max-w-2xl">
           <CardHeader>
             <CardTitle>
-              {editingService ? 'Edit Service' : 'Add New Service'}
+              {editingService ? 'Edit Service - Health & Wellness' : 'Add New Service - Health & Wellness'}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -219,15 +232,18 @@ const Services = () => {
               </div>
               
               <div>
-                <Label htmlFor="category">Category</Label>
+                <Label htmlFor="price">Price ($)</Label>
                 <Input
-                  id="category"
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  placeholder="e.g. Health & Wellness, Education & Development"
+                  id="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData(prev => ({ ...prev, price: parseInt(e.target.value) }))}
+                  min="0"
+                  step="5"
                   required
                 />
               </div>
+              
               
               <div className="flex justify-end space-x-3 pt-4">
                 <Button type="button" variant="outline" onClick={handleCancel}>

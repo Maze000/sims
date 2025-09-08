@@ -18,7 +18,6 @@ import {
   Shield,
   Award,
   Users,
-  DollarSign,
   Send
 } from "lucide-react";
 import { mockProviders } from "@/data/mockProviders";
@@ -29,6 +28,7 @@ const SimsProfileNew = () => {
   const [contactForm, setContactForm] = useState({
     name: '',
     contact: '',
+    subject: '',
     message: ''
   });
   const [contactType, setContactType] = useState<'phone' | 'email'>('phone');
@@ -81,7 +81,7 @@ const SimsProfileNew = () => {
     verified: true,
     yearsExperience: parseInt(provider.experience.split(' ')[0]),
     totalSessions: provider.reviews * 3, // Estimate
-    specialties: provider.services,
+    specialties: provider.services.map(s => s.name),
     languages: provider.languages,
     phone: "+64 9 123 4567", // Mock phone
     email: `${provider.name.toLowerCase().replace(' ', '.')}@sims.com`, // Mock email
@@ -93,10 +93,10 @@ const SimsProfileNew = () => {
     ],
     services: provider.services.map((service, index) => ({
       id: (index + 1).toString(),
-      name: service,
-        duration: "60 min",
-      price: parseInt(provider.price),
-      description: `Professional ${service.toLowerCase()} service`,
+      name: service.name,
+      duration: "60 min",
+      price: service.price,
+      description: `Professional ${service.name.toLowerCase()} service`,
     })),
     availability: {
       "2025-01-20": ["09:00", "11:00", "14:00", "16:00"],
@@ -242,7 +242,7 @@ const SimsProfileNew = () => {
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                         <span className="font-medium">{sim.rating}</span>
                       </div>
-                      <span className="text-gray-600">({sim.reviewsCount} reviews)</span>
+                      <span className="text-gray-600">(Profile Score)</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {sim.specialties.map((specialty) => (
@@ -281,10 +281,15 @@ const SimsProfileNew = () => {
                         <div className="flex-1">
                           <h3 className="font-semibold text-lg mb-2">{service.name}</h3>
                           <p className="text-gray-600 mb-3">{service.description}</p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              {service.duration}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {service.duration}
+                              </div>
+                            </div>
+                            <div className="text-lg font-bold" style={{color: '#FF6B35'}}>
+                              ${service.price || Math.floor(Math.random() * 200) + 25}
                             </div>
                           </div>
                         </div>
@@ -416,6 +421,19 @@ const SimsProfileNew = () => {
                  </div>
                  
                     <div className="space-y-2">
+                      <Label htmlFor="subject">Subject</Label>
+                      <Input
+                        id="subject"
+                        type="text"
+                        placeholder="Enter subject of your request"
+                        value={contactForm.subject}
+                        onChange={(e) => handleInputChange('subject', e.target.value)}
+                        required
+                        className="toy-input"
+                      />
+                 </div>
+                 
+                    <div className="space-y-2">
                       <Label htmlFor="message">Service Details</Label>
                       <Textarea
                         id="message"
@@ -481,7 +499,7 @@ const SimsProfileNew = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Star className="w-4 h-4 text-yellow-500" />
-                  <span>{sim.rating} ({sim.reviewsCount} reviews)</span>
+                  <span>{sim.rating} (Profile Score)</span>
                 </div>
               </CardContent>
             </Card>

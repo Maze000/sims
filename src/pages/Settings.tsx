@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,14 +9,10 @@ import { Separator } from '@/components/ui/separator';
 import { 
   Bell, 
   Shield, 
-  Globe, 
   Smartphone,
-  Mail,
-  Lock,
   Eye,
   EyeOff,
-  Save,
-  X
+  Save
 } from 'lucide-react';
 
 const Settings = () => {
@@ -34,7 +30,6 @@ const Settings = () => {
     pushNotifications: true,
     marketingEmails: false,
     contactRequestAlerts: true,
-    profileViewAlerts: true,
     weeklyUpdates: false
   });
 
@@ -162,19 +157,6 @@ const Settings = () => {
                       <Switch
                         checked={notificationSettings.contactRequestAlerts}
                         onCheckedChange={(checked) => updateNotificationSettings('contactRequestAlerts', checked)}
-                      />
-                    </div>
-
-                  <Separator />
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label className="text-sm sm:text-base font-medium">Profile View Alerts</Label>
-                        <p className="text-xs sm:text-sm text-gray-600">Notify when someone views your profile</p>
-                      </div>
-                      <Switch
-                        checked={notificationSettings.profileViewAlerts}
-                        onCheckedChange={(checked) => updateNotificationSettings('profileViewAlerts', checked)}
                       />
                     </div>
 

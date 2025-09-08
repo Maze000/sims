@@ -167,7 +167,7 @@ const AppContent = () => {
           </ProtectedRoute>
         } />
         
-        <Route path="/therapist-dashboard" element={
+        <Route path="/sims-dashboard" element={
           <ProtectedRoute allowedUserTypes={['service_provider']} redirectTo="/dashboard">
             <AppLayout>
               <SimsDashboard />
@@ -179,14 +179,6 @@ const AppContent = () => {
           <ProtectedRoute>
             <AppLayout>
               <ExploreSims />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/sims/:id" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <SimsProfile />
             </AppLayout>
           </ProtectedRoute>
         } />

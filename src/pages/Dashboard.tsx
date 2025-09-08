@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
 
 
   const handleNavigateToServiceProviderDashboard = () => {
-    navigate('/therapist-dashboard');
+    navigate('/sims-dashboard');
   };
 
   const handleNavigateToCreateProfile = () => {
@@ -79,6 +79,37 @@ const Dashboard: React.FC = () => {
             </Card>
           )}
 
+          {user?.userType === 'client' && (
+            <Card className="hover:shadow-md transition-shadow col-span-2" style={{backgroundColor: 'rgba(255, 107, 53, 0.1)', borderColor: '#FF6B35'}}>
+              <CardContent className="p-3 sm:p-4 md:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm font-semibold mb-2" style={{color: '#FF6B35'}}>🚀 As a Provider you will:</p>
+                    <div className="space-y-1">
+                      <p className="text-xs sm:text-sm text-gray-700 flex items-center">
+                        <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                        Show your services to clients
+                      </p>
+                      <p className="text-xs sm:text-sm text-gray-700 flex items-center">
+                        <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                        Clients contact you via email
+                      </p>
+                      <p className="text-xs sm:text-sm text-gray-700 flex items-center">
+                        <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                        Your phone & email stay private
+                      </p>
+                      <p className="text-xs sm:text-sm text-gray-700 flex items-center">
+                        <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                        You decide how to respond
+                      </p>
+                    </div>
+                  </div>
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" style={{color: '#FF6B35'}} />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {user?.userType === 'service_provider' && (
             <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/profile-stats')}>
               <CardContent className="p-3 sm:p-4 md:p-6">
@@ -124,7 +155,7 @@ const Dashboard: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                   <div>
                     <Label className="text-xs sm:text-sm font-medium text-gray-600">Full Name</Label>
-                    <p className="text-xs sm:text-sm md:text-base font-medium">{user?.firstName} {user?.lastName}</p>
+                    <p className="text-xs sm:text-sm md:text-base font-medium">{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : 'User'}</p>
                   </div>
                   <div>
                     <Label className="text-xs sm:text-sm font-medium text-gray-600">Email</Label>
@@ -137,9 +168,9 @@ const Dashboard: React.FC = () => {
                     </Badge>
                   </div>
                   <div>
-                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Verification Status</Label>
-                    <Badge variant={user?.isVerified ? 'default' : 'secondary'} className="text-xs sm:text-sm">
-                      {user?.isVerified ? 'Verified' : 'Pending'}
+                    <Label className="text-xs sm:text-sm font-medium text-gray-600">Account Status</Label>
+                    <Badge variant="default" className="text-xs sm:text-sm bg-green-500 hover:bg-green-600 text-white">
+                      Active
                     </Badge>
                   </div>
                 </div>
@@ -194,13 +225,15 @@ const Dashboard: React.FC = () => {
                   <Mail className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
                   <span className="text-xs sm:text-sm truncate">{user?.email}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
-                  <span className="text-xs sm:text-sm">Auckland, New Zealand</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
-                  <span className="text-xs sm:text-sm">+64 21 123 4567</span>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs sm:text-sm font-medium text-gray-600">Profile Completion</span>
+                    <span className="text-xs sm:text-sm font-bold text-blue-600">25%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300" style={{width: '25%'}}></div>
+                  </div>
+                  <p className="text-xs text-gray-500">Complete your profile to unlock more features</p>
                 </div>
               </CardContent>
             </Card>

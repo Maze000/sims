@@ -161,7 +161,7 @@ const Navigation = () => {
   if (user) {
     const navItems = user.userType === 'service_provider' 
       ? [
-          { path: '/therapist-dashboard', label: 'Dashboard', icon: Home },
+          { path: '/sims-dashboard', label: 'Dashboard', icon: Home },
           { path: '/explore', label: 'Find Your Sims', icon: Users },
           { path: '/profile', label: 'Profile', icon: User },
           { path: '/services', label: 'Services', icon: Star },
@@ -210,7 +210,7 @@ const Navigation = () => {
             : 'fixed left-0 top-0 w-64 z-30'
           }
         `}>
-          <div className="p-3 sm:p-4 md:p-6 overflow-y-auto h-full">
+          <div className="p-3 sm:p-4 md:p-6 h-full">
             {/* Logo */}
             <div className="flex items-center mb-6 sm:mb-8">
               <Link to="/" className="text-lg sm:text-xl md:text-2xl font-bold">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
-import { Camera, Save, X, User, Mail, Phone, MapPin, Edit3, FileText } from 'lucide-react';
+import { Camera, Save, X, User, Mail, Phone, MapPin, Edit3, FileText, Award, Plus, Trash2 } from 'lucide-react';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
@@ -22,6 +22,19 @@ const Profile = () => {
     location: (user as { location?: string })?.location || '',
     bio: (user as { bio?: string })?.bio || ''
   });
+
+  // Mock certifications data - in real app this would come from user data
+  const [certifications, setCertifications] = useState([
+    { id: '1', name: 'Personal Training Certification', issuer: 'ACSM', date: '2023-01-15' },
+    { id: '2', name: 'Nutrition Specialist', issuer: 'NASM', date: '2022-08-20' }
+  ]);
+  
+  const [newCertification, setNewCertification] = useState({
+    name: '',
+    issuer: '',
+    date: ''
+  });
+  const [editingCert, setEditingCert] = useState<string | null>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -58,6 +71,37 @@ const Profile = () => {
 
   const updateFormData = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const addCertification = () => {
+    if (newCertification.name && newCertification.issuer && newCertification.date) {
+      const cert = {
+        id: Date.now().toString(),
+        ...newCertification
+      };
+      setCertifications(prev => [...prev, cert]);
+      setNewCertification({ name: '', issuer: '', date: '' });
+    }
+  };
+
+  const updateCertification = (id: string, updatedCert: any) => {
+    setCertifications(prev => prev.map(cert => 
+      cert.id === id ? { ...cert, ...updatedCert } : cert
+    ));
+    setEditingCert(null);
+  };
+
+  const deleteCertification = (id: string) => {
+    setCertifications(prev => prev.filter(cert => cert.id !== id));
+  };
+
+  const startEditingCert = (cert: any) => {
+    setEditingCert(cert.id);
+    setNewCertification({
+      name: cert.name,
+      issuer: cert.issuer,
+      date: cert.date
+    });
   };
 
   return (
@@ -241,6 +285,160 @@ const Profile = () => {
                 </div>
               </div>
 
+              {/* Certifications section - Only for service providers */}
+              {user?.userType === 'service_provider' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs sm:text-sm font-medium">
+                      <Award className="w-4 h-4 inline mr-2" />
+                      Certifications & Diplomas
+                    </Label>
+                    {isEditing && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setNewCertification({ name: '', issuer: '', date: '' })}
+                        className="text-xs sm:text-sm"
+                      >
+                        <Plus className="w-3 h-3 mr-1" />
+                        Add New
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Existing certifications */}
+                  <div className="space-y-3">
+                    {certifications.map((cert) => (
+                      <div key={cert.id} className="border rounded-lg p-3 bg-gray-50">
+                        {editingCert === cert.id ? (
+                          <div className="space-y-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <div>
+                                <Label className="text-xs font-medium">Certification Name</Label>
+                                <Input
+                                  value={newCertification.name}
+                                  onChange={(e) => setNewCertification(prev => ({ ...prev, name: e.target.value }))}
+                                  className="text-sm"
+                                  placeholder="e.g., Personal Training Certification"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs font-medium">Issuing Organization</Label>
+                                <Input
+                                  value={newCertification.issuer}
+                                  onChange={(e) => setNewCertification(prev => ({ ...prev, issuer: e.target.value }))}
+                                  className="text-sm"
+                                  placeholder="e.g., ACSM, NASM"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <Label className="text-xs font-medium">Date Obtained</Label>
+                              <Input
+                                type="date"
+                                value={newCertification.date}
+                                onChange={(e) => setNewCertification(prev => ({ ...prev, date: e.target.value }))}
+                                className="text-sm"
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => updateCertification(cert.id, newCertification)}
+                                className="text-xs"
+                              >
+                                Save
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setEditingCert(null)}
+                                className="text-xs"
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h4 className="font-medium text-sm">{cert.name}</h4>
+                              <p className="text-xs text-gray-600">{cert.issuer} • {new Date(cert.date).toLocaleDateString()}</p>
+                            </div>
+                            {isEditing && (
+                              <div className="flex gap-1">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => startEditingCert(cert)}
+                                  className="text-xs p-1 h-6 w-6"
+                                >
+                                  <Edit3 className="w-3 h-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => deleteCertification(cert.id)}
+                                  className="text-xs p-1 h-6 w-6 text-red-600 hover:text-red-700"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add new certification form */}
+                  {isEditing && newCertification.name === '' && newCertification.issuer === '' && newCertification.date === '' && (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <Label className="text-xs font-medium">Certification Name</Label>
+                            <Input
+                              value={newCertification.name}
+                              onChange={(e) => setNewCertification(prev => ({ ...prev, name: e.target.value }))}
+                              className="text-sm"
+                              placeholder="e.g., Personal Training Certification"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs font-medium">Issuing Organization</Label>
+                            <Input
+                              value={newCertification.issuer}
+                              onChange={(e) => setNewCertification(prev => ({ ...prev, issuer: e.target.value }))}
+                              className="text-sm"
+                              placeholder="e.g., ACSM, NASM"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs font-medium">Date Obtained</Label>
+                          <Input
+                            type="date"
+                            value={newCertification.date}
+                            onChange={(e) => setNewCertification(prev => ({ ...prev, date: e.target.value }))}
+                            className="text-sm"
+                          />
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={addCertification}
+                          className="text-xs"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          Add Certification
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Bio field - Only for service providers */}
               {user?.userType === 'service_provider' && (
                 <div className="space-y-2">
@@ -308,9 +506,9 @@ const Profile = () => {
                   </p>
                 </div>
                 <div>
-                  <Label className="text-xs sm:text-sm font-medium text-gray-600">Verification Status</Label>
+                  <Label className="text-xs sm:text-sm font-medium text-gray-600">Account Status</Label>
                   <p className="text-sm sm:text-base font-medium mt-1">
-                    {user?.isVerified ? 'Verified' : 'Pending'}
+                    Active
                   </p>
                 </div>
                 <div>

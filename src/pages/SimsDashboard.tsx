@@ -1,37 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
-  Calendar,
   Clock,
-  DollarSign,
   Edit3,
   Eye,
-  MessageSquare,
   Star,
   TrendingUp,
   Users,
   MapPin,
   Phone,
   Mail,
-  Settings,
-  Plus
+  Flag
 } from 'lucide-react';
 
 const SimsDashboard = () => {
   const navigate = useNavigate();
-  const [selectedPeriod, setSelectedPeriod] = useState('week');
   const [showAllRequests, setShowAllRequests] = useState(false);
 
   // Mock data
   const stats = {
-    totalEarnings: 2840,
-    totalSessions: 47,
-    averageRating: 4.8,
-    totalClients: 23
+    profileScore: 4.8
   };
 
   const allContactRequests = [
@@ -85,57 +77,14 @@ const SimsDashboard = () => {
     }
   ];
 
-  const upcomingSessions = [
-    {
-      id: '1',
-      clientName: 'David Brown',
-      service: 'Sports Massage',
-      date: '2024-01-18',
-      time: '09:00',
-      duration: '60 min'
-    },
-    {
-      id: '2',
-      clientName: 'Lisa Davis',
-      service: 'Hot Stone Massage',
-      date: '2024-01-19',
-      time: '11:00',
-      duration: '90 min'
-    }
-  ];
 
-  const recentReviews = [
-    {
-      id: '1',
-      clientName: 'Alex Thompson',
-      rating: 5,
-      comment: 'Excellent therapeutic massage. Really helped with my back pain.',
-      date: '2024-01-14'
-    },
-    {
-      id: '2',
-      clientName: 'Maria Garcia',
-      rating: 5,
-      comment: 'Very professional and skilled. Highly recommend!',
-      date: '2024-01-13'
-    }
-  ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'confirmed':
-        return 'bg-green-100 text-green-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
-  const getStatusText = (status: string) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
+  const handleReportRequest = (requestId: string, clientName: string) => {
+    // TODO: Implement report functionality
+    console.log(`Reporting request ${requestId} from ${clientName}`);
+    // This would typically open a modal or navigate to a report form
+    alert(`Report submitted for ${clientName}. Thank you for helping maintain platform quality.`);
   };
 
   return (
@@ -190,13 +139,13 @@ const SimsDashboard = () => {
 
           <Card>
             <CardContent className="p-3 sm:p-4 md:p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-600">Average Rating</p>
-                  <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-600">{stats.averageRating}</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-600">Profile Score</p>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400">{stats.profileScore}</p>
+                  </div>
+                  <Star className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-yellow-400 fill-current" />
                 </div>
-                <Star className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-yellow-600 fill-current" />
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -224,7 +173,7 @@ const SimsDashboard = () => {
               <CardContent className="p-3 sm:p-4 md:p-6">
                 <div className={`space-y-3 sm:space-y-4 ${showAllRequests ? 'max-h-96 overflow-y-auto' : ''}`}>
                   {(showAllRequests ? allContactRequests : allContactRequests.slice(0, 3)).map((request) => (
-                    <div key={request.id} className="flex items-center p-3 sm:p-4 bg-gray-50 rounded-lg">
+                    <div key={request.id} className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-3 sm:space-x-4">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-pink-100 rounded-full flex items-center justify-center">
                           <Users className="w-5 h-5 sm:w-6 sm:h-6 text-pink-600" />
@@ -238,55 +187,21 @@ const SimsDashboard = () => {
                           </div>
                         </div>
                       </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs sm:text-sm touch-target text-red-600 hover:text-red-700 hover:bg-red-50"
+                        onClick={() => handleReportRequest(request.id, request.clientName)}
+                      >
+                        <Flag className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                        Report
+                      </Button>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Recent Reviews */}
-            <Card>
-              <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="text-lg sm:text-xl">Recent Reviews</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
-                  What your clients are saying
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-4 md:p-6">
-                <div className="space-y-4 sm:space-y-6">
-                  {recentReviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-200 pb-4 sm:pb-6 last:border-b-0">
-                      <div className="flex items-start justify-between mb-2 sm:mb-3">
-                        <div className="flex items-center space-x-2 sm:space-x-3">
-                          <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
-                            <AvatarFallback className="bg-purple-100 text-purple-600 text-xs sm:text-sm">
-                              {review.clientName.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-medium text-sm sm:text-base">{review.clientName}</p>
-                            <div className="flex items-center space-x-1">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                                    i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-xs sm:text-sm text-gray-500">
-                          {new Date(review.date).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-sm sm:text-base text-gray-700">{review.comment}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Right Column - Sidebar */}
@@ -337,9 +252,13 @@ const SimsDashboard = () => {
                   </div>
                 </div>
                 <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-200">
-                  <Button className="w-full text-sm sm:text-base touch-target" variant="outline">
+                  <Button 
+                    className="w-full text-sm sm:text-base touch-target" 
+                    variant="outline"
+                    onClick={() => navigate('/profile')}
+                  >
                     <Edit3 className="w-4 h-4 mr-2" />
-                    Complete Profile
+                    {95 === 100 ? 'Edit Profile' : 'Complete Profile'}
                   </Button>
                 </div>
               </CardContent>

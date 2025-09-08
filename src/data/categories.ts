@@ -127,11 +127,3 @@ export const serviceCategories: ServiceCategory[] = [
   }
 ];
 
-export const getCategoryById = (id: string): ServiceCategory | undefined => {
-  return serviceCategories.find(category => category.id === id);
-};
-
-export const getCategoryColor = (id: string): string => {
-  const category = getCategoryById(id);
-  return category?.color || '#FF6B9D';
-};

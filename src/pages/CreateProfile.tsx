@@ -58,7 +58,7 @@ const CreateProfile = () => {
     services: [] as string[],
     servicePrices: {} as Record<string, string>,
     serviceDescription: '',
-    initialServices: [] as Array<{name: string, duration: string, description: string}>,
+    initialServices: [] as Array<{name: string, duration: string, description: string, price: string}>,
     
     // Availability
     availability: {
@@ -164,7 +164,7 @@ const CreateProfile = () => {
   const addInitialService = () => {
     setFormData(prev => ({
       ...prev,
-      initialServices: [...prev.initialServices, { name: '', duration: '', description: '' }]
+      initialServices: [...prev.initialServices, { name: '', duration: '', description: '', price: '' }]
     }));
   };
 
@@ -327,7 +327,7 @@ const CreateProfile = () => {
       await becomeServiceProvider();
       
       // Redirect to service provider dashboard
-    navigate('/therapist-dashboard');
+    navigate('/sims-dashboard');
     } catch (error) {
       // console.error('Error creating profile:', error);
       // Fallback to regular dashboard
@@ -976,7 +976,7 @@ const CreateProfile = () => {
                         </Button>
                       </div>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div className="space-y-2">
                           <Label htmlFor={`service-name-${index}`} className="text-xs font-medium">Service Name</Label>
                           <Input
@@ -995,6 +995,19 @@ const CreateProfile = () => {
                             onChange={(e) => updateInitialService(index, 'duration', e.target.value)}
                             className="text-sm"
                             placeholder="e.g., 60 minutes"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor={`service-price-${index}`} className="text-xs font-medium">Price (Optional)</Label>
+                          <Input
+                            id={`service-price-${index}`}
+                            type="number"
+                            value={service.price || ''}
+                            onChange={(e) => updateInitialService(index, 'price', e.target.value)}
+                            className="text-sm"
+                            placeholder="e.g., 75"
+                            min="0"
+                            step="5"
                           />
                         </div>
                       </div>

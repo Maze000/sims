@@ -49,14 +49,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>({
     id: '1',
     email: 'test@example.com',
-    firstName: 'John',
-    lastName: 'Doe',
+    firstName: '',
+    lastName: '',
     userType: 'client',
     isVerified: true
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Clear old localStorage data to force fresh start
+    localStorage.removeItem('userData');
+    localStorage.removeItem('authToken');
+    
     // Check for existing token on app load
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -92,8 +96,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const mockUser: User = {
         id: '1',
         email,
-        firstName: 'John',
-        lastName: 'Doe',
+        firstName: '',
+        lastName: '',
         userType: 'client',
         isVerified: true
       };

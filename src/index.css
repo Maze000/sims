@@ -803,10 +803,10 @@
     max-width: 100%;
   }
 
-  /* Reduce animations on mobile for better performance */
-  * {
-    animation-duration: 2s !important;
-    transition-duration: 2s !important;
+  /* Slow animations for specific elements */
+  .kiwi-animation, .cities-animation {
+    animation-duration: 2s;
+    transition-duration: 2s;
   }
   
   /* Optimize transforms for mobile */
